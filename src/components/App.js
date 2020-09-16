@@ -20,6 +20,7 @@ import TopBar from 'components/Shared/TopBar/TopBar';
 import Loader from 'components/Shared/Loader';
 import LoginScreen from 'components/LoginScreen/LoginScreen';
 import SocketTracker from 'components/SocketTracker/SocketTracker';
+import Tournaments from 'components/Tournaments/Tournaments';
 
 import { fetchResults, setFilter } from 'reducers/results';
 import { fetchTracklist } from 'reducers/tracklist';
@@ -123,6 +124,7 @@ function App({
         </Switch>
       </Route>
       <Route path={routes.songs.path} component={SongsTop} />
+      <Route path={routes.tournaments.path} component={Tournaments} />
     </div>
   );
 }

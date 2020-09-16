@@ -12,7 +12,7 @@ const timeStyle = {
   gradation: convenient,
   units: ['day', 'week', 'month'],
 };
-export const tooltipFormatter = result => {
+export const tooltipFormatter = (result) => {
   if (!result.isExactDate) {
     const resultType =
       result.isMyBest === undefined && result.isMachineBest === undefined
@@ -34,10 +34,8 @@ export const tooltipFormatter = result => {
   }
 };
 
-export const getTimeAgo = date => {
-  const dayDiff = moment()
-    .startOf('day')
-    .diff(moment(date).startOf('day'), 'days');
+export const getTimeAgo = (date) => {
+  const dayDiff = moment().startOf('day').diff(moment(date).startOf('day'), 'days');
   const hour = moment(date).hour();
   if (moment().hour() < 5) {
     return dayDiff <= 1 ? 'сегодня' : timeAgo.format(date, timeStyle);
@@ -49,4 +47,9 @@ export const getTimeAgo = date => {
     : dayDiff === 1
     ? 'вчера'
     : timeAgo.format(date, timeStyle);
+};
+
+export const labelToTypeLevel = (label) => {
+  const [type, level] = label ? label.match(/(\D+)|(\d+)/g) : [];
+  return [type, level];
 };

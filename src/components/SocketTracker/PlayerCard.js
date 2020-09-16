@@ -5,8 +5,10 @@ import { TYPES } from 'constants/popups';
 
 import ChartLabel from 'components/Leaderboard/ChartLabel';
 
-import { getRankImg } from 'utils/exp';
 import { useTrackedEx } from './helpers';
+
+import { getRankImg } from 'utils/exp';
+import { labelToTypeLevel } from 'utils/leaderboards';
 
 export const PlayerCard = ({
   player,
@@ -95,7 +97,7 @@ export const PlayerCard = ({
     ),
   });
 
-  const [type, level] = label ? label.match(/(\D+)|(\d+)/g) : [];
+  const [type, level] = labelToTypeLevel(label);
 
   return (
     <div className={`player-container ${isLeft ? 'left' : 'right'}`}>

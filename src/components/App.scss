@@ -107,6 +107,41 @@
   background-position: 0 0;
 }
 
+.chart-name {
+  font-weight: 600;
+  line-height: 100%;
+  flex: 0 0 auto;
+  background: grey;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 1.4em;
+  border-radius: 0.25em;
+  margin-left: 0;
+  margin-right: 0.4em;
+  padding: 0 0.4em;
+
+  > .chart-letter {
+    margin-right: 2px;
+  }
+  &.single {
+    background: #af2928;
+  }
+  &.singlep {
+    background: #af2879;
+  }
+  &.double {
+    background: #169c16;
+  }
+  &.doublep {
+    background: #129c96;
+  }
+  &.coop {
+    background: #8d8a1b;
+  }
+}
+
 @media screen and (max-width: 900px) {
   .pumpking-tooltip {
     font-size: 100%;

@@ -15,6 +15,9 @@ export const routes = {
       path: '/ranking/faq',
     },
   },
+  tournaments: {
+    path: `/tournaments`,
+  },
   profile: {
     path: `/profiles/:id`,
     getPath: (params) => `/profiles/${params.id}`,

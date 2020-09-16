@@ -7,6 +7,7 @@ import { getExp } from 'utils/exp';
 import { achievements, initialAchievementState } from 'utils/achievements';
 import { parseDate } from 'utils/date';
 import { getScoreWithoutBonus } from 'utils/score';
+import { labelToTypeLevel } from 'utils/leaderboards';
 
 import WorkerProfilesProcessing from 'workerize-loader!utils/workers/profilesPostProcess'; // eslint-disable-line import/no-webpack-loader-syntax
 import * as profilesProcessing from 'utils/workers/profilesPostProcess';
@@ -263,7 +264,7 @@ const processData = (data, tracklist) => {
     if (!top[sharedChartId]) {
       const sharedChart = shared_charts[sharedChartId];
       const label = _.toUpper(sharedChart.chart_label);
-      const [chartType, chartLevel] = label.match(/(\D+)|(\d+)/g);
+      const [chartType, chartLevel] = labelToTypeLevel(label);
       top[sharedChartId] = {
         song: sharedChart.track_name,
         chartLabel: label,

@@ -5,6 +5,8 @@ import ru from 'javascript-time-ago/locale/ru';
 import { convenient } from 'javascript-time-ago/gradation';
 import moment from 'moment';
 
+import { labelToTypeLevel } from 'utils/leaderboards';
+
 TimeAgo.addLocale(ru);
 const timeAgo = new TimeAgo('ru-RU');
 const timeStyle = {
@@ -38,7 +40,7 @@ export const preprocessData = (data) => ({
           0
         );
 
-      const [chartType, chartLevel] = item.chart_label.match(/(\D+)|(\d+)/g);
+      const [chartType, chartLevel] = labelToTypeLevel(item.chart_label);
 
       return {
         song: item.track,

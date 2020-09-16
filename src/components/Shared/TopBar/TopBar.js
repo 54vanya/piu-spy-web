@@ -41,6 +41,11 @@ function TopBar({ isLoadingLogin, isLoadingUser, user, login, logout }) {
             </NavLink>
           </li>
           <li>
+            <NavLink exact to={routes.tournaments.path}>
+              tournaments
+            </NavLink>
+          </li>
+          <li>
             <NavLink exact to={routes.songs.path}>
               songs
             </NavLink>

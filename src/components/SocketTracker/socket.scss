@@ -181,7 +181,6 @@
         flex: 0 0 auto;
 
         > .chart-name {
-          margin-right: 10px;
           font-size: 110%;
         }
       }
@@ -403,40 +402,6 @@
           }
         }
       }
-    }
-  }
-
-  .chart-name {
-    font-weight: 600;
-    line-height: 100%;
-    flex: 0 0 auto;
-    background: grey;
-    text-align: center;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 35px;
-    border-radius: 5px;
-    margin-left: 0;
-    padding: 0 10px;
-
-    > .chart-letter {
-      margin-right: 2px;
-    }
-    &.single {
-      background: #af2928;
-    }
-    &.singlep {
-      background: #af2879;
-    }
-    &.double {
-      background: #169c16;
-    }
-    &.doublep {
-      background: #129c96;
-    }
-    &.coop {
-      background: #8d8a1b;
     }
   }
 }

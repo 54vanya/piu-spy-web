@@ -16,40 +16,6 @@
     padding: 6px 8px;
     display: flex;
     flex-flow: row nowrap;
-    > .chart-name {
-      font-weight: 600;
-      line-height: 100%;
-      flex: 0 0 auto;
-      background: grey;
-      text-align: center;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-right: 10px;
-      height: 25px;
-      border-radius: 5px;
-      margin-left: 0;
-      padding: 0 10px;
-
-      > .chart-letter {
-        margin-right: 2px;
-      }
-      &.single {
-        background: #af2928;
-      }
-      &.singlep {
-        background: #af2879;
-      }
-      &.double {
-        background: #169c16;
-      }
-      &.doublep {
-        background: #129c96;
-      }
-      &.coop {
-        background: #8d8a1b;
-      }
-    }
     > .date {
       flex: 1 0 auto;
       text-align: right;
@@ -82,12 +48,6 @@
       padding: 1vw;
       border-radius: 1vw;
       margin-bottom: 1vw;
-      > .chart-name {
-        margin-right: 1vw;
-        height: 4vw;
-        border-radius: 0.6vw;
-        padding: 0 1vw;
-      }
     }
   }
 }
