@@ -157,6 +157,17 @@
     }
     &.grades {
       text-align: center;
+      &.sss,
+      &.ss,
+      &.s {
+        color: #daa520;
+      }
+      &.a {
+        color: #1274ba;
+      }
+      &.f {
+        color: #da0e0e;
+      }
     }
     &.hide-col {
       padding-right: 8px;
