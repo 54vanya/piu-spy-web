@@ -100,8 +100,8 @@ const mapStateToProps = (state, props) => {
     players: playersSelector(state),
     filteredData: isChartView ? sharedChartDataSelector(state, props) : filteredDataSelector(state),
     filter: isChartView ? defaultFilter : state.results.filter,
-    error: state.results.error || state.tracklist.error,
-    isLoading: state.results.isLoading || state.tracklist.isLoading,
+    error: state.charts.error || state.tracklist.error,
+    isLoading: state.charts.isLoading || state.tracklist.isLoading,
     presets: state.presets.presets,
   };
 };

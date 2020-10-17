@@ -40,7 +40,7 @@ const defaultGradesWithLevelsDistribution = _.flow(
 export const profileSelectorCreator = idParamName =>
   createSelector(
     (state, props) => _.toInteger(props.match.params[idParamName]),
-    state => state.results.isLoading || state.results.isLoadingRanking,
+    state => state.charts.isLoading || state.results.isLoadingRanking,
     state => state.results.profiles,
     state => state.profiles.filter,
     state => state.tracklist.data,

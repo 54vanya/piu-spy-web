@@ -145,7 +145,7 @@ const Result = (
                       <div className="x-number">{xMod}</div>
                     </div>
                   ))}
-              {res.isRank && <div className="mod vj">{res.isExactDate ? 'R' : 'R?'}</div>}
+              {res.isRank && <div className="mod vj">{res.mods ? 'R' : 'R?'}</div>}
               {res.isHJ && <div className="mod hj">HJ</div>}
             </div>
           )}

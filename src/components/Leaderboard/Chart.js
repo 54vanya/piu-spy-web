@@ -17,7 +17,6 @@ const ANIMATION_DURATION = 250;
 
 const mapStateToProps = (state, props) => {
   return {
-    allResults: state.results.results,
     sharedCharts: state.results.sharedCharts,
     playersHiddenStatus: props.playersHiddenStatus || state.preferences.data.playersHiddenStatus,
   };
@@ -26,7 +25,6 @@ const mapStateToProps = (state, props) => {
 const Chart = React.forwardRef(
   (
     {
-      allResults,
       playersHiddenStatus = {},
       sharedCharts = {},
       // shared
@@ -95,14 +93,15 @@ const Chart = React.forwardRef(
       if (!undoedResult) return;
 
       const undoedPlayerId = undoedResult.playerId;
+      const previousResults =sharedCharts[chart.sharedChartId].previousResults; 
       const previousPlayerResult = _.findLast(
         (res) =>
           res.playerId === undoedPlayerId &&
-          res.sharedChartId === chart.sharedChartId &&
           res.isRank === undoedResult.isRank &&
           res.date < undoedResult.date,
-        allResults
+          previousResults
       );
+      
       const newResults = _.orderBy(
         'score',
         'desc',
@@ -124,7 +123,7 @@ const Chart = React.forwardRef(
     });
 
     const isActive = !_.isEmpty(overrides);
-    const totalResultsCount = _.countBy((id) => !playersHiddenStatus[id], chart.allResultsIds).true;
+    const totalResultsCount = _.countBy((id) => !playersHiddenStatus[id], chart.eachResultPlayerIds).true;
     const currentIndex = isActive ? 1 + totalResultsCount - _.size(overrides) : totalResultsCount;
     const canUndo = !(currentIndex === 1 && totalResultsCount === 1);
 

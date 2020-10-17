@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { Route, Redirect, Switch } from 'react-router-dom';
-import { connect } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import localForage from 'localforage';
 import ReactModal from 'react-modal';
 import _ from 'lodash/fp';
@@ -26,41 +26,27 @@ import { fetchResults, setFilter } from 'reducers/results';
 import { fetchTracklist } from 'reducers/tracklist';
 import { fetchUser } from 'reducers/user';
 import { fetchPreferences } from 'reducers/preferences';
+import { fetchChartsData } from 'reducers/charts';
+import { fetchPlayers } from 'reducers/players';
 
 ReactModal.setAppElement('#root');
 
-const mapStateToProps = (state) => {
-  return {
-    userData: state.user.data,
-    isLoading: state.user.isLoading,
-  };
-};
+function App() {
+  const dispatch = useDispatch();
+  const userData = useSelector(state => state.user.data);
+  const isLoading = useSelector(state => state.user.isLoading);
 
-const mapDispatchToProps = {
-  setFilter,
-  fetchResults,
-  fetchTracklist,
-  fetchUser,
-  fetchPreferences,
-};
+  // const resultsStore = useSelector(state => state.results);
+  // console.log(resultsStore)
 
-function App({
-  fetchUser,
-  fetchTracklist,
-  fetchResults,
-  fetchPreferences,
-  setFilter,
-  userData,
-  isLoading,
-}) {
   useEffect(() => {
     if (!process.env.REACT_APP_SOCKET) {
-      fetchUser();
+      dispatch(fetchUser());
       localForage
         .getItem('filter')
         .then((filter) => {
           if (filter) {
-            setFilter({
+            dispatch(setFilter({
               ..._.omit('song', filter),
               chartRange: filter.chartRange && {
                 ...filter.chartRange,
@@ -71,28 +57,29 @@ function App({
                   ? filter.chartRange.range
                   : CHART_MIN_MAX,
               },
-            });
+            }));
           }
         })
         .catch((error) => console.error('Cannot get filter from local storage', error));
     }
-  }, [fetchUser, fetchTracklist, fetchResults, setFilter]);
+  }, [dispatch]);
 
   useEffect(() => {
     if (!process.env.REACT_APP_SOCKET && userData && userData.player) {
-      Promise.all([fetchTracklist(), fetchPreferences()]).then(() => {
-        fetchResults();
+      Promise.all([dispatch(fetchPlayers()), dispatch(fetchTracklist()), dispatch(fetchPreferences())]).then(() => {
+        // dispatch(fetchResults());
+        dispatch(fetchChartsData());
       });
     }
-  }, [userData, fetchPreferences, fetchResults, fetchTracklist]);
+  }, [dispatch, userData]);
 
   useEffect(() => {
     if (process.env.REACT_APP_SOCKET) {
-      fetchTracklist().then(() => {
-        fetchResults();
+      dispatch(fetchTracklist()).then(() => {
+        dispatch(fetchResults());
       });
     }
-  }, [fetchResults, fetchTracklist]);
+  }, [dispatch]);
 
   if (isLoading) {
     return (
@@ -129,4 +116,4 @@ function App({
   );
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default App;

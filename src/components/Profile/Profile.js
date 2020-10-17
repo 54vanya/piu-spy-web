@@ -79,10 +79,10 @@ const mapStateToProps = (state, props) => {
     otherPlayers: otherPlayersSelector(state, props),
     tracklist: state.tracklist.data,
     filter: state.profiles.filter,
-    error: state.results.error || state.tracklist.error,
+    error: state.charts.error || state.tracklist.error,
     sharedCharts: state.results.sharedCharts,
     isLoading:
-      state.results.isLoading || state.results.isLoadingRanking || state.tracklist.isLoading,
+      state.charts.isLoading || state.results.isLoadingRanking || state.tracklist.isLoading,
   };
 };
 

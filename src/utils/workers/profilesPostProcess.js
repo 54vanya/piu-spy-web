@@ -418,11 +418,11 @@ const processPP = ({ profiles, sharedCharts }) => {
       items.forEach((profile, index) => {
         profile.ratingHistory.push({
           rating: profile.rating,
-          date: profile.firstResultDate,
+          date: profile.firstResultDate.getTime(),
         });
         profile.rankingHistory.push({
           place: index + 1,
-          date: profile.firstResultDate,
+          date: profile.firstResultDate.getTime(),
         });
       })
   )(profiles);

@@ -320,9 +320,9 @@ const mapStateToProps = (state, props) => {
     combinedData: getCombinedData(profile1, profile2, state.tracklist.data),
     tracklist: state.tracklist.data,
     filter: state.profiles.filter,
-    error: state.results.error || state.tracklist.error,
+    error: state.charts.error || state.tracklist.error,
     isLoading:
-      state.results.isLoading || state.results.isLoadingRanking || state.tracklist.isLoading,
+      state.charts.isLoading || state.results.isLoadingRanking || state.tracklist.isLoading,
   };
 };
 

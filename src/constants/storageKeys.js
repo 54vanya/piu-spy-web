@@ -1,0 +1,1 @@
+export const RESULTS_CACHE = 'resultsCache';
