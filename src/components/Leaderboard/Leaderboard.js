@@ -26,7 +26,8 @@ import { routes } from 'constants/routes';
 import { SORT, RANK_FILTER } from 'constants/leaderboard';
 
 // reducers
-import { fetchResults, setFilter, resetFilter, defaultFilter } from 'reducers/results';
+import { fetchChartsData } from 'reducers/charts';
+import { setFilter, resetFilter, defaultFilter } from 'reducers/results';
 import { selectPreset, openPreset } from 'reducers/presets';
 
 // utils
@@ -107,7 +108,7 @@ const mapStateToProps = (state, props) => {
 };
 
 const mapDispatchToProps = {
-  fetchResults,
+  fetchChartsData,
   setFilter,
   resetFilter,
   selectPreset,
@@ -136,7 +137,7 @@ class Leaderboard extends Component {
 
   onRefresh = () => {
     const { isLoading } = this.props;
-    !isLoading && this.props.fetchResults();
+    !isLoading && this.props.fetchChartsData();
   };
 
   onTypeSongName = _.debounce(300, (value) => {

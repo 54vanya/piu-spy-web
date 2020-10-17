@@ -33,8 +33,8 @@ ReactModal.setAppElement('#root');
 
 function App() {
   const dispatch = useDispatch();
-  const userData = useSelector(state => state.user.data);
-  const isLoading = useSelector(state => state.user.isLoading);
+  const userData = useSelector((state) => state.user.data);
+  const isLoading = useSelector((state) => state.user.isLoading);
 
   // const resultsStore = useSelector(state => state.results);
   // console.log(resultsStore)
@@ -46,18 +46,20 @@ function App() {
         .getItem('filter')
         .then((filter) => {
           if (filter) {
-            dispatch(setFilter({
-              ..._.omit('song', filter),
-              chartRange: filter.chartRange && {
-                ...filter.chartRange,
-                range: _.every(
-                  (r) => r >= CHART_MIN_MAX[0] && r <= CHART_MIN_MAX[1],
-                  filter.chartRange.range
-                )
-                  ? filter.chartRange.range
-                  : CHART_MIN_MAX,
-              },
-            }));
+            dispatch(
+              setFilter({
+                ..._.omit('song', filter),
+                chartRange: filter.chartRange && {
+                  ...filter.chartRange,
+                  range: _.every(
+                    (r) => r >= CHART_MIN_MAX[0] && r <= CHART_MIN_MAX[1],
+                    filter.chartRange.range
+                  )
+                    ? filter.chartRange.range
+                    : CHART_MIN_MAX,
+                },
+              })
+            );
           }
         })
         .catch((error) => console.error('Cannot get filter from local storage', error));
@@ -66,8 +68,11 @@ function App() {
 
   useEffect(() => {
     if (!process.env.REACT_APP_SOCKET && userData && userData.player) {
-      Promise.all([dispatch(fetchPlayers()), dispatch(fetchTracklist()), dispatch(fetchPreferences())]).then(() => {
-        // dispatch(fetchResults());
+      Promise.all([
+        dispatch(fetchPlayers()),
+        dispatch(fetchTracklist()),
+        dispatch(fetchPreferences()),
+      ]).then(() => {
         dispatch(fetchChartsData());
       });
     }

@@ -36,7 +36,7 @@ import Loader from 'components/Shared/Loader';
 import Range from 'components/Shared/Range';
 
 // reducers
-import { fetchResults } from 'reducers/results';
+import { fetchChartsData } from 'reducers/charts';
 import { setProfilesFilter, resetProfilesFilter } from 'reducers/profiles';
 
 // utils
@@ -327,7 +327,7 @@ const mapStateToProps = (state, props) => {
 };
 
 const mapDispatchToProps = {
-  fetchResults,
+  fetchChartsData,
   setProfilesFilter,
   resetProfilesFilter,
 };
@@ -352,7 +352,7 @@ class ProfileCompare extends Component {
 
   onRefresh = () => {
     const { isLoading } = this.props;
-    !isLoading && this.props.fetchResults();
+    !isLoading && this.props.fetchChartsData();
   };
 
   onChangeDayRange = (range) => {

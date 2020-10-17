@@ -17,7 +17,7 @@ import RankingFaq from './RankingFaq';
 import { routes } from 'constants/routes';
 
 // reducers
-import { fetchResults } from 'reducers/results';
+import { fetchChartsData } from 'reducers/charts';
 import { updatePreferences } from 'reducers/preferences';
 
 // utils
@@ -40,7 +40,7 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = {
-  fetchResults,
+  fetchChartsData,
   updatePreferences,
 };
 
@@ -67,7 +67,7 @@ class Ranking extends Component {
 
   onRefresh = () => {
     const { isLoading } = this.props;
-    !isLoading && this.props.fetchResults();
+    !isLoading && this.props.fetchChartsData();
   };
 
   render() {
