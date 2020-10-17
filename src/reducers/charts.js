@@ -225,6 +225,7 @@ export const resetChartsData = () => ({
 export const loadCachedData = () => async (dispatch, getState) => {
   const cache = await localForage.getItem(RESULTS_CACHE);
   if (cache) {
+    console.log('Found cached data from', cache.lastUpdatedOn);
     dispatch(setChartsData(cache.data, cache.lastUpdatedOn));
   }
 };
@@ -234,16 +235,18 @@ export const fetchChartsData = () => async (dispatch, getState) => {
 
   if (!getState().charts.data) {
     // Check if we have any cached data
+    performance.mark('cache_start');
     await dispatch(loadCachedData());
+    performance.measure('time spent on getting cached data', 'cache_start');
   }
 
-  const { data: cachedData, lastUpdatedOn: x } = getState().charts;
-  // TODO: remove this hack when dino fixes date formats
-  const lastUpdatedOn = x && x.indexOf('.') > -1 ? x.slice(0, x.indexOf('.')) : x;
-
-  const queryParams = queryString.stringify({ since: lastUpdatedOn });
-  const url = `${HOST}/${resultsUrl}?${queryParams}`;
+  const { data: cachedData, lastUpdatedOn } = getState().charts;
+  const queryParams = lastUpdatedOn ? '?' + queryString.stringify({ since: lastUpdatedOn }) : '';
+  const url = `${HOST}/${resultsUrl}${queryParams}`;
+  performance.measure('time from page open to requesting /results/best');
+  performance.mark('request_start');
   const { charts: fetchedData, lastUpdatedAt: newLastUpdated } = await dispatch(fetchJson({ url }));
+  performance.measure('time spent on requesting /results/best', 'request_start');
   const newData = {
     ...(cachedData || {}),
     ...fetchedData,
@@ -252,8 +255,11 @@ export const fetchChartsData = () => async (dispatch, getState) => {
   await dispatch(setAndCacheData(newData, newLastUpdated));
 
   const players = getState().players.data;
+  performance.mark('process_start');
   const { profiles, sharedCharts, battles } = processChartsData(newData, players);
+  performance.measure('time spent building charts with results', 'process_start');
 
+  performance.mark('display_start');
   dispatch({
     type: RESULTS_SUCCESS,
     data: _.values(sharedCharts),
@@ -265,11 +271,14 @@ export const fetchChartsData = () => async (dispatch, getState) => {
     sharedCharts,
   });
   dispatch(endLoadingCharts());
+  performance.measure('time spent rendering charts', 'display_start');
+  performance.measure('time from page open to displaying first data');
 
   // Parallelized calculation of ELO and profile data
   const { tracklist } = getState();
   const input = { sharedCharts, profiles, tracklist, battles, debug: DEBUG };
 
+  performance.mark('elo_calc_start');
   let output;
   if (window.Worker) {
     const worker = new WorkerProfilesProcessing();
@@ -278,6 +287,7 @@ export const fetchChartsData = () => async (dispatch, getState) => {
   } else {
     output = profilesProcessing.getProcessedProfiles(input);
   }
+  performance.measure('time spent calculating elo/pp and graphs for profiles', 'elo_calc_start');
 
   DEBUG && console.log(output.logText);
   DEBUG &&
@@ -287,9 +297,21 @@ export const fetchChartsData = () => async (dispatch, getState) => {
         .filter((q) => q.pp)
         .sort((a, b) => b.pp.pp - a.pp.pp)
     );
+  performance.mark('display2_start');
   dispatch({
     type: RESULTS_PROFILES_UPDATE,
     ...output,
   });
   dispatch(calculateRankingChanges(output.profiles));
+  performance.measure('time spent rendering update with elo/pp', 'display2_start');
+  performance.measure('time from page open to displaying everything');
+
+  console.log(
+    performance
+      .getEntriesByType('measure')
+      .map((x) => `${x.name}: ${x.duration} ms`)
+      .join('\n')
+  );
+  performance.clearMarks();
+  performance.clearMeasures();
 };
