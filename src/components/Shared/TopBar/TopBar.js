@@ -11,6 +11,8 @@ import { routes } from 'constants/routes';
 // reducers
 import * as loginACs from 'reducers/login';
 
+import { useLanguage } from 'utils/context/translation';
+
 // redux
 const mapStateToProps = (state) => {
   return {
@@ -26,28 +28,29 @@ const mapDispatchToProps = {
 };
 
 function TopBar({ isLoadingLogin, isLoadingUser, user, login, logout }) {
+  const lang = useLanguage();
   return (
     <header className="top-bar">
       <nav>
         <ul>
           <li>
             <NavLink exact to={routes.leaderboard.path}>
-              leaderboards
+              {lang.LEADERBOARDS}
             </NavLink>
           </li>
           <li>
             <NavLink exact to={routes.ranking.path}>
-              ranking
+              {lang.RANKING}
             </NavLink>
           </li>
           <li>
             <NavLink exact to={routes.tournaments.path}>
-              tournaments
+              {lang.TOURNAMENTS}
             </NavLink>
           </li>
           <li>
             <NavLink exact to={routes.songs.path}>
-              songs
+              {lang.SONGS}
             </NavLink>
           </li>
         </ul>
@@ -66,7 +69,7 @@ function TopBar({ isLoadingLogin, isLoadingUser, user, login, logout }) {
           onClick={logout}
           disabled={isLoadingLogin || isLoadingUser}
         >
-          <span> logout</span>
+          <span> {lang.LOGOUT}</span>
         </button>
       </div>
     </header>

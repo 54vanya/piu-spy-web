@@ -7,17 +7,9 @@ import Overlay from 'components/Shared/Overlay/Overlay';
 import Input from 'components/Shared/Input/Input';
 
 import { loadPresets, savePreset, selectPreset, openPreset, deletePreset } from 'reducers/presets';
+import { Language } from 'utils/context/translation';
 
-const overlayItem = (
-  <button className="btn btn-sm btn-dark btn-icon _margin-right">
-    <FaLayerGroup />
-    пресеты
-  </button>
-);
-
-const noPresetsMessage = () => 'пусто';
-
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
     ...state.presets,
   };
@@ -34,11 +26,13 @@ const mapDispatchToProps = {
 class PresetsControl extends React.Component {
   state = {};
 
+  static contextType = Language;
+
   componentDidMount() {
     this.props.loadPresets();
   }
 
-  onChangeSelection = selected => {
+  onChangeSelection = (selected) => {
     this.props.selectPreset(selected.name);
   };
 
@@ -56,18 +50,26 @@ class PresetsControl extends React.Component {
   render() {
     const { presets, currentPreset, isLoading } = this.props;
     const { name, isAddingNew } = this.state;
+    const lang = this.context;
     return (
       <div>
-        <Overlay overlayItem={overlayItem}>
+        <Overlay
+          overlayItem={
+            <button className="btn btn-sm btn-dark btn-icon _margin-right">
+              <FaLayerGroup />
+              {lang.PRESETS}
+            </button>
+          }
+        >
           <div className="presets-control-overlay">
             <Select
               className="select _margin-bottom"
               classNamePrefix="select"
-              placeholder="пресеты..."
+              placeholder={lang.PRESETS_PLACEHOLDER}
               options={presets}
               value={currentPreset}
               onChange={this.props.selectPreset}
-              noOptionsMessage={noPresetsMessage}
+              noOptionsMessage={() => lang.EMPTY}
             />
             {currentPreset && (
               <div className="buttons-presets _margin-bottom">
@@ -77,21 +79,21 @@ class PresetsControl extends React.Component {
                   onClick={this.props.openPreset}
                   disabled={isLoading}
                 >
-                  <FaFolderOpen /> открыть
+                  <FaFolderOpen /> {lang.OPEN}
                 </button>
                 <button
                   className="btn btn-sm btn-dark btn-icon _margin-right"
                   onClick={this.onRewritePreset}
                   disabled={isLoading}
                 >
-                  <FaSave /> перезаписать
+                  <FaSave /> {lang.OVERWRITE}
                 </button>
                 <button
                   className="btn btn-sm btn-dark btn-icon"
                   onClick={this.props.deletePreset}
                   disabled={isLoading}
                 >
-                  <FaTrashAlt /> удалить
+                  <FaTrashAlt /> {lang.DELETE}
                 </button>
               </div>
             )}
@@ -104,7 +106,7 @@ class PresetsControl extends React.Component {
                   onClick={() => this.setState({ isAddingNew: true })}
                   disabled={isLoading}
                 >
-                  <FaPlus /> добавить
+                  <FaPlus /> {lang.ADD}
                 </button>
               </div>
             )}
@@ -112,23 +114,23 @@ class PresetsControl extends React.Component {
               <div className="adding-new _margin-bottom">
                 <Input
                   value={name}
-                  placeholder="имя пресета..."
+                  placeholder={lang.PRESET_NAME_PLACEHOLDER}
                   className="form-control"
-                  onChange={name => this.setState({ name })}
+                  onChange={(name) => this.setState({ name })}
                 />
                 <button
                   className="btn btn-sm btn-dark btn-icon _margin-left"
                   onClick={this.onSavePreset}
                   disabled={!name || isLoading}
                 >
-                  <FaSave /> сохранить
+                  <FaSave /> {lang.SAVE}
                 </button>
                 <button
                   className="btn btn-sm btn-dark btn-icon _margin-left"
                   onClick={() => this.setState({ isAddingNew: false })}
                   disabled={isLoading}
                 >
-                  отмена
+                  {lang.CANCEL}
                 </button>
               </div>
             )}
@@ -139,7 +141,7 @@ class PresetsControl extends React.Component {
                   localForage.setItem('showTabs', active);
                 }}
               >
-                показывать табы с пресетами
+                {lang.SHOW_PRESETS_TABS}
               </Toggle>
             </div> */}
           </div>
@@ -149,7 +151,4 @@ class PresetsControl extends React.Component {
   }
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(PresetsControl);
+export default connect(mapStateToProps, mapDispatchToProps)(PresetsControl);

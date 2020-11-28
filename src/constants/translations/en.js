@@ -1,5 +1,5 @@
-import { TEXT as RUSSIAN } from './ru';
+import ru from './ru';
 
-export const TEXT = {
-  ...RUSSIAN.TEXT,
+export default {
+  ...ru,
 };

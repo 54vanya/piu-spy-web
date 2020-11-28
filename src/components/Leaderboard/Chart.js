@@ -13,6 +13,8 @@ import { DEBUG } from 'constants/env';
 import Result from './Result';
 import ChartLabel from './ChartLabel';
 
+import { useLanguage } from 'utils/context/translation';
+
 const ANIMATION_DURATION = 250;
 
 const mapStateToProps = (state, props) => {
@@ -44,6 +46,8 @@ const Chart = React.forwardRef(
   ) => {
     const [overrides, setOverrides] = useState(null);
     const [isHidingPlayers, setHidingPlayers] = useState(!showHiddenPlayers);
+
+    const lang = useLanguage();
 
     useEffect(() => {
       setHidingPlayers(!showHiddenPlayers);
@@ -93,15 +97,15 @@ const Chart = React.forwardRef(
       if (!undoedResult) return;
 
       const undoedPlayerId = undoedResult.playerId;
-      const previousResults =sharedCharts[chart.sharedChartId].previousResults; 
+      const previousResults = sharedCharts[chart.sharedChartId].previousResults;
       const previousPlayerResult = _.findLast(
         (res) =>
           res.playerId === undoedPlayerId &&
           res.isRank === undoedResult.isRank &&
           res.date < undoedResult.date,
-          previousResults
+        previousResults
       );
-      
+
       const newResults = _.orderBy(
         'score',
         'desc',
@@ -123,7 +127,8 @@ const Chart = React.forwardRef(
     });
 
     const isActive = !_.isEmpty(overrides);
-    const totalResultsCount = _.countBy((id) => !playersHiddenStatus[id], chart.eachResultPlayerIds).true;
+    const totalResultsCount = _.countBy((id) => !playersHiddenStatus[id], chart.eachResultPlayerIds)
+      .true;
     const currentIndex = isActive ? 1 + totalResultsCount - _.size(overrides) : totalResultsCount;
     const canUndo = !(currentIndex === 1 && totalResultsCount === 1);
 
@@ -173,7 +178,7 @@ const Chart = React.forwardRef(
                   '_on-hover': !isSocketView,
                 })}
               >
-                скрыто: {hiddenPlayersCount}
+                {lang.HIDDEN}: {hiddenPlayersCount}
               </div>
             )}
             {(hiddenPlayersCount > 0 || !isHidingPlayers) && !isSocketView && (

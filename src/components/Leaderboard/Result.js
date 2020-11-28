@@ -18,6 +18,7 @@ import { getTimeAgo as getShortTimeAgo } from 'components/SocketTracker/helpers'
 import { tooltipFormatter } from 'utils/leaderboards';
 import { getExp } from 'utils/exp';
 import { colorsArray } from 'utils/colors';
+import { useLanguage } from 'utils/context/translation';
 
 const mapStateToProps = (state) => {
   return {
@@ -47,6 +48,8 @@ const Result = (
   ref
 ) => {
   const inf = resultInfo[res.id] || {};
+
+  const lang = useLanguage();
 
   // Rating info for nickname column:
   let ratingInfoBlock = null;
@@ -176,51 +179,54 @@ const Result = (
               </>
             )}
             <div>
-              <span className="_grey">игрок: </span>
+              <span className="_grey">{lang.PLAYER}: </span>
               <NavLink exact to={routes.profile.getPath({ id: res.playerId })}>
                 {res.nickname} ({res.nicknameArcade})
               </NavLink>
             </div>
             {!!getExp(res, chart) && (
               <div className="important">
-                <span className="_grey">опыт: </span>+{numeral(getExp(res, chart)).format('0,0')}
+                <span className="_grey">{lang.EXP}: </span>+
+                {numeral(getExp(res, chart)).format('0,0')}
               </div>
             )}
             {_.isNumber(inf.startingRating) && _.isNumber(inf.ratingDiff) && (
               <div className="important">
-                <span className="_grey">эло: {inf.startingRating.toFixed(0)} </span>
+                <span className="_grey">
+                  {lang.ELO}: {inf.startingRating.toFixed(0)}{' '}
+                </span>
                 {inf.ratingDiff >= 0 ? `+${inf.ratingDiff.toFixed(0)}` : inf.ratingDiff.toFixed(0)}
               </div>
             )}
             {inf.pp && (
               <div className="important">
-                <span className="_grey">pp: </span>
+                <span className="_grey">{lang.PP}: </span>
                 <span>{inf.pp.ppFixed}pp</span>
               </div>
             )}
             {!res.isExactDate && (
               <div className="warning">
                 <FaExclamationTriangle />
-                рекорд взят с my best. часть данных недоступна
+                {lang.MY_BEST_SCORE_WARNING}
               </div>
             )}
             {!!res.isExactDate && (
               <>
                 {!!res.mods && (
                   <div>
-                    <span className="_grey">моды: </span>
+                    <span className="_grey">{lang.MODS}: </span>
                     {res.mods}
                   </div>
                 )}
                 {!!res.calories && (
                   <div>
-                    <span className="_grey">ккал: </span>
+                    <span className="_grey">{lang.CCAL}: </span>
                     {res.calories}
                   </div>
                 )}
                 {!!res.scoreIncrease && (
                   <div>
-                    <span className="_grey">прирост: </span>+
+                    <span className="_grey">{lang.SCORE_INCREASE}: </span>+
                     {numeral(res.scoreIncrease).format('0,0')}
                   </div>
                 )}
@@ -228,23 +234,23 @@ const Result = (
                   <div>
                     <div className="warning">
                       <FaExclamationTriangle />
-                      было сыграно на {res.originalChartMix}
+                      {lang.ORIGINAL_MIX} {res.originalChartMix}
                     </div>
                     {res.originalChartLabel && (
                       <div>
-                        <span className="_grey">оригинальный чарт: </span>
+                        <span className="_grey">{lang.ORIGINAL_CHART} </span>
                         {res.originalChartLabel}
                       </div>
                     )}
                     {res.originalScore && (
                       <div>
-                        <span className="_grey">оригинальный скор: </span>
+                        <span className="_grey">{lang.ORIGINAL_SCORE} </span>
                         {res.originalScore}
                       </div>
                     )}
                   </div>
                 )}
-                {res.scoreIncrease > res.score * 0.8 && '* сайтрид'}
+                {res.scoreIncrease > res.score * 0.8 && lang.SIGHTREAD}
               </>
             )}
           </div>

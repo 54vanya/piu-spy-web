@@ -8,17 +8,20 @@ import Input from 'components/Shared/Input/Input';
 import Range from 'components/Shared/Range';
 
 import { CHART_MIN_MAX, DURATION_DEFAULT, DURATION } from 'constants/leaderboard';
+import { useLanguage } from 'utils/context/translation';
 
 export default function ChartFilter({ filterValue, onChange: onChangeEx }) {
   const range = _.getOr(CHART_MIN_MAX, 'range', filterValue);
   const type = _.getOr(null, 'type', filterValue);
   const duration = _.getOr(DURATION_DEFAULT, 'duration', filterValue);
 
-  let buttonText = 'фильтр чартов';
+  const lang = useLanguage();
+
+  let buttonText = lang.FILTER_CHARTS;
   if (filterValue) {
     const t = type || '';
     buttonText = range[0] === range[1] ? `${t}${range[0]}` : `${t}${range[0]} - ${t}${range[1]}`;
-    buttonText = 'чарты: ' + buttonText;
+    buttonText = lang.CHARTS + ': ' + buttonText;
     if (!_.isEqual(duration, DURATION_DEFAULT)) {
       buttonText += ' ***';
       // buttonText += ` (${_.values(DURATION)
@@ -28,7 +31,7 @@ export default function ChartFilter({ filterValue, onChange: onChangeEx }) {
     }
   }
 
-  const onChange = value => {
+  const onChange = (value) => {
     onChangeEx({
       range,
       type,
@@ -50,7 +53,7 @@ export default function ChartFilter({ filterValue, onChange: onChangeEx }) {
             <ToggleButton
               text="Single"
               active={type === 'S'}
-              onToggle={active => {
+              onToggle={(active) => {
                 onChange({
                   type: active ? 'S' : null,
                 });
@@ -59,7 +62,7 @@ export default function ChartFilter({ filterValue, onChange: onChangeEx }) {
             <ToggleButton
               text="Double"
               active={type === 'D'}
-              onToggle={active => {
+              onToggle={(active) => {
                 onChange({
                   type: active ? 'D' : null,
                 });
@@ -70,7 +73,7 @@ export default function ChartFilter({ filterValue, onChange: onChangeEx }) {
             range={range}
             min={CHART_MIN_MAX[0]}
             max={CHART_MIN_MAX[1]}
-            onChange={r => onChange({ range: r })}
+            onChange={(r) => onChange({ range: r })}
           />
           <div className="inputs">
             <button
@@ -89,7 +92,7 @@ export default function ChartFilter({ filterValue, onChange: onChangeEx }) {
               min={CHART_MIN_MAX[0]}
               max={Math.min(CHART_MIN_MAX[1], range[1])}
               value={range[0]}
-              onBlur={value => {
+              onBlur={(value) => {
                 onChange({ range: [value, range[1]] });
               }}
             />
@@ -122,7 +125,7 @@ export default function ChartFilter({ filterValue, onChange: onChangeEx }) {
               min={Math.max(CHART_MIN_MAX[0], range[0])}
               max={CHART_MIN_MAX[1]}
               value={range[1]}
-              onBlur={value => onChange({ range: [range[0], value] })}
+              onBlur={(value) => onChange({ range: [range[0], value] })}
             />
             <button
               className="btn btn-sm btn-dark"
@@ -139,7 +142,7 @@ export default function ChartFilter({ filterValue, onChange: onChangeEx }) {
             <ToggleButton
               text="Standard"
               active={duration.includes(DURATION.STD)}
-              onToggle={active => {
+              onToggle={(active) => {
                 onChange({
                   duration: active
                     ? [...duration, DURATION.STD]
@@ -150,7 +153,7 @@ export default function ChartFilter({ filterValue, onChange: onChangeEx }) {
             <ToggleButton
               text="Short"
               active={duration.includes(DURATION.SHORT)}
-              onToggle={active => {
+              onToggle={(active) => {
                 onChange({
                   duration: active
                     ? [...duration, DURATION.SHORT]
@@ -161,7 +164,7 @@ export default function ChartFilter({ filterValue, onChange: onChangeEx }) {
             <ToggleButton
               text="Remix"
               active={duration.includes(DURATION.REMIX)}
-              onToggle={active => {
+              onToggle={(active) => {
                 onChange({
                   duration: active
                     ? [...duration, DURATION.REMIX]
@@ -172,7 +175,7 @@ export default function ChartFilter({ filterValue, onChange: onChangeEx }) {
             <ToggleButton
               text="Full"
               active={duration.includes(DURATION.FULL)}
-              onToggle={active => {
+              onToggle={(active) => {
                 onChange({
                   duration: active
                     ? [...duration, DURATION.FULL]

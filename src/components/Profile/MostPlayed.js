@@ -16,12 +16,15 @@ import { routes } from 'constants/routes';
 import { HOST } from 'constants/backend';
 
 import './most-played.scss';
+import { useLanguage } from 'utils/context/translation';
 
 export default connect((state) => ({ charts: state.results.sharedCharts }), { fetchJson })(
   ({ playerId, charts, fetchJson }) => {
     const [isLoading, setLoading] = useState(false);
     const [limit, setLimit] = useState(10);
     const [data, setData] = useState([]);
+
+    const lang = useLanguage();
 
     useEffect(() => {
       setLoading(true);
@@ -83,7 +86,7 @@ export default connect((state) => ({ charts: state.results.sharedCharts }), { fe
             className="show-more btn btn-sm btn-dark btn-icon"
             onClick={() => setLimit(limit + 10)}
           >
-            <MdExpandMore /> больше
+            <MdExpandMore /> {lang.SHOW_MORE}
           </button>
         )}
       </div>

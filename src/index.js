@@ -8,15 +8,20 @@ import { HashRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 
 import './index.scss';
+
+import { Language, detectedLanguage } from 'utils/context/translation';
+
 import App from 'components/App';
 
 import { store } from 'reducers';
 
 ReactDOM.render(
-  <Provider store={store}>
-    <HashRouter>
-      <App />
-    </HashRouter>
-  </Provider>,
+  <Language.Provider value={detectedLanguage}>
+    <Provider store={store}>
+      <HashRouter>
+        <App />
+      </HashRouter>
+    </Provider>
+  </Language.Provider>,
   document.getElementById('root')
 );
