@@ -1,0 +1,58 @@
+@import 'utils/css/colors';
+
+.profile-results-by-level {
+  > header {
+    display: flex;
+    flex-flow: row nowrap;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    .select.levels {
+      width: 6em;
+    }
+  }
+  > .chart-types {
+    display: grid;
+    grid-template-columns: 50% 50%;
+    > .chart-type {
+      background: $background-lv-1;
+      padding: 0.3em;
+      margin: 0.15em;
+      border-radius: 0.3em;
+      > header {
+        font-size: 125%;
+        font-weight: 600;
+      }
+      > .grades-groups {
+        > .grades-group {
+          > header {
+            font-weight: 600;
+            font-size: 110%;
+            > img {
+              height: 2em;
+              padding: 0.3em;
+            }
+          }
+          > .charts-for-grade {
+            > .chart-block {
+              background: $background-lv-2;
+              border-radius: 0.3em;
+              padding: 0.3em;
+              margin-bottom: 0.3em;
+              display: flex;
+              flex-flow: row nowrap;
+              align-items: center;
+              > img {
+                height: 1.2em;
+                margin-left: 0.3em;
+                margin-right: 0.3em;
+              }
+              > .chart-name {
+                flex: 0 0 auto;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

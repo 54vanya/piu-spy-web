@@ -75,5 +75,11 @@ export default {
   NO_RESULTS: 'ничего не найдено',
   SHOW_MORE: 'показать больше',
   HIDDEN: 'скрыто',
+  // Profile Results by level
+  DOUBLES: 'даблы',
+  SINGLES: 'синглы',
+  UNPLAYED: 'не сыграно',
+  BACK_BUTTON: 'назад',
+  LEVEL_PLACEHOLDER: 'уровень...',
   // TODO: WIP, not finished
 };

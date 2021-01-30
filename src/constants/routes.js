@@ -21,6 +21,14 @@ export const routes = {
   profile: {
     path: `/profiles/:id`,
     getPath: (params) => `/profiles/${params.id}`,
+    resultsByLevel: {
+      path: `/profiles/:id/levels`,
+      getPath: (params) => `/profiles/${params.id}/levels`,
+      level: {
+        path: `/profiles/:id/levels/:level`,
+        getPath: (params) => `/profiles/${params.id}/levels/${params.level}`,
+      },
+    },
     compare: {
       path: `/profiles/:id/vs/:compareToId`,
       getPath: (params) => `/profiles/${params.id}/vs/${params.compareToId}`,

@@ -227,7 +227,9 @@ export const sharedChartDataSelector = createSelector(
   (state) => state.results.data,
   (state, props) => props.match.params.sharedChartId,
   (data, sharedChartId) => {
-    const chartId = _.toNumber(sharedChartId);
-    return data.filter((chart) => chart.sharedChartId === chartId);
+    // eslint-disable-next-line eqeqeq
+    const chart = data.filter((chart) => chart.sharedChartId == sharedChartId);
+    // console.log(chart);
+    return chart;
   }
 );

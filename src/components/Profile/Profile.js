@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import toBe from 'prop-types';
 import { connect } from 'react-redux';
 import { FaSearch, FaQuestionCircle, FaTimes, FaCaretLeft, FaCaretRight } from 'react-icons/fa';
-import { withRouter } from 'react-router-dom';
+import { withRouter, Link } from 'react-router-dom';
 import classNames from 'classnames';
 import ReactModal from 'react-modal';
 import Tooltip from 'react-responsive-ui/modules/Tooltip';
@@ -36,6 +36,7 @@ import { DEBUG } from 'constants/env';
 
 // components
 import Range from 'components/Shared/Range';
+import Grade from 'components/Shared/Grade';
 import Loader from 'components/Shared/Loader';
 import Toggle from 'components/Shared/Toggle/Toggle';
 import MostPlayed from './MostPlayed';
@@ -55,7 +56,7 @@ import { getRankImg } from 'utils/exp';
 // code
 const MIN_GRAPH_HEIGHT = undefined;
 
-const profileSelector = profileSelectorCreator('id');
+export const profileSelector = profileSelectorCreator('id');
 
 export const otherPlayersSelector = createSelector(
   (state) => state.results.players,
@@ -519,7 +520,7 @@ class Profile extends Component {
     return (
       <div className="grade-block">
         <div className="grade-letter">
-          <img src={`${process.env.PUBLIC_URL}/grades/${grade}.png`} alt={grade} />
+          <Grade grade={grade} />
         </div>
         <div className="grade-level">{levelString}</div>
         <div className="grade-progress">
@@ -565,6 +566,36 @@ class Profile extends Component {
           />
         </div>
       </Tooltip>
+    );
+  }
+
+  renderResultsByLevelHeader() {
+    const { isLevelGraphCombined } = this.state;
+    return (
+      <div className="toggle-holder">
+        <Toggle
+          className="combine-toggle"
+          checked={isLevelGraphCombined}
+          onChange={() =>
+            this.setState((state) => ({
+              isLevelGraphCombined: !state.isLevelGraphCombined,
+            }))
+          }
+        >
+          объединить графики
+        </Toggle>
+      </div>
+    );
+  }
+
+  renderResultsByLevelFooter() {
+    const { profile } = this.props;
+    return (
+      <div className="toggle-holder">
+        <Link to={routes.profile.resultsByLevel.getPath({ id: profile.id })}>
+          <button className="btn btn-sm btn-dark btn-icon _margin-right">подробнее</button>
+        </Link>
+      </div>
     );
   }
 
@@ -676,19 +707,7 @@ class Profile extends Component {
                   <div className="profile-section-2">
                     <div className="profile-sm-section-header flex">
                       <span>уровни</span>
-                      <div className="toggle-holder">
-                        <Toggle
-                          className="combine-toggle"
-                          checked={isLevelGraphCombined}
-                          onChange={() =>
-                            this.setState((state) => ({
-                              isLevelGraphCombined: !state.isLevelGraphCombined,
-                            }))
-                          }
-                        >
-                          объединить графики
-                        </Toggle>
-                      </div>
+                      {this.renderResultsByLevelHeader()}
                     </div>
                     <div className="chart-container">{this.renderLevels()}</div>
                   </div>
@@ -698,29 +717,21 @@ class Profile extends Component {
                     </div>
                     <div className="chart-container">{this.renderGrades()}</div>
                   </div>
+                  {this.renderResultsByLevelFooter()}
                 </>
               ) : (
-                <div className="profile-section-2">
-                  <div className="profile-sm-section-header flex">
-                    <span>оценки</span>
-                    <div className="toggle-holder">
-                      <Toggle
-                        className="combine-toggle"
-                        checked={isLevelGraphCombined}
-                        onChange={() =>
-                          this.setState((state) => ({
-                            isLevelGraphCombined: !state.isLevelGraphCombined,
-                          }))
-                        }
-                      >
-                        объединить графики
-                      </Toggle>
+                <>
+                  <div className="profile-section-2">
+                    <div className="profile-sm-section-header flex">
+                      <span>оценки</span>
+                      {this.renderResultsByLevelHeader()}
+                    </div>
+                    <div className="chart-container single-double-labels">
+                      {this.renderGradesWithLevels()}
                     </div>
                   </div>
-                  <div className="chart-container single-double-labels">
-                    {this.renderGradesWithLevels()}
-                  </div>
-                </div>
+                  {this.renderResultsByLevelFooter()}
+                </>
               )}
             </div>
           </div>

@@ -1,0 +1,207 @@
+import React, { useEffect, useState } from 'react';
+import { createSelector } from 'reselect';
+import _ from 'lodash/fp';
+import numeral from 'numeral';
+import { useSelector } from 'react-redux';
+import { Link, NavLink } from 'react-router-dom';
+import { FaCaretDown, FaCaretUp } from 'react-icons/fa';
+import Select from 'react-select';
+
+import './results-by-level.scss';
+
+import { routes } from 'constants/routes';
+
+import { profileSelector } from './Profile';
+
+import Loader from 'components/Shared/Loader';
+import Grade from 'components/Shared/Grade';
+import ChartLabel from 'components/Leaderboard/ChartLabel';
+
+import { gradeComparator } from 'utils/leaderboards';
+import { useLanguage } from 'utils/context/translation';
+
+const selectOptionsSelector = createSelector(
+  (state) => state.tracklist.data,
+  (data) => {
+    return _.flow(
+      _.get('chartLevels'),
+      _.keys,
+      _.filter((key) => 0 < key),
+      _.map((key) => ({ label: key, value: key }))
+    )(data);
+  }
+);
+
+const resultsByLevelSelector = createSelector(
+  (state) => state.results.sharedCharts,
+  profileSelector,
+  (state, props) => props.match.params.level,
+  (state, props) => props.sortOrder,
+  (sharedCharts, profile, level, sortOrder) => {
+    if (!profile || !level) {
+      return null;
+    }
+
+    const levelString = _.toString(level);
+    const unplayed = _.flow(
+      _.values,
+      _.filter(
+        (chart) =>
+          chart.chartLevel === levelString &&
+          !chart.results.some((res) => res.playerId === profile.id)
+      ),
+      _.map((chart) => ({ chart })),
+      _.groupBy('chart.chartType')
+    )(sharedCharts);
+
+    const grouped = _.flow(
+      _.groupBy('chart.chartType'),
+      // Add keys from unplayed
+      (g) => ({ ...Object.keys(unplayed).reduce((acc, key) => ({ ...acc, [key]: [] }), {}), ...g }),
+      _.mapValues(
+        _.flow(
+          _.groupBy('result.grade'),
+          _.toPairs,
+          _.orderBy(([grade]) => gradeComparator[grade], sortOrder)
+        )
+      ),
+      _.toPairs,
+      _.orderBy(([type]) => (type === 'S' ? 0 : type === 'D' ? 1 : 2), 'asc'),
+      _.map(([type, group]) =>
+        sortOrder === 'asc'
+          ? [type, [['X', unplayed[type] || []], ...group]]
+          : [type, [...group, ['X', unplayed[type] || []]]]
+      )
+    )(profile.resultsByLevel[level]);
+
+    return { byType: grouped };
+  }
+);
+
+const ResultsByLevel = (props) => {
+  const { match, history } = props;
+
+  const lang = useLanguage();
+  const [sortOrder, setSortOrder] = useState('asc');
+  const selectOptions = useSelector(selectOptionsSelector);
+  const profile = useSelector((state) => profileSelector(state, props));
+  const data = useSelector((state) => resultsByLevelSelector(state, { ...props, sortOrder }));
+  const isLoading = useSelector(
+    (state) => state.charts.isLoading || state.results.isLoadingRanking || state.tracklist.isLoading
+  );
+
+  useEffect(() => {
+    if (profile && !match.params.level) {
+      const redirectToLevel = _.flow(
+        _.get('resultsByLevel'),
+        _.toPairs,
+        _.maxBy('[1].length'),
+        _.first
+      )(profile);
+      history.push(
+        routes.profile.resultsByLevel.level.getPath({ ...match.params, level: redirectToLevel })
+      );
+    }
+  }, [match.params, profile, history]);
+
+  if (isLoading) {
+    return <Loader />;
+  }
+
+  if (!data) {
+    return null;
+  }
+
+  const chartTypeText = {
+    D: lang.DOUBLES,
+    S: lang.SINGLES,
+  };
+
+  return (
+    <div className="profile-results-by-level">
+      <header>
+        <Link to={routes.profile.getPath({ id: profile.id })}>
+          <button className="btn btn-sm btn-dark btn-icon _margin-right">{lang.BACK_BUTTON}</button>
+        </Link>
+        <div className="_flex-fill" />
+        <button
+          className="btn btn-sm btn-dark btn-icon _margin-right"
+          onClick={() => setSortOrder((order) => (order === 'asc' ? 'desc' : 'asc'))}
+        >
+          {sortOrder === 'desc' ? <FaCaretDown /> : <FaCaretUp />} {lang.SORTING}
+        </button>
+        <Select
+          className={'select levels'}
+          classNamePrefix="select"
+          placeholder={lang.LEVEL_PLACEHOLDER}
+          options={selectOptions}
+          value={selectOptions.find((option) => option.value === match.params.level)}
+          onChange={(option) => {
+            history.push(
+              routes.profile.resultsByLevel.level.getPath({ id: profile.id, level: option.value })
+            );
+          }}
+        />
+      </header>
+      <div className="chart-types">
+        {data.byType.map(([chartType, byGrade]) => {
+          return (
+            <div key={chartType} className="chart-type">
+              <header>{chartTypeText[chartType] || chartType}</header>
+              <div className="grades-groups">
+                {byGrade.map(([grade, charts]) => {
+                  if (_.isEmpty(charts)) {
+                    return null;
+                  }
+
+                  return (
+                    <div key={grade} className="grades-group">
+                      <header>
+                        {grade === 'X' ? (
+                          lang.UNPLAYED
+                        ) : grade === '?' ? (
+                          '?'
+                        ) : (
+                          <Grade grade={grade} />
+                        )}
+                      </header>
+                      <div className="charts-for-grade">
+                        {charts.map(({ chart, result }) => {
+                          return (
+                            <div key={chart.sharedChartId} className="chart-block">
+                              <ChartLabel type={chart.chartType} level={chart.chartLevel} />
+                              <NavLink
+                                exact
+                                to={routes.leaderboard.sharedChart.getPath({
+                                  sharedChartId: chart.sharedChartId,
+                                })}
+                              >
+                                {chart.song}
+                              </NavLink>
+                              {result && (
+                                <>
+                                  <div className="_flex-fill" />
+                                  <Grade grade={grade} />
+                                  <span className="score-span">
+                                    {result.scoreIncrease > result.score * 0.8 && '*'}
+                                    {numeral(result.score).format('0,0')}
+                                  </span>
+                                </>
+                              )}
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+};
+
+export default ResultsByLevel;

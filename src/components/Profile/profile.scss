@@ -144,18 +144,21 @@
           flex: 1 1 auto;
           display: flex;
           flex-flow: column nowrap;
-          > .toggle-holder {
-            display: flex;
-            justify-content: flex-end;
-            > .toggle-checkbox {
-              flex: 0 0 auto;
-            }
-          }
           > .profile-section-2 {
             width: 100%;
             flex: 1 1 auto;
             display: flex;
             flex-flow: column nowrap;
+            > .profile-sm-section-header {
+              > .toggle-holder {
+                display: flex;
+                justify-content: flex-end;
+                flex-flow: row nowrap;
+                > .toggle-checkbox {
+                  flex: 0 0 auto;
+                }
+              }
+            }
             > .chart-container {
               flex: 1 1 auto;
             }

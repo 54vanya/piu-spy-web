@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import toBe from 'prop-types';
 import { connect } from 'react-redux';
-import { NavLink } from 'react-router-dom';
 import _ from 'lodash/fp';
 import Select from 'react-select';
 import classNames from 'classnames';
@@ -22,7 +21,6 @@ import PresetsControl from './PresetsControl';
 import Chart from './Chart';
 
 // constants
-import { routes } from 'constants/routes';
 import { SORT, RANK_FILTER } from 'constants/leaderboard';
 
 // reducers
@@ -330,7 +328,8 @@ class Leaderboard extends Component {
   }
 
   render() {
-    const { isLoading, isChartView, filteredData, error, filter, presets } = this.props;
+    const { isLoading, isChartView, filteredData, error, filter, presets, history } = this.props;
+
     const { showItemsCount } = this.state;
     const canShowMore = filteredData.length > showItemsCount;
     const visibleData = _.slice(0, showItemsCount, filteredData);
@@ -366,11 +365,11 @@ class Leaderboard extends Component {
             <div className="content">
               {isChartView && (
                 <div className="simple-search">
-                  <NavLink exact to={routes.leaderboard.path}>
-                    <button className="btn btn-sm btn-dark btn-icon">
-                      <FaArrowLeft /> {lang.BACK_TO_ALL_CHARTS}
-                    </button>
-                  </NavLink>
+                  {/* <NavLink exact to={routes.leaderboard.path}> */}
+                  <button className="btn btn-sm btn-dark btn-icon" onClick={() => history.goBack()}>
+                    <FaArrowLeft /> {lang.BACK_BUTTON}
+                  </button>
+                  {/* </NavLink> */}
                 </div>
               )}
               {!isChartView && (

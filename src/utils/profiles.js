@@ -3,8 +3,8 @@ import { createSelector } from 'reselect';
 import moment from 'moment';
 
 const cutRange = (array, range) => {
-  const startIndex = _.findIndex(item => item.date > range[0], array);
-  const endIndex = _.findLastIndex(item => item.date < range[1], array);
+  const startIndex = _.findIndex((item) => item.date > range[0], array);
+  const endIndex = _.findLastIndex((item) => item.date < range[1], array);
   let firstElement =
     startIndex > 0 ? array[startIndex - 1] : startIndex === 0 ? array[startIndex] : _.last(array);
   let lastElement = endIndex > -1 ? array[endIndex] : _.first(array);
@@ -28,7 +28,7 @@ const defaultGradesDistribution = {
   F: 0,
 };
 const defaultGradesWithLevelsDistribution = _.flow(
-  _.flatMap(type => {
+  _.flatMap((type) => {
     return _.flow(
       _.toPairs,
       _.map(([grade, value]) => [`${type}-${grade}`, value])
@@ -37,14 +37,15 @@ const defaultGradesWithLevelsDistribution = _.flow(
   _.fromPairs
 )(['S', 'D']);
 
-export const profileSelectorCreator = idParamName =>
+export const profileSelectorCreator = (idParamName) =>
   createSelector(
-    (state, props) => _.toInteger(props.match.params[idParamName]),
-    state => state.charts.isLoading || state.results.isLoadingRanking,
-    state => state.results.profiles,
-    state => state.profiles.filter,
-    state => state.tracklist.data,
-    (id, isLoading, profiles, filter, tracklist) => {
+    (state, props) => props.match.params[idParamName],
+    (state) => state.charts.isLoading || state.results.isLoadingRanking,
+    (state) => state.results.profiles,
+    (state) => state.profiles.filter,
+    (state) => state.tracklist.data,
+    (idText, isLoading, profiles, filter, tracklist) => {
+      const id = _.toInteger(idText);
       const profile = profiles[id];
       if (_.isEmpty(profile) || isLoading) {
         return null;
@@ -56,13 +57,13 @@ export const profileSelectorCreator = idParamName =>
           x: _.toInteger(x),
           S:
             (_.size(
-              _.filter(res => res.chart.chartType === 'S' || res.chart.chartType === 'SP', y)
+              _.filter((res) => res.chart.chartType === 'S' || res.chart.chartType === 'SP', y)
             ) /
               tracklist.singlesLevels[x]) *
             100,
           D:
             (-_.size(
-              _.filter(res => res.chart.chartType === 'D' || res.chart.chartType === 'DP', y)
+              _.filter((res) => res.chart.chartType === 'D' || res.chart.chartType === 'DP', y)
             ) /
               tracklist.doublesLevels[x]) *
             100,
@@ -72,7 +73,7 @@ export const profileSelectorCreator = idParamName =>
         _.get('resultsByLevel'),
         _.toPairs,
         _.map(
-          _.update('[1].result.grade', grade =>
+          _.update('[1].result.grade', (grade) =>
             grade && grade.includes('+') && grade !== 'A+' ? grade.replace('+', '') : grade
           )
         )
@@ -83,13 +84,13 @@ export const profileSelectorCreator = idParamName =>
           ...defaultGradesDistribution,
           ..._.omit('?', _.mapValues(_.size, _.groupBy('result.grade', y))),
         })),
-        _.map(item => {
+        _.map((item) => {
           const grades = _.pick(Object.keys(defaultGradesDistribution), item);
           const sum = _.sum(_.values(grades));
           return {
             ...item,
             gradesValues: grades,
-            ...(sum === 0 ? grades : _.mapValues(value => (100 * value) / sum, grades)),
+            ...(sum === 0 ? grades : _.mapValues((value) => (100 * value) / sum, grades)),
           };
         })
       )(gradesData);
@@ -99,7 +100,7 @@ export const profileSelectorCreator = idParamName =>
           const counts = _.omit(
             '?',
             _.mapValues(
-              _.countBy(res => {
+              _.countBy((res) => {
                 return res.chart.chartType === 'S' || res.chart.chartType === 'SP'
                   ? 'S'
                   : res.chart.chartType === 'D' || res.chart.chartType === 'DP'

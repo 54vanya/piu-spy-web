@@ -8,16 +8,13 @@ import { NavLink } from 'react-router-dom';
 
 import { routes } from 'constants/routes';
 
+import Grade from 'components/Shared/Grade';
 import Loader from 'components/Shared/Loader';
 import Flag from 'components/Shared/Flag';
 import Toggle from 'components/Shared/Toggle/Toggle';
 // import CheckBox from 'components/Shared/CheckBox';
 
 import { getRankImg } from 'utils/exp';
-
-const getGradeImg = (grade) => (
-  <img src={`${process.env.PUBLIC_URL}/grades/${grade}.png`} alt={grade} />
-);
 
 export default function RankingList({ ranking, isLoading, preferences, updatePreferences }) {
   return (
@@ -37,14 +34,30 @@ export default function RankingList({ ranking, isLoading, preferences, updatePre
               <th className="rating-change-cell"></th>
               <th className="rating">pp</th>
               {/* <th className="total-score">total score</th> */}
-              <th className="grades sss">{getGradeImg('SSS')}</th>
-              <th className="grades ss">{getGradeImg('SS')}</th>
-              <th className="grades s">{getGradeImg('S')}</th>
-              <th className="grades a">{getGradeImg('A+')}</th>
-              <th className="grades b">{getGradeImg('B')}</th>
-              <th className="grades c">{getGradeImg('C')}</th>
-              <th className="grades d">{getGradeImg('D')}</th>
-              <th className="grades f">{getGradeImg('F')}</th>
+              <th className="grades sss">
+                <Grade grade="SSS" />
+              </th>
+              <th className="grades ss">
+                <Grade grade="SS" />
+              </th>
+              <th className="grades s">
+                <Grade grade="S" />
+              </th>
+              <th className="grades a">
+                <Grade grade="A+" />
+              </th>
+              <th className="grades b">
+                <Grade grade="B" />
+              </th>
+              <th className="grades c">
+                <Grade grade="C" />
+              </th>
+              <th className="grades d">
+                <Grade grade="D" />
+              </th>
+              <th className="grades f">
+                <Grade grade="F" />
+              </th>
               <th className="playcount">scores</th>
               {/* <th className="calories">kcal</th> */}
               <th className="accuracy">accuracy</th>

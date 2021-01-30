@@ -11,6 +11,7 @@ import { routes } from 'constants/routes';
 import { DEBUG } from 'constants/env';
 
 import Flag from 'components/Shared/Flag';
+import Grade from 'components/Shared/Grade';
 import Overlay from 'components/Shared/Overlay/Overlay';
 
 import { getTimeAgo as getShortTimeAgo } from 'components/SocketTracker/helpers';
@@ -258,10 +259,7 @@ const Result = (
       </td>
       <td className="grade">
         <div className="img-holder">
-          {res.grade && res.grade !== '?' && (
-            <img src={`${process.env.PUBLIC_URL}/grades/${res.grade}.png`} alt={res.grade} />
-          )}
-          {res.grade === '?' && null}
+          <Grade grade={res.grade} />
         </div>
       </td>
       {isSocketView && (

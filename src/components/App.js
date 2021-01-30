@@ -15,6 +15,7 @@ import SongsTop from 'components/SongsTop/SongsTop';
 import Leaderboard from 'components/Leaderboard/Leaderboard';
 import Ranking from 'components/Ranking/Ranking';
 import Profile from 'components/Profile/Profile';
+import ResultsByLevel from 'components/Profile/ResultsByLevel';
 import ProfileCompare from 'components/ProfileCompare/ProfileCompare';
 import TopBar from 'components/Shared/TopBar/TopBar';
 import Loader from 'components/Shared/Loader';
@@ -112,6 +113,8 @@ function App() {
       <Route path={routes.profile.path}>
         <Switch>
           <Route path={routes.profile.path} exact component={Profile} />
+          <Route path={routes.profile.resultsByLevel.path} exact component={ResultsByLevel} />
+          <Route path={routes.profile.resultsByLevel.level.path} exact component={ResultsByLevel} />
           <Route path={routes.profile.compare.path} exact component={ProfileCompare} />
         </Switch>
       </Route>
