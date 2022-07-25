@@ -45,8 +45,9 @@ const Result = (
     leftProfile = {},
     rightProfile = {},
     isSocketView = false,
+    bestGradeScore = false,
   },
-  ref
+  ref,
 ) => {
   const inf = resultInfo[res.id] || {};
 
@@ -98,6 +99,7 @@ const Result = (
         latest: new Date(chart.latestScoreDate) - new Date(res.date) < 12 * 60 * 60 * 1000,
         left: res.nickname === leftProfile.name,
         right: res.nickname === rightProfile.name,
+        bestGradeScore: bestGradeScore
       })}
       style={
         nameIndex > -1
@@ -109,14 +111,14 @@ const Result = (
       }
     >
       {!isSocketView && (
-        <td className="place">{res.isSecondOccurenceInResults ? '' : `#${res.topPlace}`}</td>
+        <td className="place">{res.isSecondOccurenceInResults ? '' : res.topPlace && `#${res.topPlace}`}</td>
       )}
       <td className="nickname" style={nameIndex > -1 ? { fontWeight: 'bold' } : {}}>
         <div className="nickname-container">
-          {flag}
+          {!bestGradeScore && flag}
           <span className="nickname-text">
             <NavLink exact to={routes.profile.getPath({ id: res.playerId })}>
-              {res.nickname}
+              {!bestGradeScore && res.nickname}
             </NavLink>
             {!!placeDifference && (
               <span className="change-holder up">

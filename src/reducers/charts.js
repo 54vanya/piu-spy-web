@@ -12,7 +12,7 @@ import {
   calculateRankingChanges,
 } from 'reducers/results';
 
-import WorkerProfilesProcessing from 'workerize-loader!utils/workers/profilesPostProcess'; // eslint-disable-line import/no-webpack-loader-syntax
+import WorkerProfilesProcessing from 'workerize-loader?inline!utils/workers/profilesPostProcess'; // eslint-disable-line import/no-webpack-loader-syntax
 import * as profilesProcessing from 'utils/workers/profilesPostProcess';
 
 import { fetchJson } from 'utils/fetch';
@@ -46,6 +46,7 @@ const processChartsData = (chartsData, players) => {
   // Loop 1
   for (let sharedChartId in chartsData) {
     const chartEntry = chartsData[sharedChartId];
+    // console.log(chartEntry)
     // console.log(chartEntry);
     // Initialize chart info
     const chartInfo = chartEntry.chart;
@@ -79,6 +80,15 @@ const processChartsData = (chartsData, players) => {
       const result = mapResult(_result, players, chartTop, sharedChartId);
       const topResultId = getTopResultId(result);
       const bestGradeResultId = getBestGradeResultId(result);
+
+      // bestGradeResult is result with best grade not score
+      const bestGradeResult = chartEntry.bestGradeResults?.find(res => res.player === result.playerId);
+      if (bestGradeResult && result.grade !== '?' && bestGradeResult.grade !== '?') {
+        const mappedBestGradeResult = mapResult(bestGradeResult, players, chartTop, sharedChartId);
+        if ((mappedBestGradeResult.isRank && result.isRank) || (!mappedBestGradeResult.isRank && !result.isRank)) {
+          result.bestGradeResult = mappedBestGradeResult;
+        }
+      }
 
       // b0 = performance.now();
       // Chronological results array to calculate battles order
@@ -265,7 +275,7 @@ export const fetchChartsData = () => async (dispatch, getState) => {
     data: _.values(sharedCharts),
     players: _.flow(
       _.toPairs,
-      _.map(([id, player]) => ({ ...player, id: _.toInteger(id) }))
+      _.map(([id, player]) => ({ ...player, id: _.toInteger(id) })),
     )(players),
     profiles,
     sharedCharts,
@@ -291,12 +301,12 @@ export const fetchChartsData = () => async (dispatch, getState) => {
 
   DEBUG && console.log(output.logText);
   DEBUG &&
-    console.log(
-      'Processed profiles:',
-      Object.values(output.profiles)
-        .filter((q) => q.pp)
-        .sort((a, b) => b.pp.pp - a.pp.pp)
-    );
+  console.log(
+    'Processed profiles:',
+    Object.values(output.profiles)
+      .filter((q) => q.pp)
+      .sort((a, b) => b.pp.pp - a.pp.pp),
+  );
   performance.mark('display2_start');
   dispatch({
     type: RESULTS_PROFILES_UPDATE,
@@ -310,7 +320,7 @@ export const fetchChartsData = () => async (dispatch, getState) => {
     performance
       .getEntriesByType('measure')
       .map((x) => `${x.name}: ${x.duration} ms`)
-      .join('\n')
+      .join('\n'),
   );
   performance.clearMarks();
   performance.clearMeasures();

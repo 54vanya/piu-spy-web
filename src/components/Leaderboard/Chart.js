@@ -258,20 +258,37 @@ const Chart = React.forwardRef(
                       }
 
                       return (
-                        <Result
-                          key={res.isRank + '_' + res.nickname}
-                          chart={chart}
-                          results={results}
-                          res={res}
-                          placeDifference={placeDifference}
-                          showProtagonistEloChange={showProtagonistEloChange}
-                          showProtagonistPpChange={showProtagonistPpChange}
-                          uniqueSelectedNames={uniqueSelectedNames}
-                          protagonistName={protagonistName}
-                          leftProfile={leftProfile}
-                          rightProfile={rightProfile}
-                          isSocketView={isSocketView}
-                        />
+                        <React.Fragment key={res.isRank + "_" + res.nickname}>
+                          <Result
+                            chart={chart}
+                            results={results}
+                            res={res}
+                            placeDifference={placeDifference}
+                            showProtagonistEloChange={showProtagonistEloChange}
+                            showProtagonistPpChange={showProtagonistPpChange}
+                            uniqueSelectedNames={uniqueSelectedNames}
+                            protagonistName={protagonistName}
+                            leftProfile={leftProfile}
+                            rightProfile={rightProfile}
+                            isSocketView={isSocketView}
+                          />
+                          {res.bestGradeResult && (
+                            <Result
+                              chart={chart}
+                              results={results}
+                              res={res.bestGradeResult}
+                              placeDifference={placeDifference}
+                              showProtagonistEloChange={showProtagonistEloChange}
+                              showProtagonistPpChange={showProtagonistPpChange}
+                              uniqueSelectedNames={uniqueSelectedNames}
+                              protagonistName={protagonistName}
+                              leftProfile={leftProfile}
+                              rightProfile={rightProfile}
+                              isSocketView={isSocketView}
+                              bestGradeScore={true}
+                            />
+                          )}
+                        </React.Fragment>
                       );
                     })}
                   </FlipMove>
@@ -282,7 +299,7 @@ const Chart = React.forwardRef(
         </div>
       </div>
     );
-  }
+  },
 );
 
 export default connect(mapStateToProps, null, null, { forwardRef: true })(Chart);
