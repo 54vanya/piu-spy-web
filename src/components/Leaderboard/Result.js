@@ -45,8 +45,9 @@ const Result = (
     leftProfile = {},
     rightProfile = {},
     isSocketView = false,
+    bestGradeScore = false,
   },
-  ref
+  ref,
 ) => {
   const inf = resultInfo[res.id] || {};
 
@@ -58,7 +59,7 @@ const Result = (
     // In debug mode we show all info
     ratingInfoBlock = (
       <>
-        <span className="debug-elo-info">
+        <span className='debug-elo-info'>
           {' '}
           {inf.startingRating && Math.round(inf.startingRating)}
           {' / '}
@@ -98,28 +99,29 @@ const Result = (
         latest: new Date(chart.latestScoreDate) - new Date(res.date) < 12 * 60 * 60 * 1000,
         left: res.nickname === leftProfile.name,
         right: res.nickname === rightProfile.name,
+        bestGradeScore: bestGradeScore
       })}
       style={
         nameIndex > -1
           ? {
-              background: colorsArray[nameIndex] + '3A',
-              outline: `1px solid ${colorsArray[nameIndex]}A0`,
-            }
+            background: colorsArray[nameIndex] + '3A',
+            outline: `1px solid ${colorsArray[nameIndex]}A0`,
+          }
           : {}
       }
     >
       {!isSocketView && (
-        <td className="place">{res.isSecondOccurenceInResults ? '' : `#${res.topPlace}`}</td>
+        <td className='place'>{res.isSecondOccurenceInResults ? '' : res.topPlace && `#${res.topPlace}`}</td>
       )}
-      <td className="nickname" style={nameIndex > -1 ? { fontWeight: 'bold' } : {}}>
-        <div className="nickname-container">
-          {flag}
-          <span className="nickname-text">
+      <td className='nickname' style={nameIndex > -1 ? { fontWeight: 'bold' } : {}}>
+        <div className='nickname-container'>
+          {!bestGradeScore && flag}
+          <span className='nickname-text'>
             <NavLink exact to={routes.profile.getPath({ id: res.playerId })}>
-              {res.nickname}
+              {!bestGradeScore && res.nickname}
             </NavLink>
             {!!placeDifference && (
-              <span className="change-holder up">
+              <span className='change-holder up'>
                 <span>{placeDifference}</span>
                 <FaAngleDoubleUp />
               </span>
@@ -127,16 +129,16 @@ const Result = (
             {ratingInfoBlock}
           </span>
           {!isSocketView && (
-            <div className="mods-container">
+            <div className='mods-container'>
               {isSocketView &&
                 res.mods &&
                 res.mods
                   .split(' ')
                   .filter((mod) => mod.includes('AV'))
                   .map((avMod) => (
-                    <div className="mod av-mod">
-                      <div className="av-text">AV</div>
-                      <div className="av-number">{avMod.replace('AV', '')}</div>
+                    <div className='mod av-mod'>
+                      <div className='av-text'>AV</div>
+                      <div className='av-number'>{avMod.replace('AV', '')}</div>
                     </div>
                   ))}
               {isSocketView &&
@@ -145,68 +147,68 @@ const Result = (
                   .split(' ')
                   .filter((mod) => mod.endsWith('X'))
                   .map((xMod) => (
-                    <div className="mod x-mod">
-                      <div className="x-number">{xMod}</div>
+                    <div className='mod x-mod'>
+                      <div className='x-number'>{xMod}</div>
                     </div>
                   ))}
-              {res.isRank && <div className="mod vj">{res.mods ? 'R' : 'R?'}</div>}
-              {res.isHJ && <div className="mod hj">HJ</div>}
+              {res.isRank && <div className='mod vj'>{res.mods ? 'R' : 'R?'}</div>}
+              {res.isHJ && <div className='mod hj'>HJ</div>}
             </div>
           )}
         </div>
       </td>
-      <td className="score">
+      <td className='score'>
         <Overlay
-          overlayClassName="score-overlay-outer"
+          overlayClassName='score-overlay-outer'
           overlayItem={
-            <span className="score-span">
+            <span className='score-span'>
               {res.scoreIncrease > res.score * 0.8 && '*'}
               {numeral(res.score).format('0,0')}
             </span>
           }
-          placement="top"
+          placement='top'
         >
-          <div className="score-overlay">
+          <div className='score-overlay'>
             {DEBUG && (
               <>
                 <div>
-                  <span className="_grey">result id: </span>
+                  <span className='_grey'>result id: </span>
                   {res.id}
                 </div>
                 <div>
-                  <span className="_grey">player id: </span>
+                  <span className='_grey'>player id: </span>
                   {res.playerId}
                 </div>
               </>
             )}
             <div>
-              <span className="_grey">{lang.PLAYER}: </span>
+              <span className='_grey'>{lang.PLAYER}: </span>
               <NavLink exact to={routes.profile.getPath({ id: res.playerId })}>
                 {res.nickname} ({res.nicknameArcade})
               </NavLink>
             </div>
             {!!getExp(res, chart) && (
-              <div className="important">
-                <span className="_grey">{lang.EXP}: </span>+
+              <div className='important'>
+                <span className='_grey'>{lang.EXP}: </span>+
                 {numeral(getExp(res, chart)).format('0,0')}
               </div>
             )}
             {_.isNumber(inf.startingRating) && _.isNumber(inf.ratingDiff) && (
-              <div className="important">
-                <span className="_grey">
+              <div className='important'>
+                <span className='_grey'>
                   {lang.ELO}: {inf.startingRating.toFixed(0)}{' '}
                 </span>
                 {inf.ratingDiff >= 0 ? `+${inf.ratingDiff.toFixed(0)}` : inf.ratingDiff.toFixed(0)}
               </div>
             )}
             {inf.pp && (
-              <div className="important">
-                <span className="_grey">{lang.PP}: </span>
+              <div className='important'>
+                <span className='_grey'>{lang.PP}: </span>
                 <span>{inf.pp.ppFixed}pp</span>
               </div>
             )}
             {!res.isExactDate && (
-              <div className="warning">
+              <div className='warning'>
                 <FaExclamationTriangle />
                 {lang.MY_BEST_SCORE_WARNING}
               </div>
@@ -215,37 +217,37 @@ const Result = (
               <>
                 {!!res.mods && (
                   <div>
-                    <span className="_grey">{lang.MODS}: </span>
+                    <span className='_grey'>{lang.MODS}: </span>
                     {res.mods}
                   </div>
                 )}
                 {!!res.calories && (
                   <div>
-                    <span className="_grey">{lang.CCAL}: </span>
+                    <span className='_grey'>{lang.CCAL}: </span>
                     {res.calories}
                   </div>
                 )}
                 {!!res.scoreIncrease && (
                   <div>
-                    <span className="_grey">{lang.SCORE_INCREASE}: </span>+
+                    <span className='_grey'>{lang.SCORE_INCREASE}: </span>+
                     {numeral(res.scoreIncrease).format('0,0')}
                   </div>
                 )}
                 {res.originalChartMix && (
                   <div>
-                    <div className="warning">
+                    <div className='warning'>
                       <FaExclamationTriangle />
                       {lang.ORIGINAL_MIX} {res.originalChartMix}
                     </div>
                     {res.originalChartLabel && (
                       <div>
-                        <span className="_grey">{lang.ORIGINAL_CHART} </span>
+                        <span className='_grey'>{lang.ORIGINAL_CHART} </span>
                         {res.originalChartLabel}
                       </div>
                     )}
                     {res.originalScore && (
                       <div>
-                        <span className="_grey">{lang.ORIGINAL_SCORE} </span>
+                        <span className='_grey'>{lang.ORIGINAL_SCORE} </span>
                         {res.originalScore}
                       </div>
                     )}
@@ -257,8 +259,8 @@ const Result = (
           </div>
         </Overlay>
       </td>
-      <td className="grade">
-        <div className="img-holder">
+      <td className='grade'>
+        <div className='img-holder'>
           <Grade grade={res.grade} />
         </div>
       </td>
@@ -269,16 +271,16 @@ const Result = (
             hj: res.isHJ,
           })}
         >
-          <div className="mods-container">
+          <div className='mods-container'>
             {isSocketView &&
               res.mods &&
               res.mods
                 .split(' ')
                 .filter((mod) => mod.includes('AV'))
                 .map((avMod) => (
-                  <div className="av-mod">
-                    <div className="av-text">AV</div>
-                    <div className="av-number">{avMod.replace('AV', '')}</div>
+                  <div className='av-mod'>
+                    <div className='av-text'>AV</div>
+                    <div className='av-number'>{avMod.replace('AV', '')}</div>
                   </div>
                 ))}
             {isSocketView &&
@@ -287,25 +289,25 @@ const Result = (
                 .split(' ')
                 .filter((mod) => mod.endsWith('X'))
                 .map((xMod) => (
-                  <div className="x-mod">
-                    <div className="x-number">{xMod}</div>
+                  <div className='x-mod'>
+                    <div className='x-number'>{xMod}</div>
                   </div>
                 ))}
-            {res.isRank && <div className="inner">{res.isExactDate ? 'R' : 'R?'}</div>}
-            {res.isHJ && <div className="inner">HJ</div>}
+            {res.isRank && <div className='inner'>{res.isExactDate ? 'R' : 'R?'}</div>}
+            {res.isHJ && <div className='inner'>HJ</div>}
           </div>
         </td>
       )}
-      <td className="number miss">{res.miss}</td>
-      <td className="number bad">{res.bad}</td>
-      <td className="number good">{res.good}</td>
-      <td className="number great">{res.great}</td>
-      <td className="number perfect">{res.perfect}</td>
-      <td className="combo">
+      <td className='number miss'>{res.miss}</td>
+      <td className='number bad'>{res.bad}</td>
+      <td className='number good'>{res.good}</td>
+      <td className='number great'>{res.great}</td>
+      <td className='number perfect'>{res.perfect}</td>
+      <td className='combo'>
         {res.combo}
         {res.combo ? 'x' : ''}
       </td>
-      <td className="accuracy">
+      <td className='accuracy'>
         {res.accuracy === 100 ? 100 : res.accuracy ? res.accuracy.toFixed(2) : ''}
         {res.accuracy ? '%' : ''}
       </td>
@@ -317,7 +319,7 @@ const Result = (
         {isSocketView ? (
           getShortTimeAgo(res.dateObject)
         ) : (
-          <Tooltip content={tooltipFormatter(res)} tooltipClassName="pumpking-tooltip">
+          <Tooltip content={tooltipFormatter(res)} tooltipClassName='pumpking-tooltip'>
             {getShortTimeAgo(res.dateObject)}
             {res.isExactDate ? '' : '?'}
           </Tooltip>

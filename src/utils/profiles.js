@@ -31,10 +31,10 @@ const defaultGradesWithLevelsDistribution = _.flow(
   _.flatMap((type) => {
     return _.flow(
       _.toPairs,
-      _.map(([grade, value]) => [`${type}-${grade}`, value])
+      _.map(([grade, value]) => [`${type}-${grade}`, value]),
     )(defaultGradesDistribution);
   }),
-  _.fromPairs
+  _.fromPairs,
 )(['S', 'D']);
 
 export const profileSelectorCreator = (idParamName) =>
@@ -50,34 +50,44 @@ export const profileSelectorCreator = (idParamName) =>
       if (_.isEmpty(profile) || isLoading) {
         return null;
       }
-      const levelsDistribution = _.flow(
+
+      const filteredResultsByLevel = _.flow(
         _.get('resultsByLevel'),
+        _.toPairs,
+        _.map(
+          _.update('[1]', _.filter(({ result }) => result.isBestGradeOnChart),
+          ),
+        ),
+        _.fromPairs,
+      )(profile);
+
+      const levelsDistribution = _.flow(
         _.toPairs,
         _.map(([x, y]) => ({
           x: _.toInteger(x),
           S:
             (_.size(
-              _.filter((res) => res.chart.chartType === 'S' || res.chart.chartType === 'SP', y)
-            ) /
+                _.filter((res) => res.chart.chartType === 'S' || res.chart.chartType === 'SP', y),
+              ) /
               tracklist.singlesLevels[x]) *
             100,
           D:
             (-_.size(
-              _.filter((res) => res.chart.chartType === 'D' || res.chart.chartType === 'DP', y)
-            ) /
+                _.filter((res) => res.chart.chartType === 'D' || res.chart.chartType === 'DP', y),
+              ) /
               tracklist.doublesLevels[x]) *
             100,
-        }))
-      )(profile);
+        })),
+      )(filteredResultsByLevel);
+
       const gradesData = _.flow(
-        _.get('resultsByLevel'),
         _.toPairs,
         _.map(
           _.update('[1].result.grade', (grade) =>
-            grade && grade.includes('+') && grade !== 'A+' ? grade.replace('+', '') : grade
-          )
-        )
-      )(profile);
+            grade && grade.includes('+') && grade !== 'A+' ? grade.replace('+', '') : grade,
+          ),
+        ),
+      )(filteredResultsByLevel);
       const gradesDistribution = _.flow(
         _.map(([x, y]) => ({
           x: _.toInteger(x),
@@ -92,7 +102,7 @@ export const profileSelectorCreator = (idParamName) =>
             gradesValues: grades,
             ...(sum === 0 ? grades : _.mapValues((value) => (100 * value) / sum, grades)),
           };
-        })
+        }),
       )(gradesData);
       const gradesAndLevelsDistribution = _.flow(
         _.map(([x, y]) => {
@@ -104,11 +114,11 @@ export const profileSelectorCreator = (idParamName) =>
                 return res.chart.chartType === 'S' || res.chart.chartType === 'SP'
                   ? 'S'
                   : res.chart.chartType === 'D' || res.chart.chartType === 'DP'
-                  ? 'D'
-                  : 'Other';
+                    ? 'D'
+                    : 'Other';
               }),
-              groupedResults
-            )
+              groupedResults,
+            ),
           );
           const reduced = _.reduce(
             (acc, [grade, levelsData]) => {
@@ -120,12 +130,12 @@ export const profileSelectorCreator = (idParamName) =>
                     ? (count / tracklist.singlesLevels[x]) * 100
                     : (-count / tracklist.doublesLevels[x]) * 100,
                 ]),
-                _.fromPairs
+                _.fromPairs,
               )(levelsData);
               return { ...acc, ...accData };
             },
             {},
-            _.toPairs(counts)
+            _.toPairs(counts),
           );
 
           return {
@@ -133,7 +143,7 @@ export const profileSelectorCreator = (idParamName) =>
             ...defaultGradesWithLevelsDistribution,
             ...reduced,
           };
-        })
+        }),
       )(gradesData);
 
       const lastTickRating = _.last(profile.ratingHistory).date;
@@ -168,5 +178,5 @@ export const profileSelectorCreator = (idParamName) =>
         placesChanges,
         ratingChanges,
       };
-    }
+    },
   );
