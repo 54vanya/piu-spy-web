@@ -187,9 +187,6 @@
           &:last-child {
             margin-bottom: 0;
           }
-          .bestGradeScore {
-            font-size: 14px;
-          }
           > .results {
             width: 100%;
             position: relative;
@@ -199,6 +196,9 @@
             td,
             th {
               padding: 2px 4px 0 4px;
+              &.opacity {
+                opacity: 0.5;
+              }
               &.place {
                 color: #888;
                 width: 33px;

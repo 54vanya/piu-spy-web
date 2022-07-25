@@ -533,3 +533,5 @@ export const getProcessedProfiles = ({ profiles, sharedCharts, tracklist, battle
 
   return { profiles, resultInfo, sharedCharts, logText };
 };
+
+export default getProcessedProfiles;

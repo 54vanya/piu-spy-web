@@ -271,6 +271,7 @@ const Chart = React.forwardRef(
                             leftProfile={leftProfile}
                             rightProfile={rightProfile}
                             isSocketView={isSocketView}
+                            notBestGradeResult={!!res.bestGradeResult}
                           />
                           {res.bestGradeResult && (
                             <Result
