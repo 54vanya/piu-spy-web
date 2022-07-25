@@ -12,7 +12,7 @@ import {
   getMaxRawScore,
 } from 'utils/leaderboards';
 
-import WorkerProfilesProcessing from 'workerize-loader!utils/workers/profilesPostProcess'; // eslint-disable-line import/no-webpack-loader-syntax
+import WorkerProfilesProcessing from 'workerize-loader?inline!utils/workers/profilesPostProcess'; // eslint-disable-line import/no-webpack-loader-syntax
 import * as profilesProcessing from 'utils/workers/profilesPostProcess';
 
 import { HOST } from 'constants/backend';

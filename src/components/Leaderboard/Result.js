@@ -46,6 +46,7 @@ const Result = (
     rightProfile = {},
     isSocketView = false,
     bestGradeScore = false,
+    notBestGradeResult = false,
   },
   ref,
 ) => {
@@ -99,7 +100,6 @@ const Result = (
         latest: new Date(chart.latestScoreDate) - new Date(res.date) < 12 * 60 * 60 * 1000,
         left: res.nickname === leftProfile.name,
         right: res.nickname === rightProfile.name,
-        bestGradeScore: bestGradeScore
       })}
       style={
         nameIndex > -1
@@ -117,16 +117,20 @@ const Result = (
         <div className="nickname-container">
           {!bestGradeScore && flag}
           <span className="nickname-text">
-            <NavLink exact to={routes.profile.getPath({ id: res.playerId })}>
-              {!bestGradeScore && res.nickname}
-            </NavLink>
-            {!!placeDifference && (
-              <span className="change-holder up">
-                <span>{placeDifference}</span>
-                <FaAngleDoubleUp />
-              </span>
-            )}
-            {ratingInfoBlock}
+            {!bestGradeScore &&
+              <>
+                <NavLink exact to={routes.profile.getPath({ id: res.playerId })}>
+                  {res.nickname}
+                </NavLink>
+                {!!placeDifference && (
+                  <span className="change-holder up">
+                    <span>{'123'}</span>
+                    <FaAngleDoubleUp />
+                  </span>
+                )}
+                {ratingInfoBlock}
+              </>
+            }
           </span>
           {!isSocketView && (
             <div className="mods-container">
@@ -157,7 +161,7 @@ const Result = (
           )}
         </div>
       </td>
-      <td className="score">
+      <td className={classNames('score', bestGradeScore && 'opacity')}>
         <Overlay
           overlayClassName="score-overlay-outer"
           overlayItem={
@@ -259,7 +263,7 @@ const Result = (
           </div>
         </Overlay>
       </td>
-      <td className="grade">
+      <td className={classNames('grade', notBestGradeResult && 'opacity')}>
         <div className="img-holder">
           <Grade grade={res.grade} />
         </div>
@@ -298,22 +302,23 @@ const Result = (
           </div>
         </td>
       )}
-      <td className="number miss">{res.miss}</td>
-      <td className="number bad">{res.bad}</td>
-      <td className="number good">{res.good}</td>
-      <td className="number great">{res.great}</td>
-      <td className="number perfect">{res.perfect}</td>
-      <td className="combo">
+      <td className={classNames('number', 'miss', bestGradeScore && 'opacity')}>{res.miss}</td>
+      <td className={classNames('number', 'bad', bestGradeScore && 'opacity')}>{res.bad}</td>
+      <td className={classNames('number', 'good', bestGradeScore && 'opacity')}>{res.good}</td>
+      <td className={classNames('number', 'great', bestGradeScore && 'opacity')}>{res.great}</td>
+      <td className={classNames('number', 'perfect', bestGradeScore && 'opacity')}>{res.perfect}</td>
+      <td className={classNames('combo', bestGradeScore && 'opacity')}>
         {res.combo}
         {res.combo ? 'x' : ''}
       </td>
-      <td className="accuracy">
+      <td className={classNames('accuracy', bestGradeScore && 'opacity')}>
         {res.accuracy === 100 ? 100 : res.accuracy ? res.accuracy.toFixed(2) : ''}
         {res.accuracy ? '%' : ''}
       </td>
       <td
         className={classNames('date', {
           latest: res.date === chart.latestScoreDate,
+          opacity: bestGradeScore,
         })}
       >
         {isSocketView ? (
