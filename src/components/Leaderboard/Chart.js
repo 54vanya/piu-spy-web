@@ -42,7 +42,7 @@ const Chart = React.forwardRef(
       rightProfile = {},
       isSocketView = false,
     },
-    ref,
+    ref
   ) => {
     const [overrides, setOverrides] = useState(null);
     const [isHidingPlayers, setHidingPlayers] = useState(!showHiddenPlayers);
@@ -103,15 +103,15 @@ const Chart = React.forwardRef(
           res.playerId === undoedPlayerId &&
           res.isRank === undoedResult.isRank &&
           res.date < undoedResult.date,
-        previousResults,
+        previousResults
       );
 
       const newResults = _.orderBy(
         'score',
         'desc',
         _.compact(
-          _.map((res) => (res.id === undoedResult.id ? previousPlayerResult : res), results),
-        ),
+          _.map((res) => (res.id === undoedResult.id ? previousPlayerResult : res), results)
+        )
       );
       const latestScore = _.maxBy('date', newResults);
       const overrideChart = {
@@ -138,40 +138,40 @@ const Chart = React.forwardRef(
       _.get('interpolatedDifficulty', sharedCharts[chart.sharedChartId]);
 
     return (
-      <div className='song-block' ref={ref}>
-        <div className='song-name'>
+      <div className="song-block" ref={ref}>
+        <div className="song-name">
           <ChartLabel type={chart.chartType} level={chart.chartLevel} />
           {isSocketView ? (
-            <div className='song-name-text'>
+            <div className="song-name-text">
               {interpDiff ? `(${interpDiff.toFixed(1)}) ` : ''}
               {chart.song}
             </div>
           ) : (
-            <div className='song-name-text'>
+            <div className="song-name-text">
               <NavLink
                 exact
                 to={routes.leaderboard.sharedChart.getPath({ sharedChartId: chart.sharedChartId })}
               >
                 {chart.song}
               </NavLink>{' '}
-              <span className='_grey-text'>({interpDiff && interpDiff.toFixed(1)})</span>
+              <span className="_grey-text">({interpDiff && interpDiff.toFixed(1)})</span>
             </div>
           )}
           {!isSocketView && (
-            <div className='youtube-link'>
+            <div className="youtube-link">
               <a
                 href={`https://youtube.com/results?${queryString.stringify({
                   search_query: `${chart.song} ${chart.chartLabel}`.replace(/( -)|(- )/g, ' '),
                 })}`}
-                target='_blank'
-                rel='noopener noreferrer'
+                target="_blank"
+                rel="noopener noreferrer"
               >
                 <FaYoutube />
               </a>
             </div>
           )}
-          <div className='_flex-fill' />
-          <div className='right-side-block'>
+          <div className="_flex-fill" />
+          <div className="right-side-block">
             {hiddenPlayersCount > 0 && (
               <div
                 className={classNames('players-hidden-count _grey-text', {
@@ -183,7 +183,7 @@ const Chart = React.forwardRef(
             )}
             {(hiddenPlayersCount > 0 || !isHidingPlayers) && !isSocketView && (
               <div
-                className='globe-icon _on-hover'
+                className="globe-icon _on-hover"
                 onClick={() => setHidingPlayers(!isHidingPlayers)}
               >
                 <FaGlobeAmericas />
@@ -199,7 +199,7 @@ const Chart = React.forwardRef(
                   className={classNames('backward-btn', { disabled: !canUndo })}
                   onClick={() => canUndo && onUndoLatestResult(chart)}
                 />
-                <span className='number'>
+                <span className="number">
                   {currentIndex}/{totalResultsCount}
                 </span>
                 <FaForward
@@ -210,10 +210,10 @@ const Chart = React.forwardRef(
             )}
           </div>
         </div>
-        <div className='charts'>
+        <div className="charts">
           {!_.isEmpty(results) && (
-            <div className='chart'>
-              <div className='results'>
+            <div className="chart">
+              <div className="results">
                 <table>
                   {/* {chartIndex === 0 && (
                     <thead>
@@ -235,9 +235,9 @@ const Chart = React.forwardRef(
                     </thead>
                   )} */}
                   <FlipMove
-                    enterAnimation='fade'
-                    leaveAnimation='fade'
-                    typeName='tbody'
+                    enterAnimation="fade"
+                    leaveAnimation="fade"
+                    typeName="tbody"
                     maintainContainerHeight
                     duration={ANIMATION_DURATION}
                   >
@@ -258,7 +258,7 @@ const Chart = React.forwardRef(
                       }
 
                       return (
-                        <React.Fragment key={res.isRank + '_' + res.nickname}>
+                        <React.Fragment key={res.isRank + "_" + res.nickname}>
                           <Result
                             chart={chart}
                             results={results}
