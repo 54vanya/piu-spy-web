@@ -1,7 +1,7 @@
 import React from 'react';
 import classNames from 'classnames';
 
-export default ({ type, level }) => {
+export const ChartLabel = ({ type, level }) => {
   return (
     <div
       className={classNames('chart-name', {

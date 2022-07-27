@@ -124,7 +124,7 @@ const Result = (
                 </NavLink>
                 {!!placeDifference && (
                   <span className="change-holder up">
-                    <span>{'123'}</span>
+                    <span>{placeDifference}</span>
                     <FaAngleDoubleUp />
                   </span>
                 )}
