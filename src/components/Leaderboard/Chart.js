@@ -11,7 +11,7 @@ import { routes } from 'constants/routes';
 import { DEBUG } from 'constants/env';
 
 import Result from './Result';
-import ChartLabel from './ChartLabel';
+import { ChartLabel } from './ChartLabel';
 
 import { useLanguage } from 'utils/context/translation';
 

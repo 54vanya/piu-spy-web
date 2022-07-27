@@ -70,6 +70,11 @@ const processChartsData = (chartsData, players) => {
     // Parsing results
     const topResults = {};
     const bestGradeResults = {};
+
+    const chartList = [...chartEntry.results, ...chartEntry.bestGradeResults || []];
+    chartList.sort((a, b) => a.score - b.score);
+
+    // scores should be sorted from lowest to highest
     _.forEachRight((_result) => {
       if (!players[_result.player]) {
         // Player of this result was not found in list of players. Ignoring this result like it doesn't exist
@@ -80,15 +85,6 @@ const processChartsData = (chartsData, players) => {
       const result = mapResult(_result, players, chartTop, sharedChartId);
       const topResultId = getTopResultId(result);
       const bestGradeResultId = getBestGradeResultId(result);
-
-      // bestGradeResult is result with best grade not score
-      const bestGradeResult = chartEntry.bestGradeResults?.find(res => res.player === result.playerId);
-      if (bestGradeResult && result.grade !== '?' && bestGradeResult.grade !== '?') {
-        const mappedBestGradeResult = mapResult(bestGradeResult, players, chartTop, sharedChartId);
-        if ((mappedBestGradeResult.isRank && result.isRank) || (!mappedBestGradeResult.isRank && !result.isRank)) {
-          result.bestGradeResult = mappedBestGradeResult;
-        }
-      }
 
       // b0 = performance.now();
       // Chronological results array to calculate battles order
@@ -141,7 +137,11 @@ const processChartsData = (chartsData, players) => {
         // Sorted from latest to oldest
         chartTop.previousResults.push(result);
       }
-    }, chartsData[sharedChartId].results);
+
+      if (result.isBestGradeOnChart && topResults[topResultId].id !== result.id && topResults[topResultId].grade !== '?' && result.grade !== '?') {
+        topResults[topResultId].bestGradeResult = result;
+      }
+    }, chartList);
   }
 
   // c0 = performance.now();
