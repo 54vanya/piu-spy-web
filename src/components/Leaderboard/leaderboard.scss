@@ -273,7 +273,7 @@
               }
               &.accuracy {
                 width: 62px;
-                text-align: right;
+                text-align: left;
                 font-size: 80%;
               }
               &.score {
@@ -289,11 +289,12 @@
               }
               &.number {
                 width: 54px;
-                text-align: center;
+                text-align: right;
               }
               &.combo {
                 width: 52px;
                 font-size: 80%;
+                text-align: right;
               }
               &.mods {
                 width: 30px;
