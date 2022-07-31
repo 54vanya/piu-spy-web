@@ -14,11 +14,15 @@ import Result from './Result';
 import { ChartLabel } from './ChartLabel';
 
 import { useLanguage } from 'utils/context/translation';
+import { filteredDataSelector, sharedChartDataSelector } from '../../reducers/selectors';
 
 const ANIMATION_DURATION = 250;
 
 const mapStateToProps = (state, props) => {
+  const isChartView = props.isChartView;
+
   return {
+    filteredData: isChartView ? sharedChartDataSelector(state, props) : filteredDataSelector(state),
     sharedCharts: state.results.sharedCharts,
     playersHiddenStatus: props.playersHiddenStatus || state.preferences.data.playersHiddenStatus,
   };
@@ -29,9 +33,6 @@ const Chart = React.forwardRef(
     {
       playersHiddenStatus = {},
       sharedCharts = {},
-      // shared
-      chart: chartOriginal,
-      // leaderboards
       showHiddenPlayers = false,
       showProtagonistEloChange = false,
       showProtagonistPpChange = false,
@@ -41,9 +42,12 @@ const Chart = React.forwardRef(
       leftProfile = {},
       rightProfile = {},
       isSocketView = false,
+      chartIndex,
+      filteredData,
     },
     ref
   ) => {
+    const chartOriginal = filteredData[chartIndex];
     const [overrides, setOverrides] = useState(null);
     const [isHidingPlayers, setHidingPlayers] = useState(!showHiddenPlayers);
 
@@ -215,25 +219,6 @@ const Chart = React.forwardRef(
             <div className="chart">
               <div className="results">
                 <table>
-                  {/* {chartIndex === 0 && (
-                    <thead>
-                      <tr>
-                        <th className="place"></th>
-                        <th className="nickname"></th>
-                        <th className="judge"></th>
-                        <th className="score">score</th>
-                        <th className="grade"></th>
-                        <th className="number">miss</th>
-                        <th className="number">bad</th>
-                        <th className="number">good</th>
-                        <th className="number">great</th>
-                        <th className="number">perfect</th>
-                        <th className="combo">combo</th>
-                        <th className="accuracy">accuracy</th>
-                        <th className="date"></th>
-                      </tr>
-                    </thead>
-                  )} */}
                   <FlipMove
                     enterAnimation="fade"
                     leaveAnimation="fade"
