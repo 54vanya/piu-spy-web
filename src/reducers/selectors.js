@@ -45,7 +45,7 @@ const getFilteredData = (
   preferences
 ) => {
   if (data.length === 0) {
-    return {}
+    return [];
   }
   const start = performance.now();
   const playersHiddenStatus = preferences.playersHiddenStatus;

@@ -116,12 +116,13 @@ const mapDispatchToProps = {
 
 const Leaderboard = (props) => {
 
-  const [showItemsCount, setShowItemsCount] = useState(props.isChartView ? 1 : 20);
+  const [showItemsCount, setShowItemsCount] = useState(20);
   const lang = useContext(Language);
 
   const setFilter = _.curry((name, value) => {
     const filter = { ...props.filter, [name]: value };
     props.setFilter(filter);
+    setShowItemsCount(20);
     localForage.setItem('filter', filter);
   });
 
@@ -319,7 +320,7 @@ const Leaderboard = (props) => {
     );
   };
 
-  const { isLoading, isChartView, filteredData, error, filter, presets, history } = props;
+  const { isLoading, isChartView, filteredData = [], error, filter, presets, history } = props;
 
   const canShowMore = filteredData.length > showItemsCount;
   // const visibleData = _.slice(0, showItemsCount, filteredData);
@@ -405,8 +406,8 @@ const Leaderboard = (props) => {
           <div className="top-list">
             {isLoading && <Loader />}
             {_.isEmpty(filteredData) && !isLoading && (error ? error.message : lang.NO_RESULTS)}
-            {!isLoading && filteredData.length > 0 &&
-              Array(showItemsCount).fill(() => undefined).map((_, chartIndex) => renderVisibleData(chartIndex))}
+            {!isLoading &&
+              Array(showItemsCount < filteredData.length ? showItemsCount : filteredData.length).fill(() => undefined).map((_, chartIndex) => renderVisibleData(chartIndex))}
             {!isLoading && canShowMore && (
               <button
                 className="btn btn-primary"
