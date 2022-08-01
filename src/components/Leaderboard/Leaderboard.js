@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useContext, useMemo, useState } from 'react';
 import { connect } from 'react-redux';
 import _ from 'lodash/fp';
 import Select from 'react-select';
@@ -31,6 +31,7 @@ import { openPreset, selectPreset } from 'reducers/presets';
 import { colorsArray } from 'utils/colors';
 import { filteredDataSelector, playersSelector, sharedChartDataSelector } from 'reducers/selectors';
 import { Language } from 'utils/context/translation';
+import { FilteredDataContext } from '../Contexts/FilteredDataContext';
 
 // code
 const getSortingOptions = _.memoize((lang) => [
@@ -115,7 +116,8 @@ const mapDispatchToProps = {
 
 const Leaderboard = (props) => {
 
-  const [showItemsCount, setShowItemsCount] = useState(20);
+  const [showItemsCount, setShowItemsCount] = useState(props.isChartView ? 1 : 20);
+  const lang = useContext(Language);
 
   const setFilter = _.curry((name, value) => {
     const filter = { ...props.filter, [name]: value };
@@ -263,61 +265,57 @@ const Leaderboard = (props) => {
   const renderSortings = () => {
     const { players, filter } = props;
     return (
-      <Language.Consumer>
-        {(lang) => (
-          <div className="sortings">
-            <div>
-              <label className="label">{lang.SORTING_LABEL}</label>
-              <Select
-                placeholder={lang.SORTING_PLACEHOLDER}
-                className="select"
-                classNamePrefix="select"
-                isClearable={false}
-                options={getSortingOptions(lang)}
-                value={_.getOr(getSortingOptions(lang)[0], 'sortingType', filter)}
-                onChange={setFilter('sortingType')}
-              />
-            </div>
-            {[
-              SORT.PROTAGONIST,
-              SORT.RANK_ASC,
-              SORT.RANK_DESC,
-              SORT.PP_ASC,
-              SORT.PP_DESC,
-              SORT.NEW_SCORES_PLAYER,
-            ].includes(_.get('sortingType.value', filter)) && (
-              <div>
-                <label className="label">{lang.PLAYER_LABEL}</label>
-                <Select
-                  className={classNames('select players', {
-                    'red-border': !_.get('protagonist', filter),
-                  })}
-                  classNamePrefix="select"
-                  placeholder={lang.PLAYERS_PLACEHOLDER}
-                  options={players}
-                  value={_.getOr(null, 'protagonist', filter)}
-                  onChange={setFilter('protagonist')}
-                />
-              </div>
-            )}
-            {[SORT.PROTAGONIST].includes(_.get('sortingType.value', filter)) && (
-              <div>
-                <label className="label">{lang.EXCLUDE_FROM_COMPARISON}</label>
-                <Select
-                  closeMenuOnSelect={false}
-                  className="select players"
-                  classNamePrefix="select"
-                  placeholder={lang.PLAYERS_PLACEHOLDER}
-                  options={players}
-                  isMulti
-                  value={_.getOr([], 'excludeAntagonists', filter)}
-                  onChange={setFilter('excludeAntagonists')}
-                />
-              </div>
-            )}
+      <div className="sortings">
+        <div>
+          <label className="label">{lang.SORTING_LABEL}</label>
+          <Select
+            placeholder={lang.SORTING_PLACEHOLDER}
+            className="select"
+            classNamePrefix="select"
+            isClearable={false}
+            options={getSortingOptions(lang)}
+            value={_.getOr(getSortingOptions(lang)[0], 'sortingType', filter)}
+            onChange={setFilter('sortingType')}
+          />
+        </div>
+        {[
+          SORT.PROTAGONIST,
+          SORT.RANK_ASC,
+          SORT.RANK_DESC,
+          SORT.PP_ASC,
+          SORT.PP_DESC,
+          SORT.NEW_SCORES_PLAYER,
+        ].includes(_.get('sortingType.value', filter)) && (
+          <div>
+            <label className="label">{lang.PLAYER_LABEL}</label>
+            <Select
+              className={classNames('select players', {
+                'red-border': !_.get('protagonist', filter),
+              })}
+              classNamePrefix="select"
+              placeholder={lang.PLAYERS_PLACEHOLDER}
+              options={players}
+              value={_.getOr(null, 'protagonist', filter)}
+              onChange={setFilter('protagonist')}
+            />
           </div>
         )}
-      </Language.Consumer>
+        {[SORT.PROTAGONIST].includes(_.get('sortingType.value', filter)) && (
+          <div>
+            <label className="label">{lang.EXCLUDE_FROM_COMPARISON}</label>
+            <Select
+              closeMenuOnSelect={false}
+              className="select players"
+              classNamePrefix="select"
+              placeholder={lang.PLAYERS_PLACEHOLDER}
+              options={players}
+              isMulti
+              value={_.getOr([], 'excludeAntagonists', filter)}
+              onChange={setFilter('excludeAntagonists')}
+            />
+          </div>
+        )}
+      </div>
     );
   };
 
@@ -366,63 +364,61 @@ const Leaderboard = (props) => {
   }, [filter.showHiddenFromPreferences, isChartView, protagonistName, showProtagonistEloChange, showProtagonistPpChange, uniqueSelectedNames, filteredData])
 
   return (
-    <Language.Consumer>
-      {(lang) => (
-        <div className="leaderboard-page">
-          <div className="content">
-            {isChartView && (
-              <div className="simple-search">
-                {/* <NavLink exact to={routes.leaderboard.path}> */}
-                <button className="btn btn-sm btn-dark btn-icon" onClick={() => history.goBack()}>
-                  <FaArrowLeft /> {lang.BACK_BUTTON}
-                </button>
-                {/* </NavLink> */}
-              </div>
-            )}
-            {!isChartView && (
-              <>
-                <div className="search-block">
-                  {renderSimpleSearch()}
-                  <CollapsibleBar title={lang.FILTERS}>{renderFilters()}</CollapsibleBar>
-                  <CollapsibleBar title={lang.SORTING}>{renderSortings()}</CollapsibleBar>
-                </div>
-                {!!presets.length && (
-                  <div className="presets-buttons">
-                    <span>{lang.PRESETS}:</span>
-                    {presets.map((preset) => (
-                      <ToggleButton
-                        key={preset.name}
-                        text={preset.name}
-                        className="btn btn-sm btn-dark _margin-right"
-                        active={_.get('filter', preset) === filter}
-                        onToggle={() => {
-                          props.selectPreset(preset);
-                          props.openPreset();
-                        }}
-                      ></ToggleButton>
-                    ))}
-                  </div>
-                )}
-              </>
-            )}
-            <div className="top-list">
-              {isLoading && <Loader />}
-              {_.isEmpty(filteredData) && !isLoading && (error ? error.message : lang.NO_RESULTS)}
-              {!isLoading && filteredData.length > 0 &&
-                Array(showItemsCount).fill(() => undefined).map((_, chartIndex) => renderVisibleData(chartIndex))}
-              {!isLoading && canShowMore && (
-                <button
-                  className="btn btn-primary"
-                  onClick={() => setShowItemsCount(showItemsCount + 10)}
-                >
-                  {lang.SHOW_MORE}
-                </button>
-              )}
+    <FilteredDataContext.Provider value={filteredData}>
+      <div className="leaderboard-page">
+        <div className="content">
+          {isChartView && (
+            <div className="simple-search">
+              {/* <NavLink exact to={routes.leaderboard.path}> */}
+              <button className="btn btn-sm btn-dark btn-icon" onClick={() => history.goBack()}>
+                <FaArrowLeft /> {lang.BACK_BUTTON}
+              </button>
+              {/* </NavLink> */}
             </div>
+          )}
+          {!isChartView && (
+            <>
+              <div className="search-block">
+                {renderSimpleSearch()}
+                <CollapsibleBar title={lang.FILTERS}>{renderFilters()}</CollapsibleBar>
+                <CollapsibleBar title={lang.SORTING}>{renderSortings()}</CollapsibleBar>
+              </div>
+              {!!presets.length && (
+                <div className="presets-buttons">
+                  <span>{lang.PRESETS}:</span>
+                  {presets.map((preset) => (
+                    <ToggleButton
+                      key={preset.name}
+                      text={preset.name}
+                      className="btn btn-sm btn-dark _margin-right"
+                      active={_.get('filter', preset) === filter}
+                      onToggle={() => {
+                        props.selectPreset(preset);
+                        props.openPreset();
+                      }}
+                    ></ToggleButton>
+                  ))}
+                </div>
+              )}
+            </>
+          )}
+          <div className="top-list">
+            {isLoading && <Loader />}
+            {_.isEmpty(filteredData) && !isLoading && (error ? error.message : lang.NO_RESULTS)}
+            {!isLoading && filteredData.length > 0 &&
+              Array(showItemsCount).fill(() => undefined).map((_, chartIndex) => renderVisibleData(chartIndex))}
+            {!isLoading && canShowMore && (
+              <button
+                className="btn btn-primary"
+                onClick={() => setShowItemsCount(showItemsCount + 10)}
+              >
+                {lang.SHOW_MORE}
+              </button>
+            )}
           </div>
         </div>
-      )}
-    </Language.Consumer>
+      </div>
+    </FilteredDataContext.Provider>
   );
 };
 

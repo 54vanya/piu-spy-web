@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { NavLink } from 'react-router-dom';
 import { connect } from 'react-redux';
 import _ from 'lodash/fp';
@@ -14,15 +14,12 @@ import Result from './Result';
 import { ChartLabel } from './ChartLabel';
 
 import { useLanguage } from 'utils/context/translation';
-import { filteredDataSelector, sharedChartDataSelector } from '../../reducers/selectors';
+import { FilteredDataContext } from '../Contexts/FilteredDataContext';
 
 const ANIMATION_DURATION = 250;
 
 const mapStateToProps = (state, props) => {
-  const isChartView = props.isChartView;
-
   return {
-    filteredData: isChartView ? sharedChartDataSelector(state, props) : filteredDataSelector(state),
     sharedCharts: state.results.sharedCharts,
     playersHiddenStatus: props.playersHiddenStatus || state.preferences.data.playersHiddenStatus,
   };
@@ -43,10 +40,10 @@ const Chart = React.forwardRef(
       rightProfile = {},
       isSocketView = false,
       chartIndex,
-      filteredData,
     },
     ref
   ) => {
+    const filteredData = useContext(FilteredDataContext);
     const chartOriginal = filteredData[chartIndex];
     const [overrides, setOverrides] = useState(null);
     const [isHidingPlayers, setHidingPlayers] = useState(!showHiddenPlayers);

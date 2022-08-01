@@ -58,8 +58,7 @@ export const profileSelectorCreator = (idParamName) =>
           _.update(
             '[1]',
             _.flow(
-              _.filter(({ result }) => result.isBestGradeOnChart),
-              _.map(({result, ...rest}) => ({result: result.bestGradeResult || result, ...rest}))
+              _.map(({result, ...rest}) => ({result: result.bestGradeResult || result, ...rest})),
             ),
           ),
         ),
