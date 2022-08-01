@@ -225,6 +225,12 @@ const Result = (
                     {res.mods}
                   </div>
                 )}
+                {!!res.combo && (
+                  <div>
+                    <span className="_grey">{lang.COMBO}: </span>
+                    {res.combo}
+                  </div>
+                )}
                 {!!res.calories && (
                   <div>
                     <span className="_grey">{lang.CCAL}: </span>
@@ -307,10 +313,6 @@ const Result = (
       <td className={classNames('number', 'good', bestGradeScore && 'opacity')}>{res.good}</td>
       <td className={classNames('number', 'great', bestGradeScore && 'opacity')}>{res.great}</td>
       <td className={classNames('number', 'perfect', bestGradeScore && 'opacity')}>{res.perfect}</td>
-      <td className={classNames('combo', bestGradeScore && 'opacity')}>
-        {res.combo}
-        {res.combo ? 'x' : ''}
-      </td>
       <td className={classNames('accuracy', bestGradeScore && 'opacity')}>
         {res.accuracy === 100 ? 100 : res.accuracy ? res.accuracy.toFixed(2) : ''}
         {res.accuracy ? '%' : ''}
