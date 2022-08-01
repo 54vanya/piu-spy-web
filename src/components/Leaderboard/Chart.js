@@ -40,11 +40,12 @@ const Chart = React.forwardRef(
       rightProfile = {},
       isSocketView = false,
       chartIndex,
+      chart: forcedChart,
     },
     ref
   ) => {
     const filteredData = useContext(FilteredDataContext);
-    const chartOriginal = filteredData[chartIndex];
+    const chartOriginal = forcedChart || filteredData[chartIndex];
     const [overrides, setOverrides] = useState(null);
     const [isHidingPlayers, setHidingPlayers] = useState(!showHiddenPlayers);
 
