@@ -148,8 +148,9 @@
         border-radius: 5px;
         padding: 8px 0;
         margin-left: 0;
-        font-size: 100%;
+        font-size: 110%;
         font-weight: 600;
+        font-family: 'TitilliumWeb-Bold';
         display: flex;
         align-items: center;
         flex-flow: row nowrap;
@@ -273,7 +274,7 @@
               }
               &.accuracy {
                 width: 62px;
-                text-align: left;
+                text-align: right;
                 font-size: 80%;
               }
               &.score {
@@ -337,10 +338,14 @@
                   }
                 }
                 &.latest {
-                  outline: 1px solid #8080805e;
-                  background: #393939;
+                  outline: 1px solid #80808080;
+                  background: #333333;
                   td {
+                    &.score {
+                      color: #9ecd7a;
+                    }
                     &.date {
+                      font-family: 'TitilliumWeb-Bold';
                       color: #afe488; //#bef9931d;
                     }
                   }
@@ -360,6 +365,7 @@
                       background: rgba(0, 255, 0, 0.05);
                     }
                     &.perfect {
+                      width: 62px;
                       background: rgba(0, 255, 255, 0.05);
                     }
                   }
@@ -411,7 +417,7 @@
           display: flex;
         }
         > .song-name {
-          font-size: 100%;
+          font-size: 110%;
           padding: 0.3em;
 
           > * {

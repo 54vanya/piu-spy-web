@@ -63,6 +63,7 @@ export default {
   ELO: 'эло',
   PP: 'pp',
   MODS: 'моды',
+  COMBO: 'комбо',
   CCAL: 'ккал',
   SCORE_INCREASE: 'прирост',
   ORIGINAL_MIX: 'было сыграно на',
