@@ -12,7 +12,7 @@ import { routes } from 'constants/routes';
 import { fetchCurrentTournament } from 'reducers/tournament';
 
 import Loader from 'components/Shared/Loader';
-import ChartLabel from 'components/Leaderboard/ChartLabel';
+import { ChartLabel } from 'components/Leaderboard/ChartLabel';
 
 import { labelToTypeLevel } from 'utils/leaderboards';
 

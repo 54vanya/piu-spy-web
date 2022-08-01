@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { NavLink } from 'react-router-dom';
 import { connect } from 'react-redux';
 import _ from 'lodash/fp';
@@ -11,9 +11,10 @@ import { routes } from 'constants/routes';
 import { DEBUG } from 'constants/env';
 
 import Result from './Result';
-import ChartLabel from './ChartLabel';
+import { ChartLabel } from './ChartLabel';
 
 import { useLanguage } from 'utils/context/translation';
+import { FilteredDataContext } from '../Contexts/FilteredDataContext';
 
 const ANIMATION_DURATION = 250;
 
@@ -29,9 +30,6 @@ const Chart = React.forwardRef(
     {
       playersHiddenStatus = {},
       sharedCharts = {},
-      // shared
-      chart: chartOriginal,
-      // leaderboards
       showHiddenPlayers = false,
       showProtagonistEloChange = false,
       showProtagonistPpChange = false,
@@ -41,9 +39,13 @@ const Chart = React.forwardRef(
       leftProfile = {},
       rightProfile = {},
       isSocketView = false,
+      chartIndex,
+      chart: forcedChart,
     },
     ref
   ) => {
+    const filteredData = useContext(FilteredDataContext);
+    const chartOriginal = forcedChart || filteredData[chartIndex];
     const [overrides, setOverrides] = useState(null);
     const [isHidingPlayers, setHidingPlayers] = useState(!showHiddenPlayers);
 
@@ -215,25 +217,6 @@ const Chart = React.forwardRef(
             <div className="chart">
               <div className="results">
                 <table>
-                  {/* {chartIndex === 0 && (
-                    <thead>
-                      <tr>
-                        <th className="place"></th>
-                        <th className="nickname"></th>
-                        <th className="judge"></th>
-                        <th className="score">score</th>
-                        <th className="grade"></th>
-                        <th className="number">miss</th>
-                        <th className="number">bad</th>
-                        <th className="number">good</th>
-                        <th className="number">great</th>
-                        <th className="number">perfect</th>
-                        <th className="combo">combo</th>
-                        <th className="accuracy">accuracy</th>
-                        <th className="date"></th>
-                      </tr>
-                    </thead>
-                  )} */}
                   <FlipMove
                     enterAnimation="fade"
                     leaveAnimation="fade"

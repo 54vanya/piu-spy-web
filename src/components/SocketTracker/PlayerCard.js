@@ -3,7 +3,7 @@ import _ from 'lodash/fp';
 
 import { TYPES } from 'constants/popups';
 
-import ChartLabel from 'components/Leaderboard/ChartLabel';
+import { ChartLabel } from 'components/Leaderboard/ChartLabel';
 
 import { useTrackedEx } from './helpers';
 

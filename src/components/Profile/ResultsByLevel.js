@@ -15,7 +15,7 @@ import { profileSelector } from './Profile';
 
 import Loader from 'components/Shared/Loader';
 import Grade from 'components/Shared/Grade';
-import ChartLabel from 'components/Leaderboard/ChartLabel';
+import { ChartLabel } from 'components/Leaderboard/ChartLabel';
 
 import { gradeComparator } from 'utils/leaderboards';
 import { useLanguage } from 'utils/context/translation';
@@ -60,6 +60,7 @@ const resultsByLevelSelector = createSelector(
       (g) => ({ ...Object.keys(unplayed).reduce((acc, key) => ({ ...acc, [key]: [] }), {}), ...g }),
       _.mapValues(
         _.flow(
+          _.map(({result, ...rest}) => ({result: result.bestGradeResult || result, ...rest})),
           _.groupBy('result.grade'),
           _.toPairs,
           _.orderBy(([grade]) => gradeComparator[grade], sortOrder)
@@ -145,9 +146,11 @@ const ResultsByLevel = (props) => {
       </header>
       <div className="chart-types">
         {data.byType.map(([chartType, byGrade]) => {
+          const total = byGrade.map(list => list[1].length).reduce((sum, cur) => sum + cur, 0)
+
           return (
             <div key={chartType} className="chart-type">
-              <header>{chartTypeText[chartType] || chartType}</header>
+              <header>{`${chartTypeText[chartType] || chartType} (${total})`}</header>
               <div className="grades-groups">
                 {byGrade.map(([grade, charts]) => {
                   if (_.isEmpty(charts)) {
@@ -164,6 +167,7 @@ const ResultsByLevel = (props) => {
                         ) : (
                           <Grade grade={grade} />
                         )}
+                        {` (${charts.length})`}
                       </header>
                       <div className="charts-for-grade">
                         {charts.map(({ chart, result }) => {
