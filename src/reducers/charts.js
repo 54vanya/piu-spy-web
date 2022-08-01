@@ -144,7 +144,7 @@ const processChartsData = (chartsData, players) => {
         chartTop.previousResults.push(result);
       }
 
-      if (result.isBestGradeOnChart && topResults[topResultId].id !== result.id && topResults[topResultId].grade !== '?' && result.grade !== '?') {
+      if (result.isBestGradeOnChart && topResults[topResultId].id !== result.id) {
         topResults[topResultId].bestGradeResult = result;
       }
     }, chartList);
