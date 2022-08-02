@@ -292,6 +292,9 @@
                 width: 54px;
                 text-align: right;
               }
+              &.perfect {
+                width: 66px;
+              }
               &.combo {
                 width: 52px;
                 font-size: 80%;
@@ -365,7 +368,6 @@
                       background: rgba(0, 255, 0, 0.05);
                     }
                     &.perfect {
-                      width: 62px;
                       background: rgba(0, 255, 255, 0.05);
                     }
                   }
@@ -474,6 +476,9 @@
                 width: initial;
                 font-size: 80%;
                 padding: 0.25em;
+              }
+              &.perfect {
+                width: initial;
               }
               &.combo {
                 width: initial;
