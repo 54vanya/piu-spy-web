@@ -1,4 +1,6 @@
 @import 'utils/css/helpers';
+@import 'constants/colors';
+
 
 .container {
   padding-bottom: 40px;
@@ -121,24 +123,25 @@
   margin-left: 0;
   margin-right: 0.4em;
   padding: 0 0.4em;
+  font-family: 'TitilliumWeb-Bold';
 
   > .chart-letter {
     margin-right: 2px;
   }
   &.single {
-    background: #af2928;
+    background: $single_chart_color;
   }
   &.singlep {
-    background: #af2879;
+    background: $single_perf_chart_color;
   }
   &.double {
-    background: #169c16;
+    background: $double_chart_color;
   }
   &.doublep {
-    background: #129c96;
+    background: $double_perf_chart_color;
   }
   &.coop {
-    background: #8d8a1b;
+    background: $coop_chart_color;
   }
 }
 

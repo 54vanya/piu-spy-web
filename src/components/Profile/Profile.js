@@ -500,8 +500,8 @@ class Profile extends Component {
           <RechartsTooltip />
           <ReferenceLine y={0} stroke="#555" />
           <Legend />
-          <Bar dataKey="D" fill="#169c16" stackId="stack" />
-          <Bar dataKey="S" fill="#af2928" stackId="stack" />
+          <Bar dataKey="D" fill="$double_chart_color" stackId="stack" />
+          <Bar dataKey="S" fill="$single_chart_color" stackId="stack" />
         </BarChart>
       </ResponsiveContainer>
     );

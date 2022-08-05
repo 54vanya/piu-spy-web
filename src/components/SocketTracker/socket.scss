@@ -1,3 +1,6 @@
+@import 'constants/colors';
+
+
 .tracker-container {
   color: white;
   font-size: 22px;
@@ -171,7 +174,7 @@
         z-index: 2;
         border-radius: 5px;
         margin-left: 0;
-        font-size: 110%;
+        font-size: 120%;
         font-weight: 600;
         margin-bottom: 6px;
         display: flex;
@@ -246,7 +249,7 @@
                       display: inline-flex;
                       align-items: center;
                       justify-content: center;
-                      color: #afe488;
+                      color: $fresh_result_color;
                       > span {
                         padding-top: 0.2em;
                       }
@@ -327,11 +330,11 @@
                   }
                 }
                 &.vj .inner {
-                  background: #8a1919;
+                  background: $rank_mark_color;
                   padding: 5px 7px;
                 }
                 &.hj .inner {
-                  background: #735d3b;
+                  background: $hj_mark_color;
                 }
               }
             }
@@ -358,8 +361,12 @@
                   outline: 1px solid #8080805e;
                   background: #393939;
                   td {
+                    &.score {
+                      color: $fresh_result_color;
+                    }
                     &.date {
-                      color: #afe488; //#bef9931d;
+                      font-family: 'TitilliumWeb-Bold';
+                      color: $fresh_result_color;
                     }
                   }
                 }
