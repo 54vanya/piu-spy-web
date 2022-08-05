@@ -16,7 +16,11 @@ import Toggle from 'components/Shared/Toggle/Toggle';
 
 import { getRankImg } from 'utils/exp';
 
+import { useLanguage } from 'utils/context/translation';
+
 export default function RankingList({ ranking, isLoading, preferences, updatePreferences }) {
+  const lang = useLanguage();
+
   return (
     <div className="ranking-list">
       {_.isEmpty(ranking) && !isLoading && 'ничего не найдено'}
@@ -25,12 +29,12 @@ export default function RankingList({ ranking, isLoading, preferences, updatePre
         <table>
           <thead>
             <tr>
-              <th className="place"></th>
+              <th className="place">{lang.RANK}</th>
               <th className="change"></th>
-              <th className="exp-rank">rank</th>
-              <th className="name">name</th>
-              <th className="name name-piu">piu name</th>
-              <th className="rating">elo</th>
+              <th className="exp-rank">{lang.EXP}</th>
+              <th className="name">{lang.NAME}</th>
+              <th className="name name-piu">{lang.AMPASS}</th>
+              <th className="rating">{lang.ELO}</th>
               <th className="rating-change-cell"></th>
               <th className="rating">pp</th>
               {/* <th className="total-score">total score</th> */}
@@ -58,9 +62,9 @@ export default function RankingList({ ranking, isLoading, preferences, updatePre
               <th className="grades f">
                 <Grade grade="F" />
               </th>
-              <th className="playcount">scores</th>
+              <th className="playcount">{lang.SCORES_count}</th>
               {/* <th className="calories">kcal</th> */}
-              <th className="accuracy">accuracy</th>
+              <th className="accuracy">{lang.ACCURACY}</th>
               <th className="hide-col"> </th>
             </tr>
           </thead>

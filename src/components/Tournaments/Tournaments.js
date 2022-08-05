@@ -16,7 +16,10 @@ import { ChartLabel } from 'components/Leaderboard/ChartLabel';
 
 import { labelToTypeLevel } from 'utils/leaderboards';
 
+import { useLanguage } from 'utils/context/translation';
+
 export default function Tournaments() {
+  const lang = useLanguage();
   const dispatch = useDispatch();
   const [selectedBracket, setSelectedBracket] = useState(null);
 
@@ -59,15 +62,15 @@ export default function Tournaments() {
       <header>{tournamentTitle}</header>
       <div className="description">
         <div className="labeled-item">
-          <div className="title">Start date:</div>
+          <div className="title">{lang.START_DATE}</div>
           <div className="text">{new Date(tournament.start_date).toLocaleDateString()}</div>
         </div>
         <div className="labeled-item">
-          <div className="title">End date:</div>
+          <div className="title">{lang.END_DATE}</div>
           <div className="text">{new Date(tournament.end_date).toLocaleDateString()}</div>
         </div>
       </div>
-      <div className="brackets-title">Brackets:</div>
+      <div className="brackets-title">{lang.BRACKETS}</div>
       <div className="brackets">
         {brackets.map((bracket) => {
           return (
@@ -93,7 +96,7 @@ export default function Tournaments() {
       </div>
       {selectedBracket && (
         <>
-          <div className="results-title">Results:</div>
+          <div className="results-title">{lang.RESULTS}</div>
           <div className="results">
             <table>
               <thead>

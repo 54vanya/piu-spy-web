@@ -40,19 +40,19 @@ export const tooltipFormatter = (result) => {
   }
 };
 
-export const getTimeAgo = (date) => {
+export const getTimeAgo = (lang, date) => {
   const dayDiff = moment().startOf('day').diff(moment(date).startOf('day'), 'days');
   const hour = moment(date).hour();
   if (moment().hour() < 5) {
-    return dayDiff <= 1 ? 'сегодня' : timeAgo.format(date, timeStyle);
+    return dayDiff <= 1 ? lang.TODAY : timeAgo.format(date, timeStyle);
   }
   return dayDiff === 0
     ? hour < 5
-      ? 'вчера ночью'
-      : 'сегодня'
+      ? lang.YESTERDAY_NIGHT
+      : lang.TODAY
     : dayDiff === 1
-    ? 'вчера'
-    : timeAgo.format(date, timeStyle);
+    ? lang.YESTERDAY
+    : timeAgo.format(date, timeStyle);  // TODO: translate date!
 };
 
 export const labelToTypeLevel = (label) => {

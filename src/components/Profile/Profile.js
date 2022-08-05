@@ -52,6 +52,7 @@ import { parseDate } from 'utils/date';
 import { getTimeAgo } from 'utils/leaderboards';
 import { achievements } from 'utils/achievements';
 import { getRankImg } from 'utils/exp';
+import { Language } from 'utils/context/translation';
 
 // code
 const MIN_GRAPH_HEIGHT = undefined;
@@ -94,6 +95,9 @@ const mapDispatchToProps = {
 };
 
 class Profile extends Component {
+
+  static contextType = Language;
+
   static propTypes = {
     profile: toBe.object,
     error: toBe.object,
@@ -570,6 +574,7 @@ class Profile extends Component {
   }
 
   renderResultsByLevelHeader() {
+    const lang = this.context;
     const { isLevelGraphCombined } = this.state;
     return (
       <div className="toggle-holder">
@@ -582,24 +587,26 @@ class Profile extends Component {
             }))
           }
         >
-          объединить графики
+          {lang.UNITE_GRAPHS}
         </Toggle>
       </div>
     );
   }
 
   renderResultsByLevelFooter() {
+    const lang = this.context;
     const { profile } = this.props;
     return (
       <div className="toggle-holder">
         <Link to={routes.profile.resultsByLevel.getPath({ id: profile.id })}>
-          <button className="btn btn-sm btn-dark btn-icon _margin-right">подробнее</button>
+          <button className="btn btn-sm btn-dark btn-icon _margin-right">{lang.MORE_DETAILS}</button>
         </Link>
       </div>
     );
   }
 
   renderProfile() {
+    const lang = this.context;
     const { profile, otherPlayers, filter } = this.props;
     const { isLevelGraphCombined } = this.state;
     const expProgress = profile.expRankNext
@@ -610,30 +617,30 @@ class Profile extends Component {
       <div className="profile">
         <div className="profile-header">
           <div className="profile-name text-with-header">
-            <div className="text-header">игрок</div>
+            <div className="text-header">{lang.PLAYER}</div>
             <div>{profile.name}</div>
           </div>
           <div className="text-with-header">
-            <div className="text-header">ранк</div>
+            <div className="text-header">{lang.RANK}</div>
             <div>#{profile.rank}</div>
           </div>
           <div className="text-with-header">
-            <div className="text-header">эло</div>
+            <div className="text-header">{lang.ELO}</div>
             <div>{profile.rating}</div>
           </div>
           <div className="text-with-header">
-            <div className="text-header">последняя игра</div>
-            <div>{profile.lastResultDate ? getTimeAgo(profile.lastResultDate) : 'никогда'}</div>
+            <div className="text-header">{lang.LAST_TIME_PLAYED}</div>
+            <div>{profile.lastResultDate ? getTimeAgo(lang, profile.lastResultDate) : lang.NEVER}</div>
           </div>
           <div className="_flex-fill"></div>
           <div className="text-with-header -select">
-            <div className="text-header">сравнить с</div>
+            <div className="text-header">{lang.COMPARE_WITH}</div>
             <div>
               <Select
                 closeMenuOnSelect
                 className="select players"
                 classNamePrefix="select"
-                placeholder="игроки..."
+                placeholder={lang.PLAYERS_PLACEHOLDER}
                 options={otherPlayers}
                 onChange={(value) => {
                   this.props.history.push(
@@ -646,7 +653,7 @@ class Profile extends Component {
         </div>
         <div className="profile-section">
           <div className="profile-sm-section-header _flex-row _align-center">
-            <span>опыт</span>
+            <span>{lang.EXP}</span>
             <div className="_flex-fill" />
             <div onClick={this.onShowFaq} className="_clickable">
               <FaQuestionCircle onClick={this.onShowFaq} />
@@ -688,7 +695,7 @@ class Profile extends Component {
                 ></div>
               </div>
               <div className="exp-label">
-                total: <span className="taken-num">{Math.round(profile.exp)}</span>
+                {lang.TOTAL}: <span className="taken-num">{Math.round(profile.exp)}</span>
               </div>
             </div>
             {profile.expRankNext && (
@@ -713,7 +720,7 @@ class Profile extends Component {
                   </div>
                   <div className="profile-section-2">
                     <div className="profile-sm-section-header">
-                      <span>оценки</span>
+                      <span>{lang.GRADES}</span>
                     </div>
                     <div className="chart-container">{this.renderGrades()}</div>
                   </div>
@@ -723,7 +730,7 @@ class Profile extends Component {
                 <>
                   <div className="profile-section-2">
                     <div className="profile-sm-section-header flex">
-                      <span>оценки</span>
+                      <span>{lang.GRADES}</span>
                       {this.renderResultsByLevelHeader()}
                     </div>
                     <div className="chart-container single-double-labels">
@@ -739,14 +746,14 @@ class Profile extends Component {
             <div className="profile-section-content">
               <div className="profile-section-2">
                 <div className="profile-sm-section-header">
-                  <span>эло</span>
+                  <span>{lang.ELO}</span>
                 </div>
                 <div className="chart-container">{this.renderRankingHistory()}</div>
                 {/* <div className="chart-container">{this.renderAccuracyPoints()}</div> */}
               </div>
               <div className="profile-section-2">
                 <div className="profile-sm-section-header">
-                  <span>место в топе</span>
+                  <span>{lang.PLACE_IN_TOP}</span>
                 </div>
                 <div className="chart-container">{this.renderPlaceHistory()}</div>
                 {/* <div className="chart-container">{this.renderAccuracyPoints(true)}</div> */}
@@ -807,7 +814,7 @@ class Profile extends Component {
             <div className="profile-section-content">
               <div className="profile-section-2">
                 <div className="profile-sm-section-header">
-                  <span>точность по уровням</span>
+                  <span>{lang.ACCURACY_BY_LEVEL}</span>
                 </div>
                 <div className="chart-container">{this.renderAccuracyPoints()}</div>
               </div>
@@ -817,7 +824,7 @@ class Profile extends Component {
         </div>
         <div className="profile-section progress-section">
           <div className="profile-sm-section-header">
-            <span>достижения по уровням</span>
+            <span>{lang.LEVEL_ACHIEVEMENTS}</span>
           </div>
           <div className="progress-blocks-single-double">
             <div className="progress-block">
@@ -838,13 +845,12 @@ class Profile extends Component {
             </div>
           </div>
           <div className="bonus-faq">
-            * для получения ачивки нужно сыграть около 10% всех чартов данного левела на нужный
-            грейд
+            {lang.LEVEL_ACHIEVEMENTS_HINT}
           </div>
         </div>
         <div className="profile-section">
           <div className="profile-sm-section-header">
-            <span>достижения</span>
+            <span>{lang.ACHIEVEMENTS}</span>
           </div>
           <div className="achievements">
             {_.keys(profile.achievements).map((achName) =>
@@ -854,7 +860,7 @@ class Profile extends Component {
         </div>
         <div className="profile-section">
           <div className="profile-sm-section-header">
-            <span>часто играемые чарты</span>
+            <span>{lang.MOST_PLAYED_CHARTS}</span>
           </div>
           <MostPlayed playerId={profile.id} />
         </div>
@@ -865,6 +871,7 @@ class Profile extends Component {
   render() {
     const { isLoading, profile, error } = this.props;
     DEBUG && console.log('profile:', profile);
+    const lang = this.context;
     return (
       <div className="profile-page">
         <div className="content">
@@ -876,11 +883,11 @@ class Profile extends Component {
               className="btn btn-sm btn-dark btn-icon"
               onClick={this.onRefresh}
             >
-              <FaSearch /> обновить
+              <FaSearch /> {lang.UPDATE}
             </button>
           </div>
           {isLoading && <Loader />}
-          {!isLoading && _.isEmpty(profile) && <div className="profile">Profile not found</div>}
+          {!isLoading && _.isEmpty(profile) && <div className="profile">{lang.PROFILE_NOT_FOUND}</div>}
           {!isLoading && !_.isEmpty(profile) && this.renderProfile()}
         </div>
       </div>

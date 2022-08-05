@@ -324,10 +324,10 @@ const Result = (
         })}
       >
         {isSocketView ? (
-          getShortTimeAgo(res.dateObject)
+          getShortTimeAgo(lang, res.dateObject)
         ) : (
           <Tooltip content={tooltipFormatter(res)} tooltipClassName="pumpking-tooltip">
-            {getShortTimeAgo(res.dateObject)}
+            {getShortTimeAgo(lang, res.dateObject)}
             {res.isExactDate ? '' : '?'}
           </Tooltip>
         )}
