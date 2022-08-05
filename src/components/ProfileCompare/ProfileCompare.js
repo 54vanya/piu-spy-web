@@ -44,6 +44,7 @@ import { profileSelectorCreator } from 'utils/profiles';
 import { parseDate } from 'utils/date';
 import { getTimeAgo } from 'utils/leaderboards';
 import { otherPlayersSelector } from 'components/Profile/Profile';
+import { Language } from 'utils/context/translation';
 
 // code
 const BARS_MODES = {
@@ -333,6 +334,9 @@ const mapDispatchToProps = {
 };
 
 class ProfileCompare extends Component {
+
+  static contextType = Language;
+
   static propTypes = {
     profile: toBe.object,
     error: toBe.object,
@@ -595,36 +599,37 @@ class ProfileCompare extends Component {
   }
 
   renderProfile() {
+    const lang = this.context;
     const { profile, profile2, filter, otherPlayers } = this.props;
     const { compareBarsMode } = this.state;
     return (
       <div className="profile">
         <div className="profile-header">
           <div className="profile-name text-with-header blue">
-            <div className="text-header">игрок</div>
+            <div className="text-header">{lang.PLAYER}</div>
             <div>{profile.name}</div>
           </div>
           <div className="text-with-header">
-            <div className="text-header">ранк</div>
+            <div className="text-header">{lang.RANK}</div>
             <div>#{profile.rank}</div>
           </div>
           <div className="text-with-header">
-            <div className="text-header">эло</div>
+            <div className="text-header">{lang.ELO}</div>
             <div>{profile.rating}</div>
           </div>
           <div className="text-with-header">
-            <div className="text-header">последняя игра</div>
-            <div>{profile.lastResultDate ? getTimeAgo(profile.lastResultDate) : 'никогда'}</div>
+            <div className="text-header">{lang.LAST_TIME_PLAYED}</div>
+            <div>{profile.lastResultDate ? getTimeAgo(lang, profile.lastResultDate) : lang.NEVER}</div>
           </div>
           <div className="_flex-fill"></div>
           <div className="text-with-header -select">
-            <div className="text-header">сравнить с</div>
+            <div className="text-header">{lang.COMPARE_WITH}</div>
             <div>
               <Select
                 closeMenuOnSelect
                 className="select players"
                 classNamePrefix="select"
-                placeholder="игроки..."
+                placeholder={lang.PLAYERS_PLACEHOLDER}
                 options={otherPlayers}
                 onChange={(value) => {
                   this.props.history.push(
@@ -637,20 +642,20 @@ class ProfileCompare extends Component {
         </div>
         <div className="profile-header right-align">
           <div className="profile-name text-with-header orange">
-            <div className="text-header">игрок</div>
+            <div className="text-header">{lang.PLAYER}</div>
             <div>{profile2.name}</div>
           </div>
           <div className="text-with-header">
-            <div className="text-header">ранк</div>
+            <div className="text-header">{lang.RANK}</div>
             <div>#{profile2.rank}</div>
           </div>
           <div className="text-with-header">
-            <div className="text-header">эло</div>
+            <div className="text-header">{lang.ELO}</div>
             <div>{profile2.rating}</div>
           </div>
           <div className="text-with-header">
-            <div className="text-header">последняя игра</div>
-            <div>{profile2.lastResultDate ? getTimeAgo(profile2.lastResultDate) : 'никогда'}</div>
+            <div className="text-header">{lang.LAST_TIME_PLAYED}</div>
+            <div>{profile2.lastResultDate ? getTimeAgo(lang, profile2.lastResultDate) : lang.NEVER}</div>
           </div>
         </div>
         <div className="profile-section-horizontal-container">
@@ -658,7 +663,7 @@ class ProfileCompare extends Component {
             <div className="profile-section-content">
               <div className="profile-section-2">
                 <div className="profile-sm-section-header flex">
-                  <span>победы по уровням</span>
+                  <span>{lang.VICTORIES_BY_LEVEL}</span>
                 </div>
                 <div className="profile-sm-section-header flex">
                   {(() => {
@@ -685,11 +690,11 @@ class ProfileCompare extends Component {
                             }))
                           }
                         >
-                          подробно
+                          {lang.DETAILED}
                         </Toggle>
                         <div className="tabs-holder">
                           <ToggleButton
-                            text="все"
+                            text={lang.ALL}
                             active={[BARS_MODES.BOTH_TWO, BARS_MODES.BOTH_FIVE].includes(
                               compareBarsMode
                             )}
@@ -700,7 +705,7 @@ class ProfileCompare extends Component {
                             }}
                           />
                           <ToggleButton
-                            text="синглы"
+                            text={lang.SINGLES}
                             active={[BARS_MODES.SINGLE_TWO, BARS_MODES.SINGLE_FIVE].includes(
                               compareBarsMode
                             )}
@@ -713,7 +718,7 @@ class ProfileCompare extends Component {
                             }}
                           />
                           <ToggleButton
-                            text="даблы"
+                            text={lang.DOUBLES}
                             active={[BARS_MODES.DOUBLE_TWO, BARS_MODES.DOUBLE_FIVE].includes(
                               compareBarsMode
                             )}
@@ -738,13 +743,13 @@ class ProfileCompare extends Component {
             <div className="profile-section-content">
               <div className="profile-section-2">
                 <div className="profile-sm-section-header">
-                  <span>эло</span>
+                  <span>{lang.ELO}</span>
                 </div>
                 <div className="chart-container">{this.renderRankingHistory()}</div>
               </div>
               <div className="profile-section-2">
                 <div className="profile-sm-section-header">
-                  <span>место в топе</span>
+                  <span>{lang.PLACE_IN_TOP}</span>
                 </div>
                 <div className="chart-container">{this.renderPlaceHistory()}</div>
               </div>
@@ -804,7 +809,7 @@ class ProfileCompare extends Component {
             <div className="profile-section-content">
               <div className="profile-section-2">
                 <div className="profile-sm-section-header">
-                  <span>точность по уровням</span>
+                  <span>{lang.ACCURACY_BY_LEVEL}</span>
                 </div>
                 <div className="chart-container">{this.renderAccuracyPoints()}</div>
               </div>
@@ -814,7 +819,7 @@ class ProfileCompare extends Component {
             <div className="profile-section-content">
               <div className="profile-section-2">
                 <div className="profile-sm-section-header">
-                  <span>точность по уровням</span>
+                  <span>{lang.ACCURACY_BY_LEVEL}</span>
                 </div>
                 <div className="chart-container">{this.renderAccuracyPoints(true)}</div>
               </div>
@@ -828,6 +833,7 @@ class ProfileCompare extends Component {
   render() {
     const { isLoading, profile, error } = this.props;
     DEBUG && console.log('profile:', profile);
+    const lang = this.context;
     return (
       <div className="profile-compare-page">
         <div className="content">
@@ -839,7 +845,7 @@ class ProfileCompare extends Component {
               className="btn btn-sm btn-dark btn-icon"
               onClick={this.onRefresh}
             >
-              <FaSearch /> обновить
+              <FaSearch /> {lang.UPDATE}
             </button>
           </div>
           {isLoading && <Loader />}

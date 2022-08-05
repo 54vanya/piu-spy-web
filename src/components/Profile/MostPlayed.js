@@ -72,7 +72,7 @@ export default connect((state) => ({ charts: state.results.sharedCharts }), { fe
                 </NavLink>
               </div>
               <div className="date">
-                {item.latestDate ? getTimeAgo(parseDate(item.latestDate)) : null}
+                {item.latestDate ? getTimeAgo(lang, parseDate(item.latestDate)) : null}
               </div>
               <div className="playcount">
                 <FaPlay />

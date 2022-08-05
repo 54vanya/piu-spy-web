@@ -21,6 +21,7 @@ import { fetchChartsData } from 'reducers/charts';
 import { updatePreferences } from 'reducers/preferences';
 
 // utils
+import { Language } from 'utils/context/translation';
 
 // code
 const rankingSelector = createSelector(
@@ -45,6 +46,9 @@ const mapDispatchToProps = {
 };
 
 class Ranking extends Component {
+
+  static contextType = Language;
+
   static propTypes = {
     ranking: toBe.array,
     error: toBe.object,
@@ -71,6 +75,7 @@ class Ranking extends Component {
   };
 
   render() {
+    const lang = this.context;
     const { isLoading, ranking, error, preferences, updatePreferences } = this.props;
     return (
       <div className="ranking-page">
@@ -88,8 +93,8 @@ class Ranking extends Component {
                     onClick={this.onChangeHidingPlayers}
                   >
                     {preferences.showHiddenPlayersInRanking
-                      ? 'скрыть невыбранных'
-                      : 'показать всех'}
+                      ? lang.HIDE_UNSELECTED
+                      : lang.SHOW_ALL}
                   </button>
                   <Link to={routes.ranking.faq.path}>
                     <button className="btn btn-sm btn-dark btn-icon _margin-right">
@@ -101,7 +106,7 @@ class Ranking extends Component {
                     className="btn btn-sm btn-dark btn-icon"
                     onClick={this.onRefresh}
                   >
-                    <FaSearch /> обновить
+                    <FaSearch /> {lang.UPDATE}
                   </button>
                 </>
               )}

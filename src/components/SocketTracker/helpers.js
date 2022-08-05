@@ -14,13 +14,13 @@ const timeStyle = {
   gradation: convenient,
   units: ['day', 'week', 'month'],
 };
-export const getTimeAgo = (date) => {
+export const getTimeAgo = (lang, date) => {
   const dayDiff = moment().startOf('day').diff(moment(date).startOf('day'), 'days');
   return dayDiff === 0
-    ? 'сегодня'
+    ? lang.TODAY
     : dayDiff === 1
-    ? 'вчера'
-    : timeAgo.format(date, timeStyle).replace('назад', '');
+    ? lang.YESTERDAY
+    : timeAgo.format(date, timeStyle).replace('назад', '').replace('дн', lang.DAYS_SHORT).replace('нед', lang.WEEKS_SHORT).replace('мес', lang.MONTHS_SHORT);
 };
 
 export const preprocessData = (data) => ({

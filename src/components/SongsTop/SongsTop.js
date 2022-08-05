@@ -19,6 +19,7 @@ import { fetchLeastPlayed } from 'reducers/trackStats/leastPlayed';
 // utils
 import { getTimeAgo } from 'utils/leaderboards';
 import { parseDate } from 'utils/date';
+import { useLanguage } from 'utils/context/translation';
 
 // code
 function TopList({ fetchList, title, renderRightSide }) {
@@ -68,11 +69,14 @@ function TopList({ fetchList, title, renderRightSide }) {
   );
 }
 
-const leastPlayedRightSide = item => (
-  <div className="date">
-    <span>{item.last_play ? getTimeAgo(parseDate(item.last_play)) : 'никогда'}</span>
-  </div>
-);
+function leastPlayedRightSide(lang) {
+  const resultFunc = item => (
+    <div className="date">
+      <span>{item.last_play ? getTimeAgo(lang, parseDate(item.last_play)) : lang.NEVER}</span>
+    </div>
+  );
+  return resultFunc;
+}
 
 export default connect(
   null,
@@ -82,14 +86,15 @@ export default connect(
     fetchLeastPlayed,
   }
 )(function SongsTop({ fetchMostPlayed, fetchMostPlayedMonth, fetchLeastPlayed }) {
+  const lang = useLanguage();
   return (
     <div className="songs-top-page">
-      <TopList fetchList={fetchMostPlayed} title="топ популярных треков" />
-      <TopList fetchList={fetchMostPlayedMonth} title="топ популярных треков за месяц" />
+      <TopList fetchList={fetchMostPlayed} title={lang.TOP_POPULAR_TRACKS} />
+      <TopList fetchList={fetchMostPlayedMonth} title={lang.MONTHLY_TOP_POPULAR_TRACKS} />
       <TopList
         fetchList={fetchLeastPlayed}
-        title="треки, которые долго не играли"
-        renderRightSide={leastPlayedRightSide}
+        title={lang.TRACKS_PLAYED_LONG_TIME_AGO}
+        renderRightSide={leastPlayedRightSide(lang)}
       />
       <div className="top-songs-list -placeholder" />
     </div>
