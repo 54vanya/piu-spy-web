@@ -101,8 +101,8 @@ export default function Tournaments() {
             <table>
               <thead>
                 <tr>
-                  <th className="player-name">player</th>
-                  <th className="total">total</th>
+                  <th className="player-name">{lang.PLAYER}</th>
+                  <th className="total">{lang.TOTAL}</th>
                   {selectedBracket.charts.map((chart) => {
                     const [type, level] = labelToTypeLevel(chart.label);
                     return (
