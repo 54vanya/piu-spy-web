@@ -51,19 +51,20 @@ export const profileSelectorCreator = (idParamName) =>
         return null;
       }
 
-      const filteredResultsByLevel = _.flow(
-        _.get('resultsByLevel'),
-        _.toPairs,
-        _.map(
-          _.update(
-            '[1]',
-            _.flow(
-              _.map(({result, ...rest}) => ({result: result.bestGradeResult || result, ...rest})),
-            ),
-          ),
-        ),
-        _.fromPairs,
-      )(profile);
+      const filteredResultsByLevel = {}
+      Object.entries(profile.resultsByLevel)
+        .forEach(([index, results]) => {
+          const filteredResults = {}
+          results.forEach((result) => {
+            const updatedResult = { ...result, result: result.result.bestGradeResult || result.result }
+            const chartId = updatedResult.chart.sharedChartId;
+
+            if (!filteredResults[chartId] || updatedResult.result.isBestGradeOnChart) {
+              filteredResults[chartId] = result;
+            }
+          })
+          filteredResultsByLevel[index] = Object.values(filteredResults);
+        });
 
       const levelsDistribution = _.flow(
         _.toPairs,
