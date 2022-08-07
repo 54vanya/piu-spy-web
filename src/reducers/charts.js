@@ -37,7 +37,7 @@ const processChartsData = (chartsData, players) => {
   const top = {}; // Main top scores pbject
 
   // Battles for ELO calculation
-  const battles = [];
+  // const battles = [];
   const allResults = [];
 
   // Profiles for every player
@@ -149,7 +149,7 @@ const processChartsData = (chartsData, players) => {
       }
     }, chartList);
   }
-
+  /*
   // c0 = performance.now();
   allResults.forEach((res) => {
     if (!res.isUnknownPlayer) {
@@ -173,10 +173,12 @@ const processChartsData = (chartsData, players) => {
     }
   });
   // c1 = performance.now();
+  */
 
   // a1 = performance.now();
   // console.log('Perf data:', a1 - a0, bSum, c1 - c0);
-  return { profiles, sharedCharts: top, battles };
+  // return { profiles, sharedCharts: top, battles };
+  return { profiles, sharedCharts: top };
 };
 
 const resultsUrl = process.env.REACT_APP_SOCKET ? 'results/best/trusted' : 'results/best';
@@ -297,8 +299,8 @@ export const fetchChartsData = () => async (dispatch, getState) => {
   performance.mark('elo_calc_start');
   let output;
   if (window.Worker) {
-    const worker = new WorkerProfilesProcessing();
-    output = await worker.getProcessedProfiles(input);
+    const worker = WorkerProfilesProcessing();
+    output = worker.getProcessedProfiles ? await worker.getProcessedProfiles(input) : profilesProcessing.getProcessedProfiles(input);
     worker.terminate();
   } else {
     output = profilesProcessing.getProcessedProfiles(input);

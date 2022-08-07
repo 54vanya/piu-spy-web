@@ -193,6 +193,7 @@ export const initializeProfile = (result, profiles, players) => {
   const resultsByLevel = _.fromPairs(Array.from({ length: 28 }).map((x, i) => [i + 1, []]));
 
   profiles[id] = {
+    id: id,
     name: players[id].nickname,
     nameArcade: players[id].arcade_name,
     resultsByGrade: {},

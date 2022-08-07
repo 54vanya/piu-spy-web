@@ -2,7 +2,7 @@ import _ from 'lodash/fp';
 import regression from 'regression';
 
 import { ranks as expRanks } from 'utils/expRanks';
-
+/*
 const processBattles = ({ battles, profiles, debug, resultInfo: dictScoreInfo }) => {
   let logText = '';
   const dictChartElo = {};
@@ -195,6 +195,7 @@ const processBattles = ({ battles, profiles, debug, resultInfo: dictScoreInfo })
       p1.ratingHistory.push({
         rating: p1.rating,
         date: battleDate.getTime(),
+        date: battleDate.getTime(),
       });
     }
     if (p2LastRating !== p2.rating) {
@@ -223,7 +224,7 @@ const processBattles = ({ battles, profiles, debug, resultInfo: dictScoreInfo })
   )(profiles);
   return { logText };
 };
-
+*/
 const postProcessProfiles = (profiles, tracklist) => {
   const getBonusForLevel = (level) => (30 * (1 + 2 ** (level / 4))) / 11;
   const getMinimumNumber = (totalCharts) =>
@@ -403,7 +404,7 @@ const processPP = ({ profiles, sharedCharts }) => {
       profile.pp.scores.forEach((score, index) => {
         profile.pp.pp += 0.95 ** index * score.pp;
       });
-      profile.rating = profile.pp.pp;
+      profile.rating = Math.round(profile.pp.pp);
     } else {
       profile.pp = {};
       profile.rating = 0;
@@ -510,7 +511,8 @@ const interpolateDifficulties = ({ sharedCharts, profiles, debug }) => {
   return newSharedCharts;
 };
 
-export const getProcessedProfiles = ({ profiles, sharedCharts, tracklist, battles, debug }) => {
+// export const getProcessedProfiles = ({ profiles, sharedCharts, tracklist, battles, debug }) => {
+export const getProcessedProfiles = ({ profiles, sharedCharts, tracklist, debug }) => {
   // Calculate Progress achievements and bonus for starting Elo
   profiles = postProcessProfiles(profiles, tracklist);
 
@@ -523,6 +525,7 @@ export const getProcessedProfiles = ({ profiles, sharedCharts, tracklist, battle
     sharedCharts,
   });
 
+  /*
   // Calculate ELO
   const { logText } = processBattles({
     battles,
@@ -530,8 +533,8 @@ export const getProcessedProfiles = ({ profiles, sharedCharts, tracklist, battle
     resultInfo,
     debug,
   });
-
-  return { profiles, resultInfo, sharedCharts, logText };
+  */
+  return { profiles, resultInfo, sharedCharts, logText: '' };
 };
 
 export default getProcessedProfiles;
