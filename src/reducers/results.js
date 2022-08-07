@@ -432,7 +432,7 @@ const getMapOfRatings = _.flow(
 export const calculateRankingChanges = (profiles) => {
   return async (dispatch, getState) => {
     try {
-      const ranking = _.orderBy('ratingRaw', 'desc', _.values(profiles));
+      const ranking = _.orderBy('[pp.pp]', 'desc', _.values(profiles));
       const [lastChangedRanking, lastChangedRankingPoints, lastFetchedRanking] = await Promise.all([
         localForage.getItem('lastChangedRanking_v3'),
         localForage.getItem('lastChangedRankingPoints_v3'),

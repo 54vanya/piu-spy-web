@@ -133,6 +133,7 @@ const Leaderboard = (props) => {
 
   const onRefresh = () => {
     const { isLoading } = props;
+    setShowItemsCount(20);
     !isLoading && props.fetchChartsData();
   };
 
