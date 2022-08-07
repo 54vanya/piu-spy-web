@@ -102,7 +102,7 @@ const processChartsData = (chartsData, players) => {
       // Recording best grade for every player on every chart
       if (
         (!bestGradeResults[bestGradeResultId] ||
-        gradeComparator[bestGradeResults[bestGradeResultId].grade] < gradeComparator[result.grade]) && !result.isRank
+        gradeComparator[bestGradeResults[bestGradeResultId].grade] < gradeComparator[result.grade])
       ) {
         if (bestGradeResults[bestGradeResultId]) {
           bestGradeResults[bestGradeResultId].isBestGradeOnChart = false;
@@ -144,7 +144,9 @@ const processChartsData = (chartsData, players) => {
         chartTop.previousResults.push(result);
       }
 
-      if (result.isBestGradeOnChart && topResults[topResultId].id !== result.id) {
+      const sameMode = (result.isRank && topResults[topResultId].isRank) || (!result.isRank && !topResults[topResultId].isRank)
+
+      if (result.isBestGradeOnChart && topResults[topResultId].id !== result.id && sameMode) {
         topResults[topResultId].bestGradeResult = result;
       }
     }, chartList);

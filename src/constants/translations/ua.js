@@ -28,9 +28,9 @@ export default {
   PRESET_NAME_PLACEHOLDER: 'назва пресету...',
   // Leaderboards Filters
   SHOW_CHARTS_PLAYED_BY: 'показувати чарти, які зіграв:',
-  EACH_OF_THESE: 'кожен з цих',
-  AND_ANY_OF_THESE: 'и хоч один із цих',
-  AND_NONE_OF_THESE: 'и жоден із цих',
+  EACH_OF_THESE: 'кожен із цих',
+  AND_ANY_OF_THESE: 'і хоч один із цих',
+  AND_NONE_OF_THESE: 'і жоден із цих',
   SHOW_RANK: 'показувати ранк:',
   RANK_FILTER_SHOW_ALL: 'показывати усі скори',
   RANK_FILTER_SHOW_BEST: 'один кращий скор кожного гравця (ранк чи ні)',
@@ -126,4 +126,15 @@ export default {
   AMPASS: 'ampass',
   SCORES_count: 'оцінок',
   PROFILE_NOT_FOUND: 'Профіль не знайдено',
+
+  EXP_FAQ: (<div className="faq-header">
+        <strong>Досвід</strong> гравця засновується на кількості зіграних чартів.
+        <br />
+        Чим вище рівень чарту і краще оцінка на ньому, тем більше досвіду він дає.
+        <br />
+        Повторні спроби на тих же чартах не дають додатковий досвід. Щоб піднімати свій рівень, грай
+        нові треки та чарти.
+      </div>),
+
+  EXP_TITLES_LIST_HEADER: (<div className="faq-header">Список рівнів та необхідний досвій для їх отримання:</div>),
 };
