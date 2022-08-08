@@ -118,6 +118,12 @@ const ResultsByLevel = (props) => {
     S: lang.SINGLES,
   };
 
+  const handleChangeLvl = (level) => {
+    history.push(
+      routes.profile.resultsByLevel.level.getPath({ id: profile.id, level: level })
+    );
+  }
+
   return (
     <div className="profile-results-by-level">
       <header>
@@ -131,18 +137,28 @@ const ResultsByLevel = (props) => {
         >
           {sortOrder === 'desc' ? <FaCaretDown /> : <FaCaretUp />} {lang.SORTING}
         </button>
+        <button
+          className="btn btn-sm btn-dark _margin-right"
+          disabled={match.params.level === '1'}
+          onClick={() => handleChangeLvl(Number(match.params.level) - 1)}
+        >
+          -
+        </button>
         <Select
-          className={'select levels'}
+          className={'select levels _margin-right'}
           classNamePrefix="select"
           placeholder={lang.LEVEL_PLACEHOLDER}
           options={selectOptions}
           value={selectOptions.find((option) => option.value === match.params.level)}
-          onChange={(option) => {
-            history.push(
-              routes.profile.resultsByLevel.level.getPath({ id: profile.id, level: option.value })
-            );
-          }}
+          onChange={(option) => handleChangeLvl(option.value)}
         />
+        <button
+          className="btn btn-sm btn-dark"
+          disabled={match.params.level === '28'}
+          onClick={() => handleChangeLvl(Number(match.params.level) + 1)}
+        >
+          +
+        </button>
       </header>
       <div className="chart-types">
         {data.byType.map(([chartType, byGrade]) => {

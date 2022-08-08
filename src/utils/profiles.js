@@ -60,7 +60,7 @@ export const profileSelectorCreator = (idParamName) =>
             const chartId = updatedResult.chart.sharedChartId;
 
             if (!filteredResults[chartId] || updatedResult.result.isBestGradeOnChart) {
-              filteredResults[chartId] = result;
+              filteredResults[chartId] = updatedResult;
             }
           })
           filteredResultsByLevel[index] = Object.values(filteredResults);
