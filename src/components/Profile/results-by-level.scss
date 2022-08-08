@@ -3,7 +3,6 @@
 .profile-results-by-level {
   > header {
     display: flex;
-    flex-flow: row nowrap;
     margin-top: 10px;
     margin-bottom: 10px;
     .select.levels {
@@ -11,6 +10,7 @@
     }
   }
   > .chart-types {
+    width: 950px;
     display: grid;
     grid-template-columns: 50% 50%;
     > .chart-type {
