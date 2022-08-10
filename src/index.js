@@ -9,14 +9,14 @@ import { Provider } from 'react-redux';
 
 import './index.scss';
 
-import { Language, detectedLanguage } from 'utils/context/translation';
+import { Language, browserLanguage } from 'utils/context/translation';
 
 import App from 'components/App';
 
 import { store } from 'reducers';
 
 ReactDOM.render(
-  <Language.Provider value={detectedLanguage}>
+  <Language.Provider value={browserLanguage}>
     <Provider store={store}>
       <HashRouter>
         <App />
