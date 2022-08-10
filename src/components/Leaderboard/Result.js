@@ -113,24 +113,20 @@ const Result = (
       {!isSocketView && (
         <td className="place">{res.isSecondOccurenceInResults ? '' : res.topPlace && `#${res.topPlace}`}</td>
       )}
-      <td className="nickname" style={nameIndex > -1 ? { fontWeight: 'bold' } : {}}>
+      <td className={classNames('nickname', bestGradeScore && 'opacity')} style={nameIndex > -1 ? { fontWeight: 'bold' } : {}}>
         <div className="nickname-container">
-          {!bestGradeScore && flag}
+          {flag}
           <span className="nickname-text">
-            {!bestGradeScore &&
-              <>
-                <NavLink exact to={routes.profile.getPath({ id: res.playerId })}>
-                  {res.nickname}
-                </NavLink>
-                {!!placeDifference && (
-                  <span className="change-holder up">
-                    <span>{placeDifference}</span>
-                    <FaAngleDoubleUp />
-                  </span>
-                )}
-                {ratingInfoBlock}
-              </>
-            }
+            <NavLink exact to={routes.profile.getPath({ id: res.playerId })}>
+              {res.nickname}
+            </NavLink>
+            {!!placeDifference && (
+              <span className="change-holder up">
+                <span>{placeDifference}</span>
+                <FaAngleDoubleUp />
+              </span>
+            )}
+            {ratingInfoBlock}
           </span>
           {!isSocketView && (
             <div className="mods-container">
