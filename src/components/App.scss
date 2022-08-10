@@ -144,6 +144,12 @@
   }
 }
 
+.desktop-only {
+}
+.mobile-only {
+  display: none;
+}
+
 @media screen and (max-width: 900px) {
   .pumpking-tooltip {
     font-size: 100%;
@@ -157,5 +163,11 @@
     height: 2.1vw;
     border-radius: 0.5vw;
     margin: 0.6vw 0.7vw 0.6vw 0;
+  }
+  .desktop-only {
+    display: none;
+  }
+  .mobile-only {
+    display: initial;
   }
 }
