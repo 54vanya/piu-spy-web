@@ -202,7 +202,7 @@ const ResultsByLevel = (props) => {
                                 <>
                                   <div className="_flex-fill" />
                                   <Grade grade={grade} />
-                                  <span className="score-span">
+                                  <span className="score-span desktop-only">
                                     {result.scoreIncrease > result.score * 0.8 && '*'}
                                     {numeral(result.score).format('0,0')}
                                   </span>
