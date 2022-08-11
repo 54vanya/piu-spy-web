@@ -1,6 +1,8 @@
 @import 'utils/css/colors';
 
 .profile-results-by-level {
+  width: 100%;
+  max-width: 950px;
   > header {
     display: flex;
     margin-top: 10px;

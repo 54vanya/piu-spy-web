@@ -60,7 +60,6 @@ const resultsByLevelSelector = createSelector(
       (g) => ({ ...Object.keys(unplayed).reduce((acc, key) => ({ ...acc, [key]: [] }), {}), ...g }),
       _.mapValues(
         _.flow(
-          _.map(({result, ...rest}) => ({result: result.bestGradeResult || result, ...rest})),
           _.groupBy('result.grade'),
           _.toPairs,
           _.orderBy(([grade]) => gradeComparator[grade], sortOrder)
@@ -73,7 +72,7 @@ const resultsByLevelSelector = createSelector(
           ? [type, [['X', unplayed[type] || []], ...group]]
           : [type, [...group, ['X', unplayed[type] || []]]]
       )
-    )(profile.resultsByLevel[level]);
+    )(profile.bestGradeResultsByLevel[level]);
 
     return { byType: grouped };
   }

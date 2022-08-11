@@ -51,21 +51,6 @@ export const profileSelectorCreator = (idParamName) =>
         return null;
       }
 
-      const filteredResultsByLevel = {}
-      Object.entries(profile.resultsByLevel)
-        .forEach(([index, results]) => {
-          const filteredResults = {}
-          results.forEach((result) => {
-            const updatedResult = { ...result, result: result.result.bestGradeResult || result.result }
-            const chartId = updatedResult.chart.sharedChartId;
-
-            if (!filteredResults[chartId] || updatedResult.result.isBestGradeOnChart) {
-              filteredResults[chartId] = updatedResult;
-            }
-          })
-          filteredResultsByLevel[index] = Object.values(filteredResults);
-        });
-
       const levelsDistribution = _.flow(
         _.toPairs,
         _.map(([x, y]) => ({
@@ -83,7 +68,7 @@ export const profileSelectorCreator = (idParamName) =>
               tracklist.doublesLevels[x]) *
             100,
         })),
-      )(filteredResultsByLevel);
+      )(profile.bestGradeResultsByLevel);
 
       const gradesData = _.flow(
         _.toPairs,
@@ -92,7 +77,7 @@ export const profileSelectorCreator = (idParamName) =>
             grade && grade.includes('+') && grade !== 'A+' ? grade.replace('+', '') : grade,
           ),
         ),
-      )(filteredResultsByLevel);
+      )(profile.bestGradeResultsByLevel);
       const gradesDistribution = _.flow(
         _.map(([x, y]) => ({
           x: _.toInteger(x),
