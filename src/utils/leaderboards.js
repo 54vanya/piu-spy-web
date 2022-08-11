@@ -230,7 +230,7 @@ export const getProfileInfoFromResult = (result, chart, profiles) => {
     profile.sumAccuracy += result.accuracy;
   }
   profile.grades[result.grade.replace('+', '')]++;
-  if (chart.chartType !== 'COOP' && result.isBestGradeOnChart) {
+  if (chart.chartType !== 'COOP') {
     profile.resultsByGrade[result.grade] = [
       ...(profile.resultsByGrade[result.grade] || []),
       { result, chart },

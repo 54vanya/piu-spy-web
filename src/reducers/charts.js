@@ -96,9 +96,6 @@ const processChartsData = (chartsData, players) => {
       // Recording player ids just to calculate total number of results made on this chart (and be able to filter out hidden players)
       chartTop.eachResultPlayerIds.push(result.id);
 
-      // if (result.id === 16089) {
-      //   console.log(result, bestGradeResults[bestGradeResultId]);
-      // }
       // Recording best grade for every player on every chart
       if (
         (!bestGradeResults[bestGradeResultId] ||
@@ -110,9 +107,6 @@ const processChartsData = (chartsData, players) => {
         result.isBestGradeOnChart = true;
         bestGradeResults[bestGradeResultId] = result;
       }
-      // if (result.id === 16089) {
-      //   console.log(bestGradeResults[bestGradeResultId]);
-      // }
 
       // Splitting all results into best results and previous results
       if (!topResults[topResultId]) {

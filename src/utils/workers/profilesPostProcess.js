@@ -232,6 +232,24 @@ const postProcessProfiles = (profiles, tracklist) => {
     );
 
   const newProfiles = _.mapValues((profile) => {
+
+    const bestGradeResultsByLevel = {}
+    Object.entries(profile.resultsByLevel)
+      .forEach(([index, results]) => {
+        const filteredResults = {}
+        results.forEach((result) => {
+          const updatedResult = { ...result, result: result.result.bestGradeResult || result.result }
+          const chartId = updatedResult.chart.sharedChartId;
+
+          if (!filteredResults[chartId] || updatedResult.result.isBestGradeOnChart) {
+            filteredResults[chartId] = updatedResult;
+          }
+        })
+        bestGradeResultsByLevel[index] = Object.values(filteredResults);
+      });
+
+    profile.bestGradeResultsByLevel = bestGradeResultsByLevel;
+
     const neededGrades = ['A', 'A+', 'S', 'SS', 'SSS'];
     profile.expRank = _.findLast((rank) => rank.threshold <= profile.exp, expRanks);
     profile.expRankNext = _.find((rank) => rank.threshold > profile.exp, expRanks);
@@ -269,8 +287,8 @@ const postProcessProfiles = (profiles, tracklist) => {
     };
 
     profile.accuracyPointsRaw = [];
-    _.keys(profile.resultsByLevel).forEach((level) => {
-      profile.resultsByLevel[level].forEach((res) => {
+    _.keys(profile.bestGradeResultsByLevel).forEach((level) => {
+      profile.bestGradeResultsByLevel[level].forEach((res) => {
         if (!res.result.isRank && res.result.accuracyRaw) {
           profile.accuracyPointsRaw.push([
             _.toNumber(level),
