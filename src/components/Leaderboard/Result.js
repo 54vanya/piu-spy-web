@@ -113,24 +113,20 @@ const Result = (
       {!isSocketView && (
         <td className="place">{res.isSecondOccurenceInResults ? '' : res.topPlace && `#${res.topPlace}`}</td>
       )}
-      <td className="nickname" style={nameIndex > -1 ? { fontWeight: 'bold' } : {}}>
+      <td className={classNames('nickname', bestGradeScore && 'opacity')} style={nameIndex > -1 ? { fontWeight: 'bold' } : {}}>
         <div className="nickname-container">
-          {!bestGradeScore && flag}
+          {flag}
           <span className="nickname-text">
-            {!bestGradeScore &&
-              <>
-                <NavLink exact to={routes.profile.getPath({ id: res.playerId })}>
-                  {res.nickname}
-                </NavLink>
-                {!!placeDifference && (
-                  <span className="change-holder up">
-                    <span>{placeDifference}</span>
-                    <FaAngleDoubleUp />
-                  </span>
-                )}
-                {ratingInfoBlock}
-              </>
-            }
+            <NavLink exact to={routes.profile.getPath({ id: res.playerId })}>
+              {res.nickname}
+            </NavLink>
+            {!!placeDifference && (
+              <span className="change-holder up">
+                <span>{placeDifference}</span>
+                <FaAngleDoubleUp />
+              </span>
+            )}
+            {ratingInfoBlock}
           </span>
           {!isSocketView && (
             <div className="mods-container">
@@ -226,7 +222,7 @@ const Result = (
                   </div>
                 )}
                 {!!res.combo && (
-                  <div>
+                  <div className="mobile-only">
                     <span className="_grey">{lang.COMBO}: </span>
                     {res.combo}
                   </div>
@@ -313,6 +309,10 @@ const Result = (
       <td className={classNames('number', 'good', bestGradeScore && 'opacity')}>{res.good}</td>
       <td className={classNames('number', 'great', bestGradeScore && 'opacity')}>{res.great}</td>
       <td className={classNames('number', 'perfect', bestGradeScore && 'opacity')}>{res.perfect}</td>
+      <td className={classNames('combo', 'desktop-only', bestGradeScore && 'opacity')}>
+        {res.combo}
+        {res.combo ? 'x' : ''}
+      </td>
       <td className={classNames('accuracy', bestGradeScore && 'opacity')}>
         {res.accuracy === 100 ? 100 : res.accuracy ? res.accuracy.toFixed(2) : ''}
         {res.accuracy ? '%' : ''}
