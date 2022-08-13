@@ -273,10 +273,14 @@ export const fetchChartsData = () => async (dispatch, getState) => {
   };
 
   await dispatch(setAndCacheData(newData, newLastUpdated));
+  dispatch(endLoadingCharts());
+};
 
+export const postChartsProcessing = () => async (dispatch, getState) => {
   const players = getState().players.data;
+  const data = getState().charts.data;
   performance.mark('process_start');
-  const { profiles, sharedCharts, battles } = processChartsData(newData, players);
+  const { profiles, sharedCharts, battles } = processChartsData(data, players);
   performance.measure('time spent building charts with results', 'process_start');
 
   performance.mark('display_start');
@@ -290,7 +294,7 @@ export const fetchChartsData = () => async (dispatch, getState) => {
     profiles,
     sharedCharts,
   });
-  dispatch(endLoadingCharts());
+
   performance.measure('time spent rendering charts', 'display_start');
   performance.measure('time from page open to displaying first data');
 
@@ -334,4 +338,4 @@ export const fetchChartsData = () => async (dispatch, getState) => {
   );
   performance.clearMarks();
   performance.clearMeasures();
-};
+}
