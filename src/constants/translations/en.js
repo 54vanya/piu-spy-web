@@ -1,4 +1,4 @@
-export default {
+export const en = {
 
   LEADERBOARDS: 'leaderboards',
   RANKING: 'ranking',

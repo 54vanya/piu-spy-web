@@ -1,4 +1,4 @@
-export default {
+export const ru = {
   // Main top menu
   LEADERBOARDS: 'лидерборды',
   RANKING: 'ранкинг',

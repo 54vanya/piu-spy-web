@@ -1,8 +1,6 @@
 import React, { useContext } from 'react';
 
-import en from 'constants/translations/en';
-import ru from 'constants/translations/ru';
-import ua from 'constants/translations/ua';
+import { en, ru, ua } from 'constants/translations';
 
 console.log('navigator.languages = ', navigator.languages.join(', '));
 
