@@ -27,7 +27,7 @@ import { fetchResults, setFilter } from 'reducers/results';
 import { fetchTracklist } from 'reducers/tracklist';
 import { fetchUser } from 'reducers/user';
 import { fetchPreferences } from 'reducers/preferences';
-import { fetchChartsData } from 'reducers/charts';
+import { fetchChartsData, postChartsProcessing } from 'reducers/charts';
 import { fetchPlayers } from 'reducers/players';
 
 ReactModal.setAppElement('#root');
@@ -70,11 +70,12 @@ function App() {
   useEffect(() => {
     if (!process.env.REACT_APP_SOCKET && userData && userData.player) {
       Promise.all([
+        dispatch(fetchChartsData()),
         dispatch(fetchPlayers()),
         dispatch(fetchTracklist()),
         dispatch(fetchPreferences()),
-      ]).then(() => {
-        dispatch(fetchChartsData());
+    ]).then(() => {
+        dispatch(postChartsProcessing())
       });
     }
   }, [dispatch, userData]);
