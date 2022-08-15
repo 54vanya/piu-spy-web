@@ -274,7 +274,7 @@ export const postChartsProcessing = () => async (dispatch, getState) => {
   const players = getState().players.data;
   const data = getState().charts.data;
   performance.mark('process_start');
-  const { profiles, sharedCharts, battles } = processChartsData(data, players);
+  const { profiles, sharedCharts /*, battles*/ } = processChartsData(data, players);
   performance.measure('time spent building charts with results', 'process_start');
 
   performance.mark('display_start');
@@ -294,7 +294,7 @@ export const postChartsProcessing = () => async (dispatch, getState) => {
 
   // Parallelized calculation of ELO and profile data
   const { tracklist } = getState();
-  const input = { sharedCharts, profiles, tracklist, battles, debug: DEBUG };
+  const input = { sharedCharts, profiles, tracklist, /*battles,*/ debug: DEBUG };
 
   performance.mark('elo_calc_start');
   let output;
