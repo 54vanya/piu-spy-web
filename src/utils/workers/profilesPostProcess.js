@@ -195,7 +195,6 @@ const processBattles = ({ battles, profiles, debug, resultInfo: dictScoreInfo })
       p1.ratingHistory.push({
         rating: p1.rating,
         date: battleDate.getTime(),
-        date: battleDate.getTime(),
       });
     }
     if (p2LastRating !== p2.rating) {
@@ -422,7 +421,7 @@ const processPP = ({ profiles, sharedCharts }) => {
       profile.pp.scores.forEach((score, index) => {
         profile.pp.pp += 0.95 ** index * score.pp;
       });
-      profile.rating = Math.round(profile.pp.pp);
+      profile.rating = profile.pp.pp;
     } else {
       profile.pp = {};
       profile.rating = 0;
@@ -529,8 +528,7 @@ const interpolateDifficulties = ({ sharedCharts, profiles, debug }) => {
   return newSharedCharts;
 };
 
-// export const getProcessedProfiles = ({ profiles, sharedCharts, tracklist, battles, debug }) => {
-export const getProcessedProfiles = ({ profiles, sharedCharts, tracklist, debug }) => {
+export const getProcessedProfiles = ({ profiles, sharedCharts, tracklist, /* battles, */ debug }) => {
   // Calculate Progress achievements and bonus for starting Elo
   profiles = postProcessProfiles(profiles, tracklist);
 
@@ -543,8 +541,8 @@ export const getProcessedProfiles = ({ profiles, sharedCharts, tracklist, debug 
     sharedCharts,
   });
 
-  /*
   // Calculate ELO
+  /*
   const { logText } = processBattles({
     battles,
     profiles,
@@ -552,6 +550,7 @@ export const getProcessedProfiles = ({ profiles, sharedCharts, tracklist, debug 
     debug,
   });
   */
+
   return { profiles, resultInfo, sharedCharts, logText: '' };
 };
 

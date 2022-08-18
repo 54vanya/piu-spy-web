@@ -20,7 +20,7 @@ export const processChartsData = (chartsData, players) => {
   const top = {}; // Main top scores pbject
 
   // Battles for ELO calculation
-  const battles = [];
+  // const battles = [];
   const allResults = [];
 
   // Profiles for every player
@@ -29,8 +29,7 @@ export const processChartsData = (chartsData, players) => {
   // Loop 1
   for (let sharedChartId in chartsData) {
     const chartEntry = chartsData[sharedChartId];
-    // console.log(chartEntry)
-    // console.log(chartEntry);
+
     // Initialize chart info
     const chartInfo = chartEntry.chart;
     const label = _.toUpper(chartInfo.chart_label);
@@ -130,6 +129,7 @@ export const processChartsData = (chartsData, players) => {
   }
 
   // c0 = performance.now();
+  /*
   allResults.forEach((res) => {
     if (!res.isUnknownPlayer) {
       const chartTop = top[res.sharedChartId];
@@ -151,11 +151,12 @@ export const processChartsData = (chartsData, players) => {
       }
     }
   });
+  */
   // c1 = performance.now();
 
   // a1 = performance.now();
   // console.log('Perf data:', a1 - a0, bSum, c1 - c0);
-  return { profiles, sharedCharts: top, battles };
+  return { profiles, sharedCharts: top, /* battles */ };
 };
 
 export default processChartsData;

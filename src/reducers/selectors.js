@@ -131,6 +131,7 @@ const getFilteredData = (
       [direction]
     ),
   ];
+  /*
   const getEloSorting = (direction) => [
     _.filter((row) => _.map('nickname', row.results).includes(protagonist)),
     _.orderBy(
@@ -144,6 +145,7 @@ const getFilteredData = (
       [direction]
     ),
   ];
+   */
   const getDiffSorting = (direction = 'desc') => [
     _.orderBy(
       [
@@ -160,8 +162,8 @@ const getFilteredData = (
       [SORT.DEFAULT]: defaultSorting,
       [SORT.NEW_SCORES_PLAYER]: newScoresProtagonistSorting,
       [SORT.PROTAGONIST]: protagonistSorting,
-      [SORT.RANK_ASC]: getEloSorting('asc'),
-      [SORT.RANK_DESC]: getEloSorting('desc'),
+      // [SORT.RANK_ASC]: getEloSorting('asc'),
+      // [SORT.RANK_DESC]: getEloSorting('desc'),
       [SORT.PP_ASC]: getPpSorting('pp.ppRatio', 'asc'),
       [SORT.PP_DESC]: getPpSorting('pp.pp'),
       [SORT.EASIEST_SONGS]: getDiffSorting('asc'),

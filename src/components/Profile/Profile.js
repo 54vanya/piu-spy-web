@@ -487,10 +487,10 @@ class Profile extends Component {
             <div className="text-header">{lang.RANK}</div>
             <div>#{profile.rank}</div>
           </div>
-          {/*<div className="text-with-header">*/}
-          {/*  <div className="text-header">{lang.ELO}</div>*/}
-          {/*  <div>{profile.rating}</div>*/}
-          {/*</div>*/}
+          <div className="text-with-header">
+            <div className="text-header">{lang.PP}</div>
+            <div>{Math.floor(profile.pp.pp)}</div>
+          </div>
           <div className="text-with-header">
             <div className="text-header">{lang.LAST_TIME_PLAYED}</div>
             <div>{profile.lastResultDate ? getTimeAgo(lang, profile.lastResultDate) : lang.NEVER}</div>

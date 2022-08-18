@@ -123,13 +123,13 @@ export const PlayerCard = ({
               {renderDeltaText(trackedData.exp[0], trackedData.exp[1])}
             </div>
           )}
-          {trackedData.elo[0] && (
+          {/*trackedData.elo[0] && (
             <div className="rating">
               <span className="_grey-text">elo:</span>
               <span>{Math.round(trackedData.elo[0])}</span>
               {renderDeltaText(trackedData.elo[0], trackedData.elo[1])}
             </div>
-          )}
+          )*/}
           {trackedData.pp[0] && (
             <div className="rating">
               <span className="_grey-text">pp:</span>
@@ -143,7 +143,7 @@ export const PlayerCard = ({
                 <div className={`closest-player ${profile.id === pl.id ? 'current-player' : ''}`}>
                   <div className="place">#{pl.place}</div>
                   <div className="name">{pl.name}</div>
-                  <div className="elo">{pl.rating}</div>
+                  <div className="elo">{Math.floor(pl.pp.pp)}</div>
                 </div>
               );
             }, closestPlayers)}

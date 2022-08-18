@@ -7,13 +7,10 @@ import listensToClickOutside from 'react-onclickoutside';
 
 import './overlay.scss';
 
-const POPPER_MODIFIERS = {
-  preventOverflow: {
-    enabled: true,
-    padding: 10,
-    boundariesElement: 'viewport',
-  },
-};
+const POPPER_MODIFIERS = [{
+  name: 'preventOverflow',
+  enabled: true,
+}];
 
 const PLACEMENT_ARROW_MAPPING = {
   right: 'left',
