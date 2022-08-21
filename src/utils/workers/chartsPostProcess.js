@@ -19,10 +19,6 @@ export const processChartsData = (chartsData, players) => {
   const getBestGradeResultId = (result) => `${result.sharedChartId}-${result.playerId}`;
   const top = {}; // Main top scores pbject
 
-  // Battles for ELO calculation
-  // const battles = [];
-  const allResults = [];
-
   // Profiles for every player
   let profiles = {};
 
@@ -67,14 +63,6 @@ export const processChartsData = (chartsData, players) => {
       const result = mapResult(_result, players, chartTop, sharedChartId);
       const topResultId = getTopResultId(result);
       const bestGradeResultId = getBestGradeResultId(result);
-
-      // b0 = performance.now();
-      // Chronological results array to calculate battles order
-      // const resultIndex = _.sortedLastIndexBy((r) => r.dateObject, result, allResults);
-      // allResults.splice(resultIndex, 0, result);
-      allResults.push(result);
-      // b1 = performance.now();
-      // bSum += b1 - b0;
 
       // Recording player ids just to calculate total number of results made on this chart (and be able to filter out hidden players)
       chartTop.eachResultPlayerIds.push(result.id);
@@ -128,32 +116,6 @@ export const processChartsData = (chartsData, players) => {
       }
     }, chartList);
   }
-
-  // c0 = performance.now();
-  /*
-  allResults.forEach((res) => {
-    if (!res.isUnknownPlayer) {
-      const chartTop = top[res.sharedChartId];
-
-      for (let i = 0; i < chartTop.results.length; i++) {
-        const enemyResult = chartTop.results[i];
-        if (res.dateObject < enemyResult.dateObject) {
-          break;
-        }
-        if (
-          !enemyResult.isUnknownPlayer &&
-          enemyResult.isRank === res.isRank &&
-          enemyResult.playerId !== res.playerId &&
-          res.score &&
-          enemyResult.score
-        ) {
-          battles.push([res, enemyResult, chartTop]);
-        }
-      }
-    }
-  });
-  */
-  // c1 = performance.now();
 
   // a1 = performance.now();
   // console.log('Perf data:', a1 - a0, bSum, c1 - c0);

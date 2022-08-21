@@ -57,8 +57,6 @@ const getFilteredData = (
   const rankFilter = _.get('value', filter.rank) || RANK_FILTER.SHOW_ALL;
   const protagonist = [
     SORT.PROTAGONIST,
-    SORT.RANK_ASC,
-    SORT.RANK_DESC,
     SORT.PP_ASC,
     SORT.PP_DESC,
     SORT.NEW_SCORES_PLAYER,
@@ -131,21 +129,7 @@ const getFilteredData = (
       [direction]
     ),
   ];
-  /*
-  const getEloSorting = (direction) => [
-    _.filter((row) => _.map('nickname', row.results).includes(protagonist)),
-    _.orderBy(
-      [
-        (row) => {
-          const score = _.find({ nickname: protagonist }, row.results);
-          const info = resultInfo[score.id];
-          return _.getOr(direction === 'asc' ? Infinity : -Infinity, 'ratingDiff', info);
-        },
-      ],
-      [direction]
-    ),
-  ];
-   */
+
   const getDiffSorting = (direction = 'desc') => [
     _.orderBy(
       [
@@ -162,8 +146,6 @@ const getFilteredData = (
       [SORT.DEFAULT]: defaultSorting,
       [SORT.NEW_SCORES_PLAYER]: newScoresProtagonistSorting,
       [SORT.PROTAGONIST]: protagonistSorting,
-      // [SORT.RANK_ASC]: getEloSorting('asc'),
-      // [SORT.RANK_DESC]: getEloSorting('desc'),
       [SORT.PP_ASC]: getPpSorting('pp.ppRatio', 'asc'),
       [SORT.PP_DESC]: getPpSorting('pp.pp'),
       [SORT.EASIEST_SONGS]: getDiffSorting('asc'),

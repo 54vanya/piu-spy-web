@@ -106,7 +106,7 @@ export default function Tournaments() {
                   {selectedBracket.charts.map((chart) => {
                     const [type, level] = labelToTypeLevel(chart.label);
                     return (
-                      <th colSpan={3} key={chart.sharedChartId}>
+                      <th colSpan={2} key={chart.sharedChartId}>
                         <div className="chart-header">
                           <ChartLabel type={type} level={level} />{' '}
                           <NavLink
@@ -163,7 +163,6 @@ export default function Tournaments() {
                           index,
                           {
                             playerName: results[0].player_name,
-                            playcount: results.length,
                             score: bestPlayerScore,
                             percent: percent,
                             percentRaw: bestPlayerScore / maxScore,
@@ -203,7 +202,6 @@ export default function Tournaments() {
                             <React.Fragment key={index}>
                               <td>{info && `${info.percent}%`}</td>
                               <td>{info && numeral(info.score).format('0,0')}</td>
-                              <td>{info && info.playcount}</td>
                             </React.Fragment>
                           );
                         })}
