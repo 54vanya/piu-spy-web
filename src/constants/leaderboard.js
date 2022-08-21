@@ -3,8 +3,6 @@ import _ from 'lodash/fp';
 export const SORT = {
   DEFAULT: 'default',
   PROTAGONIST: 'protagonist',
-  RANK_ASC: 'rankAsc',
-  RANK_DESC: 'rankDesc',
   PP_ASC: 'ppAsc',
   PP_DESC: 'ppDesc',
   NEW_SCORES_PLAYER: 'newScoresPlayer',
