@@ -1,5 +1,3 @@
-@import 'utils/css/colors';
-
 .profile-compare-page {
   width: 100%;
   max-width: 940px;
@@ -81,7 +79,7 @@
         }
       }
       .profile-section {
-        background: $background-lv-1;
+        background: var(--background-lv-1);
         margin: 10px 0;
         border-radius: 10px;
         padding: 10px;

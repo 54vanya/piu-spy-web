@@ -155,7 +155,7 @@ export const profileSelectorCreator = (idParamName) =>
       const placesChanges = cutRange(profile.rankingHistory, dayRangeMs);
       const ratingChanges = cutRange(profile.ratingHistory, dayRangeMs);
 
-      const rank = 1 + _.findIndex({ id }, _.orderBy(['ratingRaw'], ['desc'], _.values(profiles)));
+      const rank = 1 + _.findIndex({ id }, _.orderBy(['pp.pp'], ['desc'], _.values(profiles)));
 
       return {
         ...profile,

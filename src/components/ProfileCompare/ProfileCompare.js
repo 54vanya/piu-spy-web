@@ -614,8 +614,8 @@ class ProfileCompare extends Component {
             <div>#{profile.rank}</div>
           </div>
           <div className="text-with-header">
-            <div className="text-header">{lang.ELO}</div>
-            <div>{profile.rating}</div>
+            <div className="text-header">{lang.PP}</div>
+            <div>{Math.floor(profile.pp.pp)}</div>
           </div>
           <div className="text-with-header">
             <div className="text-header">{lang.LAST_TIME_PLAYED}</div>
@@ -650,8 +650,8 @@ class ProfileCompare extends Component {
             <div>#{profile2.rank}</div>
           </div>
           <div className="text-with-header">
-            <div className="text-header">{lang.ELO}</div>
-            <div>{profile2.rating}</div>
+            <div className="text-header">{lang.PP}</div>
+            <div>{Math.floor(profile2.pp.pp)}</div>
           </div>
           <div className="text-with-header">
             <div className="text-header">{lang.LAST_TIME_PLAYED}</div>

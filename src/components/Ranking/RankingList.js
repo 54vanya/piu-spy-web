@@ -34,9 +34,9 @@ export default function RankingList({ ranking, isLoading, preferences, updatePre
               <th className="exp-rank">{lang.EXP}</th>
               <th className="name">{lang.NAME}</th>
               <th className="name name-piu">{lang.AMPASS}</th>
-              <th className="rating">{lang.ELO}</th>
-              <th className="rating-change-cell"></th>
+              {/*<th className="rating">{lang.ELO}</th>*/}
               <th className="rating">pp</th>
+              <th className="rating-change-cell"></th>
               {/* <th className="total-score">total score</th> */}
               <th className="grades sss">
                 <Grade grade="SSS" />
@@ -74,6 +74,8 @@ export default function RankingList({ ranking, isLoading, preferences, updatePre
               if (isHidden && !preferences.showHiddenPlayersInRanking) {
                 return null;
               }
+              const ppDifference = (Math.floor(player.rating * 10) - Math.floor(player.prevRating * 10)) / 10;
+
               return (
                 <tr
                   className={classNames('player', { 'hidden-player': isHidden })}
@@ -115,9 +117,10 @@ export default function RankingList({ ranking, isLoading, preferences, updatePre
                       {player.nameArcade}
                     </NavLink>
                   </td>
-                  <td className="rating">{player.rating}</td>
+                  {/*<td className="rating">{player.rating}</td>*/}
+                  <td className="rating secondary">{Math.floor(player.pp.pp)}</td>
                   <td className="rating-change-cell">
-                    {!!player.prevRating && player.prevRating !== player.rating && (
+                    {player.prevRating && ppDifference !== 0 && (
                       <span
                         className={classNames('rating-change', {
                           down: player.prevRating > player.rating,
@@ -125,11 +128,10 @@ export default function RankingList({ ranking, isLoading, preferences, updatePre
                         })}
                       >
                         {player.prevRating < player.rating ? '+' : ''}
-                        {player.rating - player.prevRating}
+                        {ppDifference.toFixed(1)}
                       </span>
                     )}
                   </td>
-                  <td className="rating secondary">{Math.round(player.pp.pp)}</td>
                   <td className="grades sss">{player.grades.SSS}</td>
                   <td className="grades ss">{player.grades.SS}</td>
                   <td className="grades s">{player.grades.S}</td>

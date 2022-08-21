@@ -193,6 +193,7 @@ export const initializeProfile = (result, profiles, players) => {
   const resultsByLevel = _.fromPairs(Array.from({ length: 28 }).map((x, i) => [i + 1, []]));
 
   profiles[id] = {
+    id: id,
     name: players[id].nickname,
     nameArcade: players[id].arcade_name,
     resultsByGrade: {},
@@ -246,9 +247,6 @@ export const getProfileInfoFromResult = (result, chart, profiles) => {
   if (result.isExactDate && profile.firstResultDate > result.dateObject) {
     profile.firstResultDate = result.dateObject;
   }
-  profile.achievements = _.mapValues.convert({ cap: false })((achState, achName) => {
-    return achievements[achName].resultFunction(result, chart, achState, profile);
-  }, profile.achievements);
   profile.exp += getExp(result, chart);
 };
 

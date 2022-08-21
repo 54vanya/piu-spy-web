@@ -101,7 +101,7 @@ const mapStateToProps = (state, props) => {
     filteredData: isChartView ? sharedChartDataSelector(state, props) : filteredDataSelector(state),
     filter: isChartView ? defaultFilter : state.results.filter,
     error: state.charts.error || state.tracklist.error,
-    isLoading: state.charts.isLoading || state.tracklist.isLoading,
+    isLoading: state.charts.isLoading || state.tracklist.isLoading || state.results.isLoading,
     presets: state.presets.presets,
   };
 };
@@ -133,6 +133,7 @@ const Leaderboard = (props) => {
 
   const onRefresh = () => {
     const { isLoading } = props;
+    setShowItemsCount(20);
     !isLoading && props.fetchChartsData();
   };
 
@@ -320,7 +321,7 @@ const Leaderboard = (props) => {
     );
   };
 
-  const { isLoading, isChartView, filteredData = [], error, filter, presets, history } = props;
+  const { isLoading, isChartView, filteredData = [], error, filter, presets, history, isResultsLoading } = props;
 
   const canShowMore = filteredData.length > showItemsCount;
   // const visibleData = _.slice(0, showItemsCount, filteredData);

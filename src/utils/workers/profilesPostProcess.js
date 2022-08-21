@@ -2,7 +2,8 @@ import _ from 'lodash/fp';
 import regression from 'regression';
 
 import { ranks as expRanks } from 'utils/expRanks';
-
+import { achievements } from '../achievements';
+/*
 const processBattles = ({ battles, profiles, debug, resultInfo: dictScoreInfo }) => {
   let logText = '';
   const dictChartElo = {};
@@ -223,7 +224,7 @@ const processBattles = ({ battles, profiles, debug, resultInfo: dictScoreInfo })
   )(profiles);
   return { logText };
 };
-
+*/
 const postProcessProfiles = (profiles, tracklist) => {
   const getBonusForLevel = (level) => (30 * (1 + 2 ** (level / 4))) / 11;
   const getMinimumNumber = (totalCharts) =>
@@ -244,6 +245,10 @@ const postProcessProfiles = (profiles, tracklist) => {
           if (!filteredResults[chartId] || updatedResult.result.isBestGradeOnChart) {
             filteredResults[chartId] = updatedResult;
           }
+
+          profile.achievements = _.mapValues.convert({ cap: false })((achState, achName) => {
+            return achievements[achName].resultFunction(result.result, result.chart, achState, profile);
+          }, profile.achievements);
         })
         bestGradeResultsByLevel[index] = Object.values(filteredResults);
       });
@@ -528,7 +533,7 @@ const interpolateDifficulties = ({ sharedCharts, profiles, debug }) => {
   return newSharedCharts;
 };
 
-export const getProcessedProfiles = ({ profiles, sharedCharts, tracklist, battles, debug }) => {
+export const getProcessedProfiles = ({ profiles, sharedCharts, tracklist, /* battles, */ debug }) => {
   // Calculate Progress achievements and bonus for starting Elo
   profiles = postProcessProfiles(profiles, tracklist);
 
@@ -542,14 +547,16 @@ export const getProcessedProfiles = ({ profiles, sharedCharts, tracklist, battle
   });
 
   // Calculate ELO
+  /*
   const { logText } = processBattles({
     battles,
     profiles,
     resultInfo,
     debug,
   });
+  */
 
-  return { profiles, resultInfo, sharedCharts, logText };
+  return { profiles, resultInfo, sharedCharts, logText: '' };
 };
 
 export default getProcessedProfiles;

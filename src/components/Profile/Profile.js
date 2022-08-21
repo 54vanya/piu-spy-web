@@ -21,8 +21,6 @@ import {
   Legend,
   ResponsiveContainer,
   Label,
-  Scatter,
-  ScatterChart,
 } from 'recharts';
 import _ from 'lodash/fp';
 import { createSelector } from 'reselect';
@@ -187,6 +185,7 @@ class Profile extends Component {
   circleShape = (args) => (
     <circle key={args.key} cx={args.cx} cy={args.cy} r={4} fill={args.fill}></circle>
   );
+  /*
   renderAccuracyPoints(interpolated = false) {
     const { profile, sharedCharts } = this.props;
     const pointsByType = _.groupBy(([, , chartId]) => {
@@ -276,7 +275,7 @@ class Profile extends Component {
       </ResponsiveContainer>
     );
   }
-
+  */
   renderPlaceHistory() {
     const { profile } = this.props;
     return (
@@ -504,8 +503,8 @@ class Profile extends Component {
           <RechartsTooltip />
           <ReferenceLine y={0} stroke="#555" />
           <Legend />
-          <Bar dataKey="D" fill="$double_chart_color" stackId="stack" />
-          <Bar dataKey="S" fill="$single_chart_color" stackId="stack" />
+          <Bar dataKey="D" fill="var(--double_chart_color)" stackId="stack" />
+          <Bar dataKey="S" fill="var(--single_chart_color)" stackId="stack" />
         </BarChart>
       </ResponsiveContainer>
     );
@@ -625,8 +624,8 @@ class Profile extends Component {
             <div>#{profile.rank}</div>
           </div>
           <div className="text-with-header">
-            <div className="text-header">{lang.ELO}</div>
-            <div>{profile.rating}</div>
+            <div className="text-header">{lang.PP}</div>
+            <div>{Math.floor(profile.pp.pp)}</div>
           </div>
           <div className="text-with-header">
             <div className="text-header">{lang.LAST_TIME_PLAYED}</div>
@@ -746,18 +745,18 @@ class Profile extends Component {
             <div className="profile-section-content">
               <div className="profile-section-2">
                 <div className="profile-sm-section-header">
-                  <span>{lang.ELO}</span>
+                  <span>{lang.PP}</span>
                 </div>
                 <div className="chart-container">{this.renderRankingHistory()}</div>
                 {/* <div className="chart-container">{this.renderAccuracyPoints()}</div> */}
               </div>
-              <div className="profile-section-2">
+              { /*<div className="profile-section-2">
                 <div className="profile-sm-section-header">
                   <span>{lang.PLACE_IN_TOP}</span>
                 </div>
                 <div className="chart-container">{this.renderPlaceHistory()}</div>
-                {/* <div className="chart-container">{this.renderAccuracyPoints(true)}</div> */}
-              </div>
+                <div className="chart-container">{this.renderAccuracyPoints(true)}</div>
+              </div> */}
             </div>
             {(() => {
               const currentRange = filter.dayRange || profile.filterRange;
@@ -809,7 +808,7 @@ class Profile extends Component {
             })()}
           </div>
         </div>
-        <div className="profile-section-horizontal-container">
+        { /* <div className="profile-section-horizontal-container">
           <div className="profile-section">
             <div className="profile-section-content">
               <div className="profile-section-2">
@@ -821,7 +820,7 @@ class Profile extends Component {
             </div>
           </div>
           <div className="profile-section"></div>
-        </div>
+        </div> */}
         <div className="profile-section progress-section">
           <div className="profile-sm-section-header">
             <span>{lang.LEVEL_ACHIEVEMENTS}</span>
