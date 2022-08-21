@@ -70,8 +70,9 @@ export const processChartsData = (chartsData, players) => {
 
       // b0 = performance.now();
       // Chronological results array to calculate battles order
-      const resultIndex = _.sortedLastIndexBy((r) => r.dateObject, result, allResults);
-      allResults.splice(resultIndex, 0, result);
+      // const resultIndex = _.sortedLastIndexBy((r) => r.dateObject, result, allResults);
+      // allResults.splice(resultIndex, 0, result);
+      allResults.push(result);
       // b1 = performance.now();
       // bSum += b1 - b0;
 
