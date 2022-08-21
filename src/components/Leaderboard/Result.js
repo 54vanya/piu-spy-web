@@ -71,17 +71,11 @@ const Result = (
         </span>
       </>
     );
-  } else if (
-    res.nickname === protagonistName &&
-    (showProtagonistEloChange || showProtagonistPpChange)
-  ) {
+  } else if (res.nickname === protagonistName && showProtagonistPpChange) {
     // In non-debug mode we show relevant info for selected protagonist
     ratingInfoBlock = (
       <>
         {' / '}
-        {showProtagonistEloChange && inf.ratingDiff && (
-          <span>{`${inf.ratingDiff > 0 ? '+' : ''}${Math.round(inf.ratingDiff)}`}</span>
-        )}
         {showProtagonistPpChange && inf.pp && <span>{inf.pp.ppFixed}pp</span>}
       </>
     );

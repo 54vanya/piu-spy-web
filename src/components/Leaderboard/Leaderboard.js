@@ -48,14 +48,6 @@ const getSortingOptions = _.memoize((lang) => [
   //   value: SORT.PROTAGONIST,
   // },
   {
-    label: lang.WORST_TO_BEST_BY_ELO,
-    value: SORT.RANK_ASC,
-  },
-  {
-    label: lang.BEST_TO_WORST_BY_ELO,
-    value: SORT.RANK_DESC,
-  },
-  {
     label: lang.WORST_TO_BEST_BY_PP,
     value: SORT.PP_ASC,
   },
@@ -286,8 +278,6 @@ const Leaderboard = (props) => {
         </div>
         {[
           SORT.PROTAGONIST,
-          SORT.RANK_ASC,
-          SORT.RANK_DESC,
           SORT.PP_ASC,
           SORT.PP_DESC,
           SORT.NEW_SCORES_PLAYER,
@@ -325,18 +315,15 @@ const Leaderboard = (props) => {
     );
   };
 
-  const { isLoading, isChartView, filteredData = [], error, filter, presets, history, isResultsLoading } = props;
+  const { isLoading, isChartView, filteredData = [], error, filter, presets, history } = props;
 
   const canShowMore = filteredData.length > showItemsCount;
   // const visibleData = _.slice(0, showItemsCount, filteredData);
 
   const sortingType = _.get('sortingType.value', filter);
-  const showProtagonistEloChange = [SORT.RANK_ASC, SORT.RANK_DESC].includes(sortingType);
   const showProtagonistPpChange = [SORT.PP_ASC, SORT.PP_DESC].includes(sortingType);
   const highlightProtagonist = [
     SORT.PROTAGONIST,
-    SORT.RANK_ASC,
-    SORT.RANK_DESC,
     SORT.PP_ASC,
     SORT.PP_DESC,
     SORT.NEW_SCORES_PLAYER,
@@ -360,14 +347,13 @@ const Leaderboard = (props) => {
         showHiddenPlayers={isChartView || filter.showHiddenFromPreferences}
         key={filteredData[chartIndex].sharedChartId}
         chartIndex={chartIndex}
-        showProtagonistEloChange={showProtagonistEloChange}
         showProtagonistPpChange={showProtagonistPpChange}
         uniqueSelectedNames={uniqueSelectedNames}
         protagonistName={protagonistName}
         isChartView={isChartView}
       />
     );
-  }, [filter.showHiddenFromPreferences, isChartView, protagonistName, showProtagonistEloChange, showProtagonistPpChange, uniqueSelectedNames, filteredData])
+  }, [filter.showHiddenFromPreferences, isChartView, protagonistName, showProtagonistPpChange, uniqueSelectedNames, filteredData])
 
   return (
     <FilteredDataContext.Provider value={filteredData}>
