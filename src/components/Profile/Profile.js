@@ -185,6 +185,142 @@ class Profile extends Component {
   circleShape = (args) => (
     <circle key={args.key} cx={args.cx} cy={args.cy} r={4} fill={args.fill}></circle>
   );
+  /*
+  renderAccuracyPoints(interpolated = false) {
+    const { profile, sharedCharts } = this.props;
+    const pointsByType = _.groupBy(([, , chartId]) => {
+      const type = sharedCharts[chartId].chartType;
+      return type === 'D' || type === 'DP';
+    }, profile.accuracyPointsRaw);
+    if (!interpolated) {
+      return (
+        <ResponsiveContainer minHeight={MIN_GRAPH_HEIGHT} aspect={1.6}>
+          <ScatterChart margin={{ top: 5, bottom: 5, right: 5, left: 0 }}>
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis
+              dataKey="[0]"
+              type="number"
+              domain={[1, 28]}
+              tickFormatter={(value) => Math.round(value)}
+              ticks={[1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23, 25, 27]}
+            />
+            <YAxis
+              dataKey="[1]"
+              type="number"
+              domain={[0, 100]}
+              width={40}
+              tickFormatter={(value) => Math.round(value) + '%'}
+            />
+            <Scatter data={pointsByType.true} shape={this.circleShape} fill="#169c16" />
+            <Scatter data={pointsByType.false} shape={this.circleShape} fill="#af2928" />
+            <RechartsTooltip
+              isAnimationActive={false}
+              content={({ active, payload, label }) => {
+                if (!payload || !payload[0] || !payload[1]) {
+                  return null;
+                }
+                const chart = payload[0].payload[2] && sharedCharts[payload[0].payload[2]];
+                return (
+                  <div className="history-tooltip">
+                    <div>Level: {payload[0].value}</div>
+                    <div>Accuracy: {payload[1].value}%</div>
+                    {chart && (
+                      <div>
+                        {chart.song} {chart.chartLabel} ({chart.interpolatedDifficulty.toFixed(1)})
+                      </div>
+                    )}
+                  </div>
+                );
+              }}
+            />
+          </ScatterChart>
+        </ResponsiveContainer>
+      );
+    }
+
+    return (
+      <ResponsiveContainer minHeight={MIN_GRAPH_HEIGHT} aspect={1.6}>
+        <LineChart margin={{ top: 5, bottom: 5, right: 5, left: 0 }}>
+          <CartesianGrid strokeDasharray="3 3" />
+          <XAxis
+            dataKey="[0]"
+            type="number"
+            domain={[1, 28]}
+            tickFormatter={(value) => Math.round(value)}
+          />
+          <YAxis domain={[0, 100]} width={40} />
+          <RechartsTooltip
+            isAnimationActive={false}
+            content={({ active, payload, label }) => {
+              if (!payload || !payload[0]) {
+                return null;
+              }
+              return (
+                <div className="history-tooltip">
+                  <div>{payload[0].payload[0]}</div>
+                  {payload && payload[0] && <div>Acc: #{payload[0].value}</div>}
+                </div>
+              );
+            }}
+          />
+          <Line
+            data={profile.accuracyPointsInterpolated}
+            isAnimationActive={false}
+            dataKey="[1]"
+            stroke="#88d3ff"
+            strokeWidth={3}
+            dot={false}
+          />
+        </LineChart>
+      </ResponsiveContainer>
+    );
+  }
+  */
+  renderPlaceHistory() {
+    const { profile } = this.props;
+    return (
+      <ResponsiveContainer minHeight={MIN_GRAPH_HEIGHT} aspect={1.6}>
+        <LineChart data={profile.placesChanges} margin={{ top: 5, bottom: 5, right: 5, left: 0 }}>
+          <CartesianGrid strokeDasharray="3 3" />
+          <XAxis
+            dataKey="date"
+            type="number"
+            domain={['dataMin', 'dataMax']}
+            tickFormatter={(value) => parseDate(value).toLocaleDateString()}
+          />
+          <YAxis
+            allowDecimals={false}
+            domain={[1, (dataMax) => (dataMax < 3 ? dataMax + 2 : dataMax + 1)]}
+            interval={0}
+            reversed
+            width={40}
+          />
+          <RechartsTooltip
+            isAnimationActive={false}
+            content={({ active, payload, label }) => {
+              if (!payload || !payload[0]) {
+                return null;
+              }
+              return (
+                <div className="history-tooltip">
+                  <div>{parseDate(payload[0].payload.date).toLocaleDateString()}</div>
+                  {payload && payload[0] && <div>Place: #{payload[0].value}</div>}
+                </div>
+              );
+            }}
+          />
+          <Line
+            isAnimationActive={false}
+            type="stepAfter"
+            dataKey="place"
+            stroke="#88d3ff"
+            strokeWidth={3}
+            dot={false}
+          />
+        </LineChart>
+      </ResponsiveContainer>
+    );
+  }
 
   renderGrades() {
     const { profile } = this.props;
@@ -614,6 +750,13 @@ class Profile extends Component {
                 <div className="chart-container">{this.renderRankingHistory()}</div>
                 {/* <div className="chart-container">{this.renderAccuracyPoints()}</div> */}
               </div>
+              { /*<div className="profile-section-2">
+                <div className="profile-sm-section-header">
+                  <span>{lang.PLACE_IN_TOP}</span>
+                </div>
+                <div className="chart-container">{this.renderPlaceHistory()}</div>
+                <div className="chart-container">{this.renderAccuracyPoints(true)}</div>
+              </div> */}
             </div>
             {(() => {
               const currentRange = filter.dayRange || profile.filterRange;
@@ -665,6 +808,19 @@ class Profile extends Component {
             })()}
           </div>
         </div>
+        { /* <div className="profile-section-horizontal-container">
+          <div className="profile-section">
+            <div className="profile-section-content">
+              <div className="profile-section-2">
+                <div className="profile-sm-section-header">
+                  <span>{lang.ACCURACY_BY_LEVEL}</span>
+                </div>
+                <div className="chart-container">{this.renderAccuracyPoints()}</div>
+              </div>
+            </div>
+          </div>
+          <div className="profile-section"></div>
+        </div> */}
         <div className="profile-section progress-section">
           <div className="profile-sm-section-header">
             <span>{lang.LEVEL_ACHIEVEMENTS}</span>
