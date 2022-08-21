@@ -2,6 +2,7 @@ import _ from 'lodash/fp';
 import regression from 'regression';
 
 import { ranks as expRanks } from 'utils/expRanks';
+import { achievements } from '../achievements';
 /*
 const processBattles = ({ battles, profiles, debug, resultInfo: dictScoreInfo }) => {
   let logText = '';
@@ -244,6 +245,10 @@ const postProcessProfiles = (profiles, tracklist) => {
           if (!filteredResults[chartId] || updatedResult.result.isBestGradeOnChart) {
             filteredResults[chartId] = updatedResult;
           }
+
+          profile.achievements = _.mapValues.convert({ cap: false })((achState, achName) => {
+            return achievements[achName].resultFunction(result.result, result.chart, achState, profile);
+          }, profile.achievements);
         })
         bestGradeResultsByLevel[index] = Object.values(filteredResults);
       });
