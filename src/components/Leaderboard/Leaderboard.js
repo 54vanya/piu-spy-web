@@ -23,7 +23,7 @@ import Chart from './Chart';
 import { RANK_FILTER, SORT } from 'constants/leaderboard';
 
 // reducers
-import { fetchChartsData } from 'reducers/charts';
+import { fetchChartsData, postChartsProcessing } from 'reducers/charts';
 import { defaultFilter, resetFilter, setFilter } from 'reducers/results';
 import { openPreset, selectPreset } from 'reducers/presets';
 
@@ -108,6 +108,7 @@ const mapStateToProps = (state, props) => {
 
 const mapDispatchToProps = {
   fetchChartsData,
+  postChartsProcessing,
   setFilter,
   resetFilter,
   selectPreset,
@@ -131,10 +132,13 @@ const Leaderboard = (props) => {
     localForage.setItem('filter', defaultFilter);
   };
 
-  const onRefresh = () => {
+  const onRefresh = async () => {
     const { isLoading } = props;
     setShowItemsCount(20);
-    !isLoading && props.fetchChartsData();
+    if (!isLoading) {
+      await props.fetchChartsData();
+      props.postChartsProcessing();
+    }
   };
 
   const onTypeSongName = _.debounce(300, (value) => {

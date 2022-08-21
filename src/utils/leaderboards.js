@@ -160,7 +160,7 @@ export const mapResult = (res, players, chart, chartId) => {
     combo: res.max_combo,
     mods: res.mods_list,
     isRank: !!res.rank_mode,
-    isHJ: (res.mods_list || '').split(' ').includes('HJ'),
+    isHJ: (res.mods_list || '').includes('HJ'),
     isMachineBest: res.recognition_notes === 'machine_best',
     isMyBest: res.recognition_notes === 'personal_best',
   };

@@ -37,7 +37,7 @@ export const defaultFilter = {
 };
 
 const initialState = {
-  isLoading: true,
+  isLoading: false,
   isLoadingRanking: false,
   data: [],
   filter: defaultFilter,

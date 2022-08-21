@@ -93,7 +93,7 @@ export const preprocessData = (data) => ({
             combo: res.max_combo,
             mods: res.mods_list,
             isRank: !!res.rank_mode,
-            isHJ: (res.mods_list || '').split(' ').includes('HJ'),
+            isHJ: (res.mods_list || '').includes('HJ'),
             ...resultInfoOverrides,
           };
         }),
