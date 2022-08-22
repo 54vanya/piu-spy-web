@@ -33,7 +33,7 @@ import { filteredDataSelector, playersSelector, sharedChartDataSelector } from '
 import { Language } from 'utils/context/translation';
 import { FilteredDataContext } from '../Contexts/FilteredDataContext';
 
-const INITIAL_COUNT = 20;
+const INITIAL_COUNT = 10;
 
 // code
 const getSortingOptions = _.memoize((lang) => [
