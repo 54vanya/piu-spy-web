@@ -203,19 +203,19 @@ const Result = (
                     {res.mods}
                   </div>
                 )}
-                {res.combo && (
+                {res.combo != null && (
                   <div className="mobile-only">
                     <span className="_grey">{lang.COMBO}: </span>
                     {res.combo}
                   </div>
                 )}
-                {res.calories && (
+                {res.calories != null && (
                   <div>
                     <span className="_grey">{lang.CCAL}: </span>
                     {res.calories}
                   </div>
                 )}
-                {res.scoreIncrease && (
+                {res.scoreIncrease != null && (
                   <div>
                     <span className="_grey">{lang.SCORE_INCREASE}: </span>+
                     {numeral(res.scoreIncrease).format('0,0')}
