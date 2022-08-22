@@ -7,4 +7,4 @@ const Grade = ({ grade }) => {
   return <img src={`${process.env.PUBLIC_URL}/grades/${grade}.png`} alt={grade} />;
 };
 
-export default Grade;
+export default React.memo(Grade);

@@ -2,6 +2,7 @@ import _ from 'lodash/fp';
 import localForage from 'localforage';
 
 import { setFilter } from 'reducers/results';
+import { EMPTY_ARRAY } from '../utils/emptyObjects';
 
 const SELECT_PRESET = `PRESETS/SELECT_PRESET`;
 const LOAD_PRESETS = `PRESETS/LOAD_PRESETS`;
@@ -50,7 +51,7 @@ export default function reducer(state = initialState, action) {
   }
 }
 
-const reloadPresets = presets => ({ type: LOAD_PRESETS, presets: presets || [] });
+const reloadPresets = presets => ({ type: LOAD_PRESETS, presets: presets || EMPTY_ARRAY });
 
 const startLoading = () => ({
   type: LOADING_START,
