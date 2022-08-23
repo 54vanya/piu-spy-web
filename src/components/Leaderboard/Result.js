@@ -1,7 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { NavLink } from 'react-router-dom';
-import _ from 'lodash/fp';
 import classNames from 'classnames';
 import numeral from 'numeral';
 import { FaExclamationTriangle, FaAngleDoubleUp } from 'react-icons/fa';
@@ -21,10 +20,10 @@ import { getExp } from 'utils/exp';
 import { colorsArray } from 'utils/colors';
 import { useLanguage } from 'utils/context/translation';
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state, props) => {
   return {
-    resultInfo: state.results.resultInfo,
-    profiles: state.results.profiles,
+    resultInfo: state.results.resultInfo[props.res.id],
+    region: state.results.profiles[props.res.playerId]?.region,
   };
 };
 
@@ -33,11 +32,10 @@ const Result = (
     // shared
     res,
     chart,
-    resultInfo,
-    profiles,
+    resultInfo = {},
+    region,
     placeDifference,
     // leaderboard
-    showProtagonistEloChange = false,
     showProtagonistPpChange = false,
     protagonistName = null,
     uniqueSelectedNames = [],
@@ -47,13 +45,9 @@ const Result = (
     isSocketView = false,
     bestGradeScore = false,
     notBestGradeResult = false,
-  },
-  ref,
+  }
 ) => {
-  const inf = resultInfo[res.id] || {};
-
   const lang = useLanguage();
-
   // Rating info for nickname column:
   let ratingInfoBlock = null;
   if (DEBUG) {
@@ -62,12 +56,12 @@ const Result = (
       <>
         <span className="debug-elo-info">
           {' '}
-          {inf.startingRating && Math.round(inf.startingRating)}
+          {resultInfo.startingRating && Math.round(resultInfo.startingRating)}
           {' / '}
-          {inf.ratingDiff > 0 ? '+' : ''}
-          {inf.ratingDiff && Math.round(inf.ratingDiff)}
+          {resultInfo.ratingDiff > 0 ? '+' : ''}
+          {resultInfo.ratingDiff && Math.round(resultInfo.ratingDiff)}
           {' / '}
-          {inf.pp && inf.pp.ppFixed}pp
+          {resultInfo.pp && resultInfo.pp.ppFixed}pp
         </span>
       </>
     );
@@ -76,19 +70,20 @@ const Result = (
     ratingInfoBlock = (
       <>
         {' / '}
-        {showProtagonistPpChange && inf.pp && <span>{inf.pp.ppFixed}pp</span>}
+        {showProtagonistPpChange && resultInfo.pp && <span>{resultInfo.pp.ppFixed}pp</span>}
       </>
     );
   }
 
-  const flag = profiles[res.playerId] ? <Flag region={profiles[res.playerId].region} /> : null;
+  const flag = region ? <Flag region={region} /> : null;
 
   const nameIndex = uniqueSelectedNames.indexOf(res.nickname);
+  const exp = getExp(res, chart);
+  const playerRoute = routes.profile.getPath({ id: res.playerId });
 
   return (
     <tr
       key={res.id}
-      ref={ref}
       className={classNames({
         empty: !res.accuracy,
         latest: new Date(chart.latestScoreDate) - new Date(res.date) < 12 * 60 * 60 * 1000,
@@ -111,7 +106,7 @@ const Result = (
         <div className="nickname-container">
           {flag}
           <span className="nickname-text">
-            <NavLink exact to={routes.profile.getPath({ id: res.playerId })}>
+            <NavLink exact to={playerRoute}>
               {res.nickname}
             </NavLink>
             {!!placeDifference && (
@@ -177,28 +172,20 @@ const Result = (
             )}
             <div>
               <span className="_grey">{lang.PLAYER}: </span>
-              <NavLink exact to={routes.profile.getPath({ id: res.playerId })}>
+              <NavLink exact to={playerRoute}>
                 {res.nickname} ({res.nicknameArcade})
               </NavLink>
             </div>
-            {!!getExp(res, chart) && (
+            {exp && (
               <div className="important">
                 <span className="_grey">{lang.EXP}: </span>+
-                {numeral(getExp(res, chart)).format('0,0')}
+                {numeral(exp).format('0,0')}
               </div>
             )}
-            {_.isNumber(inf.startingRating) && _.isNumber(inf.ratingDiff) && (
-              <div className="important">
-                <span className="_grey">
-                  {lang.ELO}: {inf.startingRating.toFixed(0)}{' '}
-                </span>
-                {inf.ratingDiff >= 0 ? `+${inf.ratingDiff.toFixed(0)}` : inf.ratingDiff.toFixed(0)}
-              </div>
-            )}
-            {inf.pp && (
+            {resultInfo.pp && (
               <div className="important">
                 <span className="_grey">{lang.PP}: </span>
-                <span>{inf.pp.ppFixed}pp</span>
+                <span>{resultInfo.pp.ppFixed}pp</span>
               </div>
             )}
             {!res.isExactDate && (
@@ -207,27 +194,27 @@ const Result = (
                 {lang.MY_BEST_SCORE_WARNING}
               </div>
             )}
-            {!!res.isExactDate && (
+            {res.isExactDate && (
               <>
-                {!!res.mods && (
+                {res.mods && (
                   <div>
                     <span className="_grey">{lang.MODS}: </span>
                     {res.mods}
                   </div>
                 )}
-                {!!res.combo && (
+                {res.combo != null && (
                   <div className="mobile-only">
                     <span className="_grey">{lang.COMBO}: </span>
                     {res.combo}
                   </div>
                 )}
-                {!!res.calories && (
+                {res.calories != null && (
                   <div>
                     <span className="_grey">{lang.CCAL}: </span>
                     {res.calories}
                   </div>
                 )}
-                {!!res.scoreIncrease && (
+                {res.scoreIncrease != null && (
                   <div>
                     <span className="_grey">{lang.SCORE_INCREASE}: </span>+
                     {numeral(res.scoreIncrease).format('0,0')}
@@ -275,7 +262,6 @@ const Result = (
             {isSocketView &&
               res.mods &&
               res.mods
-                .split(' ')
                 .filter((mod) => mod.includes('AV'))
                 .map((avMod) => (
                   <div className="av-mod">
@@ -304,8 +290,7 @@ const Result = (
       <td className={classNames('number', 'great', bestGradeScore && 'opacity')}>{res.great}</td>
       <td className={classNames('number', 'perfect', bestGradeScore && 'opacity')}>{res.perfect}</td>
       <td className={classNames('combo', 'desktop-only', bestGradeScore && 'opacity')}>
-        {res.combo}
-        {res.combo ? 'x' : ''}
+        {res.combo && `${res.combo}x`}
       </td>
       <td className={classNames('accuracy', bestGradeScore && 'opacity')}>
         {res.accuracy === 100 ? 100 : res.accuracy ? res.accuracy.toFixed(2) : ''}
@@ -330,4 +315,4 @@ const Result = (
   );
 };
 
-export default connect(mapStateToProps, null, null, { forwardRef: true })(React.forwardRef(Result));
+export default connect(mapStateToProps)(Result);

@@ -33,6 +33,8 @@ import { filteredDataSelector, playersSelector, sharedChartDataSelector } from '
 import { Language } from 'utils/context/translation';
 import { FilteredDataContext } from '../Contexts/FilteredDataContext';
 
+const INITIAL_COUNT = 10;
+
 // code
 const getSortingOptions = _.memoize((lang) => [
   {
@@ -109,13 +111,13 @@ const mapDispatchToProps = {
 
 const Leaderboard = (props) => {
 
-  const [showItemsCount, setShowItemsCount] = useState(20);
+  const [showItemsCount, setShowItemsCount] = useState(INITIAL_COUNT);
   const lang = useContext(Language);
 
   const setFilter = _.curry((name, value) => {
     const filter = { ...props.filter, [name]: value };
     props.setFilter(filter);
-    setShowItemsCount(20);
+    setShowItemsCount(INITIAL_COUNT);
     localForage.setItem('filter', filter);
   });
 
@@ -126,7 +128,7 @@ const Leaderboard = (props) => {
 
   const onRefresh = async () => {
     const { isLoading } = props;
-    setShowItemsCount(20);
+    setShowItemsCount(INITIAL_COUNT);
     if (!isLoading) {
       await props.fetchChartsData();
       props.postChartsProcessing();

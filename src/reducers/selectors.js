@@ -44,7 +44,7 @@ const getFilteredData = (
   resultInfo = {},
   preferences
 ) => {
-  if (data.length === 0) {
+  if (data.length === 0 || Object.keys(resultInfo).length === 0) {
     return [];
   }
   const start = performance.now();

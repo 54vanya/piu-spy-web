@@ -11,4 +11,4 @@ const Flag = ({ region }) => {
   );
 };
 
-export default Flag;
+export default React.memo(Flag);
