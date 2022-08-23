@@ -19,11 +19,10 @@ import { tooltipFormatter } from 'utils/leaderboards';
 import { getExp } from 'utils/exp';
 import { colorsArray } from 'utils/colors';
 import { useLanguage } from 'utils/context/translation';
-import { EMPTY_OBJECT } from '../../utils/emptyObjects';
 
 const mapStateToProps = (state, props) => {
   return {
-    resultInfo: state.results.resultInfo[props.res.id] || EMPTY_OBJECT,
+    resultInfo: state.results.resultInfo[props.res.id],
     region: state.results.profiles[props.res.playerId]?.region,
   };
 };
@@ -33,7 +32,7 @@ const Result = (
     // shared
     res,
     chart,
-    resultInfo,
+    resultInfo = {},
     region,
     placeDifference,
     // leaderboard

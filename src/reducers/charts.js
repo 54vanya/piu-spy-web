@@ -19,7 +19,6 @@ import WorkerProfilesProcessing from 'workerize-loader?inline!utils/workers/prof
 import * as profilesProcessing from 'utils/workers/profilesPostProcess';
 
 import { fetchJson } from 'utils/fetch';
-import { EMPTY_OBJECT } from '../utils/emptyObjects';
 
 const resultsUrl = process.env.REACT_APP_SOCKET ? 'results/best/trusted' : 'results/best';
 
@@ -106,7 +105,7 @@ export const fetchChartsData = () => async (dispatch, getState) => {
   const { charts: fetchedData, lastUpdatedAt: newLastUpdated } = await dispatch(fetchJson({ url }));
   performance.measure('time spent on requesting /results/best', 'request_start');
   const newData = {
-    ...(cachedData || EMPTY_OBJECT),
+    ...(cachedData || {}),
     ...fetchedData,
   };
 

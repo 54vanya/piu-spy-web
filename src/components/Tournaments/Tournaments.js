@@ -17,7 +17,6 @@ import { ChartLabel } from 'components/Leaderboard/ChartLabel';
 import { labelToTypeLevel } from 'utils/leaderboards';
 
 import { useLanguage } from 'utils/context/translation';
-import { EMPTY_OBJECT } from '../../utils/emptyObjects';
 
 export default function Tournaments() {
   const lang = useLanguage();
@@ -191,7 +190,7 @@ export default function Tournaments() {
                   );
 
                   return [...sortedIds, ...noResultsIds].map((playerId) => {
-                    const data = playerData[playerId] || EMPTY_OBJECT;
+                    const data = playerData[playerId] || {};
                     const playerName = _.get('name', profiles[playerId]) || data.playerName;
                     return (
                       <tr key={playerId}>

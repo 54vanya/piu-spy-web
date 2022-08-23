@@ -21,7 +21,6 @@ import { useTracked, useResetTrackedObject } from './helpers';
 import { PlayerCard } from './PlayerCard';
 import Chart from 'components/Leaderboard/Chart';
 import { TYPES } from 'constants/popups';
-import { EMPTY_OBJECT } from '../../utils/emptyObjects';
 
 // code
 const STATE_RESET_TIMEOUT_SEC = 5 * 60 + 10; // 5 minutes 10 seconds
@@ -131,11 +130,11 @@ function TrackerApp({
   // Get profile objects from player names
   const leftProfile = useMemo(() => {
     if (!leftPlayer || _.isEmpty(profiles)) return {};
-    return _.minBy((p) => lev.get(p.nameArcade, leftPlayer), _.values(profiles)) || EMPTY_OBJECT;
+    return _.minBy((p) => lev.get(p.nameArcade, leftPlayer), _.values(profiles)) || {};
   }, [leftPlayer, profiles]);
   const rightProfile = useMemo(() => {
     if (!rightPlayer || _.isEmpty(profiles)) return {};
-    return _.minBy((p) => lev.get(p.nameArcade, rightPlayer), _.values(profiles)) || EMPTY_OBJECT;
+    return _.minBy((p) => lev.get(p.nameArcade, rightPlayer), _.values(profiles)) || {};
   }, [rightPlayer, profiles]);
 
   const onChangeAchievements = (playerName) => (prevAchievement, currAchievement) => {

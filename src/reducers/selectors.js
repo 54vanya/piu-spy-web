@@ -4,7 +4,6 @@ import matchSorter from 'match-sorter';
 
 import { SORT, CHART_MIN_MAX, DURATION_DEFAULT, RANK_FILTER } from 'constants/leaderboard';
 import { defaultFilter } from 'reducers/results';
-import { EMPTY_OBJECT } from '../utils/emptyObjects';
 
 export const playersSelector = createSelector(
   (state) => state.results.players,
@@ -123,7 +122,7 @@ const getFilteredData = (
       [
         (row) => {
           const result = _.find({ nickname: protagonist }, row.results);
-          const info = resultInfo[result.id] || EMPTY_OBJECT;
+          const info = resultInfo[result.id] || {};
           return _.getOr(direction === 'desc' ? -Infinity : Infinity, field, info);
         },
       ],
