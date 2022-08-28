@@ -9,7 +9,7 @@ const renderPlayerLine = (pl, isCurrentPlayer) => {
     <div className={`closest-player ${isCurrentPlayer ? 'current-player' : ''}`}>
       <div className="place">#{pl.place}</div>
       <div className="name">{pl.name}</div>
-      <div className="elo">{pl.pp.toFixed(1)}</div>
+      <div className="elo">{Math.floor(pl.pp)}</div>
     </div>
   );
 };

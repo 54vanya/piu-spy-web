@@ -615,7 +615,7 @@ class ProfileCompare extends Component {
           </div>
           <div className="text-with-header">
             <div className="text-header">{lang.PP}</div>
-            <div>{profile.pp.toFixed(1)}</div>
+            <div>{Math.floor(profile.pp)}</div>
           </div>
           <div className="text-with-header">
             <div className="text-header">{lang.LAST_TIME_PLAYED}</div>
@@ -651,7 +651,7 @@ class ProfileCompare extends Component {
           </div>
           <div className="text-with-header">
             <div className="text-header">{lang.PP}</div>
-            <div>{profile2.pp.toFixed(1)}</div>
+            <div>{Math.floor(profile2.pp)}</div>
           </div>
           <div className="text-with-header">
             <div className="text-header">{lang.LAST_TIME_PLAYED}</div>

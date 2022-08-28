@@ -143,7 +143,7 @@ export const PlayerCard = ({
                 <div className={`closest-player ${profile.id === pl.id ? 'current-player' : ''}`}>
                   <div className="place">#{pl.place}</div>
                   <div className="name">{pl.name}</div>
-                  <div className="elo">{pl.pp.toFixed(1)}</div>
+                  <div className="elo">{Math.floor(pl.pp)}</div>
                 </div>
               );
             }, closestPlayers)}
