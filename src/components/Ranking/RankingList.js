@@ -75,9 +75,7 @@ export default function RankingList({ ranking, isLoading, preferences, updatePre
                 return null;
               }
 
-              // migration tmp fix
-              const pp = typeof player.pp === 'number' ? player.pp : player.rating;
-              const ppDifference = (Math.floor(pp * 10) - Math.floor(player.prevRating * 10)) / 10 || 0;
+              const ppDifference = (Math.floor(player.pp * 10) - Math.floor(player.prevRating * 10)) / 10 || 0;
 
               return (
                 <tr
@@ -126,11 +124,11 @@ export default function RankingList({ ranking, isLoading, preferences, updatePre
                     {player.prevRating && ppDifference !== 0 && (
                       <span
                         className={classNames('rating-change', {
-                          down: player.prevRating > pp,
-                          up: player.prevRating < pp,
+                          down: player.prevRating > player.pp,
+                          up: player.prevRating < player.pp,
                         })}
                       >
-                        {player.prevRating < pp ? '+' : ''}
+                        {player.prevRating < player.pp ? '+' : ''}
                         {ppDifference.toFixed(1)}
                       </span>
                     )}

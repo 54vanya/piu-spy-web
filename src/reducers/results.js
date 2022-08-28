@@ -410,7 +410,8 @@ export const resetFilter = () => ({
 
 const getListOfNames = _.map('id');
 const getMapOfRatings = _.flow(
-  _.map((q) => [q.id, q.pp]),
+  // tmp migration fix
+  _.map((q) => [q.id, typeof q.pp === 'number' ? q.pp : q.pp.pp]),
   _.fromPairs
 );
 
@@ -432,7 +433,6 @@ export const calculateRankingChanges = (profiles) => {
 
       let rankingsPointsMap = mapPointsLastChanged;
       // console.log(listNow, listLastFetched, listLastChanged);
-      // console.log(mapPointsNow, mapPointsLastFetched, mapPointsLastChanged);
       if (!_.isEqual(mapPointsNow, mapPointsLastFetched)) {
         // Between this fetch and last fetch there was a CHANGE in ranking
         localForage.setItem('lastChangedRankingPoints_v3', lastFetchedRanking);
