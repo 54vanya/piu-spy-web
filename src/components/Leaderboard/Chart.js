@@ -134,9 +134,6 @@ const Chart = React.forwardRef(
     const canUndo = !(currentIndex === 1 && totalResultsCount === 1);
 
     // TODO: remove check from sharedCharts when SocketTracker works off results data instead of topPerSong
-    const interpDiff =
-      chart.interpolatedDifficulty ||
-      _.get('interpolatedDifficulty', sharedCharts[chart.sharedChartId]);
 
     return (
       <div className="song-block" ref={ref}>
@@ -144,7 +141,7 @@ const Chart = React.forwardRef(
           <ChartLabel type={chart.chartType} level={chart.chartLevel} />
           {isSocketView ? (
             <div className="song-name-text">
-              {interpDiff ? `(${interpDiff.toFixed(1)}) ` : ''}
+              {chart.difficulty ? `(${chart.difficulty.toFixed(1)}) ` : ''}
               {chart.song}
             </div>
           ) : (
@@ -155,7 +152,7 @@ const Chart = React.forwardRef(
               >
                 {chart.song}
               </NavLink>{' '}
-              <span className="_grey-text">({interpDiff && interpDiff.toFixed(1)})</span>
+              <span className="_grey-text">{chart.difficulty ? `(${chart.difficulty.toFixed(1)}) ` : ''}</span>
             </div>
           )}
           {!isSocketView && (

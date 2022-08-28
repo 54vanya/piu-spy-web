@@ -74,7 +74,8 @@ export default function RankingList({ ranking, isLoading, preferences, updatePre
               if (isHidden && !preferences.showHiddenPlayersInRanking) {
                 return null;
               }
-              const ppDifference = (Math.floor(player.rating * 10) - Math.floor(player.prevRating * 10)) / 10;
+
+              const ppDifference = (Math.floor(player.pp * 10) - Math.floor(player.prevRating * 10)) / 10 || 0;
 
               return (
                 <tr
@@ -118,16 +119,16 @@ export default function RankingList({ ranking, isLoading, preferences, updatePre
                     </NavLink>
                   </td>
                   {/*<td className="rating">{player.rating}</td>*/}
-                  <td className="rating secondary">{Math.floor(player.pp.pp)}</td>
+                  <td className="rating secondary">{Math.floor(player.pp)}</td>
                   <td className="rating-change-cell">
                     {player.prevRating && ppDifference !== 0 && (
                       <span
                         className={classNames('rating-change', {
-                          down: player.prevRating > player.rating,
-                          up: player.prevRating < player.rating,
+                          down: player.prevRating > player.pp,
+                          up: player.prevRating < player.pp,
                         })}
                       >
-                        {player.prevRating < player.rating ? '+' : ''}
+                        {player.prevRating < player.pp ? '+' : ''}
                         {ppDifference.toFixed(1)}
                       </span>
                     )}

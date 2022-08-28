@@ -136,8 +136,8 @@ export const profileSelectorCreator = (idParamName) =>
         }),
       )(gradesData);
 
-      const lastTickRating = _.last(profile.ratingHistory).date;
-      const lastTickRanking = _.last(profile.rankingHistory).date;
+      const lastTickRating = _.last(profile.ratingHistory)?.date;
+      const lastTickRanking = _.last(profile.rankingHistory)?.date;
       const lastTick = lastTickRating > lastTickRanking ? lastTickRating : lastTickRanking; // End graph at either point
       const firstTick = _.first(profile.ratingHistory).date; // Start graph from the first battle of this player
       const lastDay = moment(lastTick).endOf('day');
@@ -155,7 +155,7 @@ export const profileSelectorCreator = (idParamName) =>
       const placesChanges = cutRange(profile.rankingHistory, dayRangeMs);
       const ratingChanges = cutRange(profile.ratingHistory, dayRangeMs);
 
-      const rank = 1 + _.findIndex({ id }, _.orderBy(['pp.pp'], ['desc'], _.values(profiles)));
+      const rank = 1 + _.findIndex({ id }, _.orderBy(['pp'], ['desc'], _.values(profiles)));
 
       return {
         ...profile,

@@ -43,6 +43,7 @@ export const processChartsData = (chartsData, players) => {
       eachResultPlayerIds: [],
       latestScoreDate: _.last(chartEntry.results).gained,
       maxScore: null,
+      difficulty: chartInfo.difficulty,
     };
 
     // Parsing results
@@ -119,7 +120,7 @@ export const processChartsData = (chartsData, players) => {
 
   // a1 = performance.now();
   // console.log('Perf data:', a1 - a0, bSum, c1 - c0);
-  return { profiles, sharedCharts: top, /* battles */ };
+  return { profiles, sharedCharts: top };
 };
 
 export default processChartsData;

@@ -167,7 +167,7 @@ export const postChartsProcessing = () => async (dispatch, getState) => {
     'Processed profiles:',
     Object.values(output.profiles)
       .filter((q) => q.pp)
-      .sort((a, b) => b.pp.pp - a.pp.pp),
+      .sort((a, b) => b.pp - a.pp),
   );
   performance.mark('display2_start');
   dispatch({

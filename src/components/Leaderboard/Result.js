@@ -22,7 +22,6 @@ import { useLanguage } from 'utils/context/translation';
 
 const mapStateToProps = (state, props) => {
   return {
-    resultInfo: state.results.resultInfo[props.res.id],
     region: state.results.profiles[props.res.playerId]?.region,
   };
 };
@@ -32,7 +31,6 @@ const Result = (
     // shared
     res,
     chart,
-    resultInfo = {},
     region,
     placeDifference,
     // leaderboard
@@ -56,12 +54,7 @@ const Result = (
       <>
         <span className="debug-elo-info">
           {' '}
-          {resultInfo.startingRating && Math.round(resultInfo.startingRating)}
-          {' / '}
-          {resultInfo.ratingDiff > 0 ? '+' : ''}
-          {resultInfo.ratingDiff && Math.round(resultInfo.ratingDiff)}
-          {' / '}
-          {resultInfo.pp && resultInfo.pp.ppFixed}pp
+          {res.pp && `${res.pp}pp`}
         </span>
       </>
     );
@@ -70,7 +63,7 @@ const Result = (
     ratingInfoBlock = (
       <>
         {' / '}
-        {showProtagonistPpChange && resultInfo.pp && <span>{resultInfo.pp.ppFixed}pp</span>}
+        {showProtagonistPpChange && res.pp && <span>{res.pp}pp</span>}
       </>
     );
   }
@@ -182,10 +175,10 @@ const Result = (
                 {numeral(exp).format('0,0')}
               </div>
             )}
-            {resultInfo.pp && (
+            {res.pp && (
               <div className="important">
                 <span className="_grey">{lang.PP}: </span>
-                <span>{resultInfo.pp.ppFixed}pp</span>
+                <span>{res.pp}pp</span>
               </div>
             )}
             {!res.isExactDate && (

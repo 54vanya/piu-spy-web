@@ -159,7 +159,7 @@ function TrackerApp({
 
   // Track changes in profiles
   const leftTracked = {
-    pp: useTracked(_.get('pp.pp', leftProfile), leftProfile.name),
+    pp: useTracked(_.get('pp', leftProfile), leftProfile.name),
     elo: useTracked(leftProfile.ratingRaw, leftProfile.name),
     exp: useTracked(leftProfile.exp, leftProfile.name),
     expRank: useTracked(leftProfile.expRank, leftProfile.name),
@@ -171,7 +171,7 @@ function TrackerApp({
   };
   const resetLeftTracked = useResetTrackedObject(leftTracked);
   const rightTracked = {
-    pp: useTracked(_.get('pp.pp', rightProfile), rightProfile.name),
+    pp: useTracked(_.get('pp', rightProfile), rightProfile.name),
     elo: useTracked(rightProfile.ratingRaw, rightProfile.name),
     exp: useTracked(rightProfile.exp, rightProfile.name),
     expRank: useTracked(rightProfile.expRank, rightProfile.name),
