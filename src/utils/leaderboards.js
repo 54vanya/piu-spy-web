@@ -129,6 +129,7 @@ export const mapResult = (res, players, chart, chartId) => {
       isExactDate: !!res.exact_gain_date,
       score: res.score,
       scoreRaw: getScoreWithoutBonus(res.score, grade),
+      pp: res.pp || 0,
       isRank: !!res.rank_mode,
     };
   }
@@ -150,6 +151,7 @@ export const mapResult = (res, players, chart, chartId) => {
     isExactDate: !!res.exact_gain_date,
     score: res.score,
     scoreRaw: getScoreWithoutBonus(res.score, grade),
+    pp: res.pp || 0,
     scoreIncrease: res.score_increase,
     calories: res.calories && res.calories / 1000,
     perfect: res.perfects,
@@ -195,6 +197,7 @@ export const initializeProfile = (result, profiles, players) => {
   profiles[id] = {
     id: id,
     name: players[id].nickname,
+    pp: players[id].pp || 0,
     nameArcade: players[id].arcade_name,
     resultsByGrade: {},
     resultsByLevel,

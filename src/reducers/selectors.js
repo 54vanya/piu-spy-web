@@ -41,10 +41,9 @@ const getFilteredData = (
   data,
   sharedCharts,
   filter = defaultFilter,
-  resultInfo = {},
   preferences
 ) => {
-  if (data.length === 0 || Object.keys(resultInfo).length === 0) {
+  if (data.length === 0) {
     return [];
   }
   const start = performance.now();
@@ -116,17 +115,14 @@ const getFilteredData = (
     }),
     _.orderBy(['distanceFromProtagonist'], ['desc']),
   ];
-  const getPpSorting = (field, direction = 'desc') => [
+  const getPpSorting = (direction = 'desc') => [
     _.filter((row) => _.map('nickname', row.results).includes(protagonist)),
     _.orderBy(
-      [
         (row) => {
           const result = _.find({ nickname: protagonist }, row.results);
-          const info = resultInfo[result.id] || {};
-          return _.getOr(direction === 'desc' ? -Infinity : Infinity, field, info);
+          return result.pp || 0;
         },
-      ],
-      [direction]
+      direction
     ),
   ];
 
@@ -146,8 +142,8 @@ const getFilteredData = (
       [SORT.DEFAULT]: defaultSorting,
       [SORT.NEW_SCORES_PLAYER]: newScoresProtagonistSorting,
       [SORT.PROTAGONIST]: protagonistSorting,
-      [SORT.PP_ASC]: getPpSorting('pp.ppRatio', 'asc'),
-      [SORT.PP_DESC]: getPpSorting('pp.pp'),
+      [SORT.PP_ASC]: getPpSorting('asc'),
+      [SORT.PP_DESC]: getPpSorting('desc'),
       [SORT.EASIEST_SONGS]: getDiffSorting('asc'),
       [SORT.HARDEST_SONGS]: getDiffSorting('desc'),
     }[sortingType] || defaultSorting;
@@ -205,7 +201,6 @@ export const filteredDataSelector = createSelector(
   (state) => state.results.data,
   (state) => state.results.sharedCharts,
   (state) => state.results.filter,
-  (state) => state.results.resultInfo,
   (state) => state.preferences.data,
   getFilteredData
 );

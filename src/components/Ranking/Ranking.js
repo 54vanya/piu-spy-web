@@ -26,7 +26,7 @@ import { Language } from 'utils/context/translation';
 // code
 const rankingSelector = createSelector(
   (state) => state.results.profiles,
-  _.flow(_.values, _.orderBy(['pp.pp'], ['desc']))
+  _.flow(_.values, _.orderBy('pp', ['desc']))
 );
 
 const mapStateToProps = (state) => {

@@ -625,7 +625,7 @@ class Profile extends Component {
           </div>
           <div className="text-with-header">
             <div className="text-header">{lang.PP}</div>
-            <div>{Math.floor(profile.pp.pp)}</div>
+            <div>{profile.pp.toFixed(1)}</div>
           </div>
           <div className="text-with-header">
             <div className="text-header">{lang.LAST_TIME_PLAYED}</div>

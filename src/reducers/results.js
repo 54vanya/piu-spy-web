@@ -48,7 +48,7 @@ const initialState = {
   sharedCharts: {},
 };
 
-const processData = (data, tracklist) => {
+const processData = (data) => {
   const { players, results, shared_charts } = data;
 
   //// Initialization
@@ -59,9 +59,6 @@ const processData = (data, tracklist) => {
   const topResults = {}; // Temp object
   const bestGradeResults = {}; // Temp object
   const top = {}; // Main top scores pbject
-
-  // Battles for ELO calculation
-  const battles = [];
 
   // Profiles for every player
   let profiles = {};
@@ -84,6 +81,7 @@ const processData = (data, tracklist) => {
         chartLabel: label,
         chartLevel,
         chartType,
+        difficulty: sharedChart.difficulty,
         duration: sharedChart.duration,
         sharedChartId: sharedChartId,
         maxTotalSteps: sharedChart.max_total_steps,
@@ -113,19 +111,6 @@ const processData = (data, tracklist) => {
         chartTop.latestScoreDate = result.date;
         chartTop.allResultsIds.push(result.playerId);
         topResults[topResultId] = result;
-      }
-      if (!result.isUnknownPlayer) {
-        chartTop.results.forEach((enemyResult) => {
-          if (
-            !enemyResult.isUnknownPlayer &&
-            enemyResult.isRank === result.isRank &&
-            enemyResult.playerId !== result.playerId &&
-            result.score &&
-            enemyResult.score
-          ) {
-            battles.push([result, enemyResult, chartTop]);
-          }
-        });
       }
     }
 
@@ -170,7 +155,7 @@ const processData = (data, tracklist) => {
     }
   }
 
-  return { mappedResults, profiles, sharedCharts: top, battles };
+  return { mappedResults, profiles, sharedCharts: top };
 };
 
 export default function reducer(state = initialState, action) {
@@ -352,7 +337,7 @@ export const appendNewResults = (lastDate) => {
 const processResultsData = (data) => {
   return async (dispatch, getState) => {
     const { tracklist } = getState();
-    const { sharedCharts, mappedResults, profiles, battles } = processData(data, tracklist);
+    const { sharedCharts, mappedResults, profiles } = processData(data, tracklist);
 
     dispatch({
       type: SUCCESS,
@@ -368,7 +353,7 @@ const processResultsData = (data) => {
     });
 
     // Parallelized calculation of ELO and profile data
-    const input = { sharedCharts, profiles, tracklist, battles, debug: DEBUG };
+    const input = { sharedCharts, profiles, tracklist, debug: DEBUG };
     let output;
     if (window.Worker) {
       const worker = new WorkerProfilesProcessing();
@@ -384,7 +369,7 @@ const processResultsData = (data) => {
         'Processed profiles:',
         Object.values(output.profiles)
           .filter((q) => q.pp)
-          .sort((a, b) => b.pp.pp - a.pp.pp)
+          .sort((a, b) => b.pp - a.pp)
       );
     // console.log(output.sharedCharts);
     // let byLevel = _.groupBy((ch) => ch.chartLevel, _.values(output.sharedCharts));
@@ -425,14 +410,14 @@ export const resetFilter = () => ({
 
 const getListOfNames = _.map('id');
 const getMapOfRatings = _.flow(
-  _.map((q) => [q.id, q.rating]),
+  _.map((q) => [q.id, q.pp]),
   _.fromPairs
 );
 
 export const calculateRankingChanges = (profiles) => {
   return async (dispatch, getState) => {
     try {
-      const ranking = _.orderBy('[pp.pp]', 'desc', _.values(profiles));
+      const ranking = _.orderBy('[pp]', 'desc', _.values(profiles));
       const [lastChangedRanking, lastChangedRankingPoints, lastFetchedRanking] = await Promise.all([
         localForage.getItem('lastChangedRanking_v3'),
         localForage.getItem('lastChangedRankingPoints_v3'),
