@@ -127,16 +127,9 @@ const getFilteredData = (
   ];
 
   const getDiffSorting = (direction = 'desc') => [
-    _.orderBy(
-      [
-        (row) => {
-          const chartInfo = sharedCharts[row.sharedChartId];
-          return _.getOr(_.toNumber(row.chartLevel), 'interpolatedDifficulty', chartInfo);
-        },
-      ],
-      [direction]
-    ),
+    _.orderBy((row) =>  row.difficulty ?? Number(row.chartLevel), direction),
   ];
+
   const sortingFunctions =
     {
       [SORT.DEFAULT]: defaultSorting,
