@@ -127,7 +127,7 @@ const getFilteredData = (
   ];
 
   const getDiffSorting = (direction = 'desc') => [
-    _.orderBy((row) =>  row.difficulty || Number(row.chartLevel), direction),
+    _.orderBy((row) =>  row.difficulty ?? Number(row.chartLevel), direction),
   ];
 
   const sortingFunctions =
