@@ -7,6 +7,7 @@ import {
   labelToTypeLevel,
   mapResult,
 } from '../leaderboards';
+import { parseDate } from '../date';
 
 export const processChartsData = (chartsData, players) => {
   // let a0, a1, b0, b1, bSum, c0, c1;
@@ -51,7 +52,7 @@ export const processChartsData = (chartsData, players) => {
     const bestGradeResults = {};
 
     const chartList = [...chartEntry.results, ...chartEntry.bestGradeResults || []];
-    chartList.sort((a, b) => a.score - b.score);
+    chartList.sort((a, b) => a.score - b.score || parseDate(a.gained).getTime() - parseDate(b.gained).getTime());
 
     // scores should be sorted from lowest to highest
     _.forEachRight((_result) => {
